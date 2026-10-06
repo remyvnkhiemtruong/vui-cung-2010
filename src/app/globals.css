@@ -1,26 +1,121 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #fff5f7;
+  --foreground: #1e1b1d;
+  --primary: #e11d48;
+  --primary-dark: #9f1239;
+  --gold: #f59e0b;
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at 50% 20%, #ffe4e6 0%, #fff1f2 40%, #fdf2f8 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle Stage Glow & Glass Effect */
+.stage-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 63, 94, 0.15);
+  box-shadow: 0 20px 40px -15px rgba(225, 29, 72, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+.stage-glow {
+  box-shadow: 0 0 35px -5px rgba(225, 29, 72, 0.25);
+}
+
+/* Option button styling for projection screens */
+.quiz-option-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quiz-option-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(225, 29, 72, 0.2);
+}
+
+.quiz-option-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Smooth Question Transition (0.22s) */
+@keyframes questionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-question-in {
+  animation: questionSlideIn 0.22s ease-out;
+}
+
+/* Score bump animation */
+@keyframes scoreBump {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-score-bump {
+  animation: scoreBump 0.3s ease-out;
+}
+
+/* Floating animation for subtle decor */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(225, 29, 72, 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Respect prefers-reduced-motion: disable big movement & transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-question-in,
+  .animate-score-bump,
+  .animate-float-slow,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
 }
