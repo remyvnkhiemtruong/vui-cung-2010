@@ -266,7 +266,7 @@ export default function ResultScreen({
               <ListFilter className="w-4 h-4 text-rose-600" />
               <span>XEM LẠI CÂU TRẢ LỜI</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold">
-                12 câu
+                {totalQuestions} câu
               </span>
             </div>
             <div className="flex items-center gap-1 text-xs text-rose-600">
