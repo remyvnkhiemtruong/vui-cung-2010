@@ -16,7 +16,7 @@ import {
   ListFilter,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { PlayerStats, HighScoreRecord } from '@/types/quiz';
+import { PlayerStats, HighScoreRecord, Question } from '@/types/quiz';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import QuestionReviewList from './QuestionReviewList';
@@ -24,6 +24,7 @@ import QuestionReviewList from './QuestionReviewList';
 interface ResultScreenProps {
   stats: PlayerStats;
   totalQuestions: number;
+  questions: Question[];
   highScore?: HighScoreRecord | null;
   onPlayAgain: () => void;
   onGoHome: () => void;
@@ -32,6 +33,7 @@ interface ResultScreenProps {
 export default function ResultScreen({
   stats,
   totalQuestions,
+  questions,
   highScore,
   onPlayAgain,
   onGoHome,
@@ -284,6 +286,7 @@ export default function ResultScreen({
             <div id="review-list-section" className="mt-4 pt-2">
               <QuestionReviewList
                 answers={stats.answers}
+                questions={questions}
                 totalQuestions={totalQuestions}
               />
             </div>
