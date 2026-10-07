@@ -15,6 +15,8 @@ export default function QuizApp() {
     currentQuestion,
     currentIndex,
     totalQuestions,
+    questions,
+    bankSize,
     selectedOption,
     isAnswered,
     timeLeft,
@@ -45,6 +47,7 @@ export default function QuizApp() {
               onStart={startGame}
               highScore={highScore}
               totalQuestions={totalQuestions}
+              bankSize={bankSize}
             />
           )}
 
@@ -74,6 +77,7 @@ export default function QuizApp() {
             <ResultScreen
               stats={stats}
               totalQuestions={totalQuestions}
+              questions={questions}
               highScore={highScore}
               onPlayAgain={handlePlayAgain}
               onGoHome={handleGoHome}
