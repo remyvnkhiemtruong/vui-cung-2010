@@ -25,13 +25,15 @@ export interface HomeScreenProps {
   onStart: (playerName: string) => void;
   highScore: HighScoreRecord | null;
   totalQuestions?: number;
+  bankSize?: number;
   timeLimit?: number;
 }
 
 export default function HomeScreen({
   onStart,
   highScore,
-  totalQuestions = 12,
+  totalQuestions = 15,
+  bankSize = totalQuestions,
   timeLimit = QUESTION_TIME_LIMIT,
 }: HomeScreenProps) {
   const [playerName, setPlayerName] = useState('');
@@ -98,10 +100,10 @@ export default function HomeScreen({
             Chào Mừng 20/10
           </Badge>
           <Badge variant="amber" icon={<HelpCircle className="w-4 h-4 text-amber-600" />}>
-            {totalQuestions} Questions
+            Ngân hàng {bankSize} câu • {totalQuestions} câu / lượt
           </Badge>
           <Badge variant="emerald" icon={<Clock className="w-4 h-4 text-emerald-600" />}>
-            {timeLimit} Seconds / Question
+            {timeLimit} giây / câu
           </Badge>
         </div>
 
@@ -114,7 +116,7 @@ export default function HomeScreen({
             </span>
           </h1>
           <div className="text-base sm:text-2xl font-black text-rose-800 tracking-wider uppercase mt-2.5">
-            Vietnamese Women&apos;s Day Quiz
+            Trắc nghiệm Ngày Phụ nữ Việt Nam
           </div>
           <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-700 italic mt-3 max-w-2xl mx-auto">
             “Thử thách kiến thức – Tôn vinh phụ nữ Việt Nam”
