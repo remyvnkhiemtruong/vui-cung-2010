@@ -9,20 +9,22 @@ import {
   HelpCircle,
   Lightbulb,
 } from 'lucide-react';
-import { PlayerAnswerRecord } from '@/types/quiz';
-import { questionBank } from '@/data/questions';
+import { PlayerAnswerRecord, Question } from '@/types/quiz';
 
 interface QuestionReviewListProps {
   answers: PlayerAnswerRecord[];
+  questions: Question[];
   totalQuestions?: number;
 }
 
 export default function QuestionReviewList({
   answers,
-  totalQuestions = 12,
+  questions,
+  totalQuestions,
 }: QuestionReviewListProps) {
-  // Map all questions from questionBank ensuring exact 1 to 12 ordering
-  const reviewItems = questionBank.slice(0, totalQuestions).map((question, index) => {
+  const reviewItems = questions
+    .slice(0, totalQuestions ?? questions.length)
+    .map((question, index) => {
     const record = answers.find((a) => a.questionId === question.id);
 
     const isAnswered = !!record;
