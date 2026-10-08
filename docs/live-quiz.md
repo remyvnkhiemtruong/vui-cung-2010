@@ -10,7 +10,7 @@
 - `/live/join/ABC123` – students join on their phones with nicknames, submit A/B/C/D.
 - `/live/screen/ABC123` – projector screen with QR, shared questions and Top 10 leaderboard.
 
-A session has 10 shared random questions from the existing 54 English October 20 questions, one common 25-second timer per question, 50 players maximum, and server-owned point calculations (100 for correct, up to 50 speed, +20 streak of 3 or more). MC controls question transitions. Updates refresh approximately every 2.2 seconds.
+A newly created room now contains **all 200 October 20 English questions, randomly ordered once, without repeats**. MC may continue through question 200, or finish early at any time. Every player sees the same current question and the same answer order, with one common 25-second timer per question. Up to 50 players join; server-owned points are base 100 for correct, up to 50 speed bonus and +20 for three or more consecutive correct answers. MC controls Start, Reveal, Next and Finish. Updates refresh approximately every 2.2 seconds.
 
 ## Database setup – REQUIRED
 
@@ -54,10 +54,33 @@ Do not store secrets in GitHub. Do not use `NEXT_PUBLIC_` prefix.
 
 ## Run tests
 
-`npm run test:live` runs unit/static validation for scoring, 50 simulated players, phase transitions, SQL safety invariants, and non-disclosure in public responses. `npm run build` runs both the prior 54-question/100-round bank validation and these Live tests before compiling Next.js.
+`npm run test:live` runs unit/static validation for scoring, 50 simulated players, phase transitions, SQL safety invariants, and non-disclosure in public responses. `npm run build` runs both the new 200-question/40-complete-deck/100-solo-round validation and these Live tests before compiling Next.js.
 
-The 50-player test is a **pure scoring simulation**, not a 50-client network throughput test. Do not infer real load capacity from unit tests alone.
+The 50-player test is a **pure scoring simulation**, not a 50-client network throughput test. The build additionally verifies 40 complete 200-question room decks for uniqueness and correct shuffled answers. Do not infer real load capacity from unit tests alone.
 
 ## Response progress indicator
 
 During each active question, both the MC dashboard and projector show **ANSWERS RECEIVED: X/Y**, a progress bar, and a green **ALL STUDENTS HAVE ANSWERED** confirmation when all joined participants have submitted an answer. The numerator is counted by PostgreSQL from accepted answers for the current room and question, not by browser clicks; duplicate submissions do not increase it. The denominator is the room's player count (maximum 50). The value updates with the existing approximately 2.2-second polling cycle. It resets automatically on the next question. This indicator does **not** automatically reveal answers: the MC explicitly clicks **REVEAL ANSWER**.
+
+## Continuing until the bank is exhausted
+
+- When the MC opens `/live/host`, the server stores a unique random permutation of all **200** questions in the room's Neon JSONB document.
+- Database state holds `question_index`, starting at 0. The public room API fetches only `questions -> question_index` rather than transporting the whole bank to each phone.
+- `REVEAL ANSWER` does not advance the question. `NEXT QUESTION` moves exactly one position after reveal. Pressing Next after question **10** opens question **11**; after **199**, it opens **200**.
+- On revealing question 200, the next MC action changes the room phase to `finished`; the final leaderboard appears. Pressing `END EARLY` is always supported during the game.
+- Answer counts are scoped to the active question and reset to 0 for the next question. Each player may submit at most one answer per question.
+- Opening a new room re-shuffles the full bank; no-repeat is guaranteed **within each room**, not between different rooms.
+- The solo mode keeps its short 10-question rounds and remembers already-shown IDs in this browser. It resets the seen deck only after using all 200.
+
+### Historical and teaching sources
+
+- [Vietnam Women's Union: historical milestones](https://hoilhpn.org.vn/web/guest/tin-chi-tiet/-/chi-tiet/hoi-lhpn-viet-nam-cac-dau-moc-lich-su-32291-3301.html)
+- [Vietnam Women's Union: 80-year history](https://www.hoilhpn.org.vn/tin-chi-tiet/-/chi-tiet/hoi-lhpn-viet-nam-80-nam-mot-chang-%C4%91uong-20-10-1930-20-10-2010--14712-2.html)
+- [Vietnam National Museum of History: Trung Sisters](https://baotanglichsu.vn/VI/Articles/3098/13485/cuoc-khoi-nghia-hai-ba-trung-nam-40-43-sau-cong-nguyen.html)
+- [Sports Authority: Tran Hieu Ngan's Olympic milestone](https://tdtt.gov.vn/the-thao-trong-nuoc/id/94134/tran-hieu-ngan-dau-moc-dau-tien-cua-the-thao-viet-nam-tai-olympic)
+
+New historical and women's achievement questions carry source URLs. Activity questions are designed as practical event-planning scenarios; they do not imply that every school follows identical October 20 traditions.
+
+### Production rollout
+
+The branch and the PR must pass Vercel Preview build, TypeScript, prebuild uniqueness checks and a room integration test before production. The Vercel Hobby project had previously hit its daily deploy quota; if Vercel shows rate limiting, do not merge solely on the strength of code review.
