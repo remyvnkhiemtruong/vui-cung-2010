@@ -2,21 +2,25 @@
 
 **Topic:** Vietnamese Women's Day on October 20 ONLY. Every question is written in English for the English Club, but this is a **celebration quiz, not an English grammar quiz**.
 
-## What's in the bank?
+## 200-question bank (English, Vietnamese Women's Day only)
 
-The game randomly selects 10 of 54 curated questions, with no duplicates:
+The English Club bank now contains **200 unique questions**, each with four options, the correct answer and an explanation. All questions stay on topic: Vietnamese Women's Day, the Vietnam Women's Union, meaningful October 20 events, and Vietnamese women's achievements.
 
-| Category | Total bank | Each round | Learning goal |
-|---|---:|---:|---|
-| October 20: Origins | 12 | 3 | Recognized founding date of the Vietnam Women's Union and its history |
-| October 20: Activities | 18 | 3 | Greetings, flower arranging, tributes, performances, community activities |
-| Vietnamese Women | 12 | 2 | Inspiring Vietnamese women highlighted during Women's Day |
-| October 20: Picture Quiz | 12 | 2 | Identify 20/10 activities from original illustrations |
-| **Total** | **54** | **10** | **All questions related to October 20** |
+| Category | Questions |
+|---|---:|
+| October 20: Origins | 36 |
+| October 20: Activities | 90 |
+| Vietnamese Women | 50 |
+| October 20: Picture Quiz | 24 |
+| **Total** | **200** |
 
-Each round contains **five warm-up questions, four standard questions, and one final celebration scenario challenge**. Questions shuffle within each level; answer positions A/B/C/D shuffle. The timer gives **25 seconds per question**. Two picture questions are guaranteed.
+There are **24 distinct picture questions** using **12 original local SVG illustrations** (one image may accompany two different questions). Historical and biographical questions link to sources such as the Vietnam Women's Union, National Museum of History and Vietnam's Sports Authority.
 
-There are **no questions about English grammar, general idioms, unrelated global celebrities, or abstract legal trivia**.
+**Solo quiz:** Still offers 10 questions per round (3 origins, 3 activities, 2 women, 2 picture clues; five warm-ups, four standard, one final challenge; 25 seconds/question). The browser remembers which questions have already appeared across consecutive rounds and avoids repeats until all 200 have been shown; it then starts a new cycle. This history is local to the browser and may reset when browser data is cleared.
+
+**Live Quiz:** A room shuffles the full bank **once when created**, then moves through the same 200-question list for all students. After question 10 the MC can continue to question 11, and so on until question 200, without repeating any question ID. The game ends when the bank is exhausted or the MC chooses **END EARLY**. The 25-second timer, server-side score calculations, up to 50 students, QR invites, answer-progress counter and projector leaderboard are unchanged. The MC manually controls **REVEAL ANSWER** and **NEXT QUESTION**; there is no automatic advance when the timer expires.
+
+**Time note:** Playing all 200 questions takes well over an hour. The MC can finish whenever appropriate for the club event; creating a new room starts a new independently randomized deck.
 
 ## Historical accuracy
 
@@ -43,7 +47,7 @@ Individual historical question cards also provide a source link after the answer
 
 ## Original illustrations
 
-Twelve new SVG illustrations are served from `public/questions/october20/` with **no external image hosting**. Each is paired with a specific October 20 activity (flowers, greeting cards, performances, tributes, museum visits, awards and more). Older general-topic illustrations are no longer referenced by the quiz.
+Twelve original SVG illustrations are served from `public/questions/october20/` with **no external image hosting**. Each is paired with a specific October 20 activity (flowers, greeting cards, performances, tributes, museum visits, awards and more). Older general-topic illustrations are no longer referenced by the quiz.
 
 ## Event format
 
@@ -74,4 +78,4 @@ npm run lint
 npm run build
 ```
 
-The prebuild validator in `scripts/check-quiz-bank.mjs` checks duplicate questions, category/difficulty ratios, missing images, all four answer options and **100 simulated 10-question rounds** — including balance, final challenge placement and correctness after shuffling.
+The prebuild validator in `scripts/check-quiz-bank.mjs` now checks all **200** unique IDs and prompts, four valid options and answer mappings, local SVGs, category counts, **100 balanced solo rounds, 40 complete 200-question Live decks**, and **20 consecutive solo rounds without any repeated question**. The Live tests also check that question 10 is no longer the end of a room.
