@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+<title id="title">Charity - October 20 celebration activity illustration</title>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#047857"/><stop offset="1" stop-color="#34d399"/></linearGradient></defs>
+<rect width="790" height="480" rx="28" fill="url(#bg)"/>
+<circle cx="700" cy="54" r="234" fill="#fff" fill-opacity=".09"/>
+<circle cx="40" cy="425" r="199" fill="#fff" fill-opacity=".08"/>
+<path d="M72 50h45m-23-23v46M682 380h42m-21-21v42" stroke="#fff" stroke-opacity=".42" stroke-width="8" stroke-linecap="round"/>
+<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M246 276h302v155H246Z" fill="#fff" fill-opacity=".15" stroke-width="12"/><path d="M240 273h315l-16-54H256Z" fill="#fff" fill-opacity=".24" stroke-width="10"/><path d="M355 165q-54-48-44-78 16-39 85 18 67-57 86-18 10 30-45 78l-41 36Z" fill="#fff" fill-opacity=".45" stroke-width="8"/><path d="M362 339h71M394 309v59" stroke-width="13"/></g>
+</svg>

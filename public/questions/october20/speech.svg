@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+<title id="title">Speech - October 20 celebration activity illustration</title>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#be123c"/><stop offset="1" stop-color="#fb7185"/></linearGradient></defs>
+<rect width="790" height="480" rx="28" fill="url(#bg)"/>
+<circle cx="700" cy="54" r="234" fill="#fff" fill-opacity=".09"/>
+<circle cx="40" cy="425" r="199" fill="#fff" fill-opacity=".08"/>
+<path d="M72 50h45m-23-23v46M682 380h42m-21-21v42" stroke="#fff" stroke-opacity=".42" stroke-width="8" stroke-linecap="round"/>
+<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M270 319h258v127H270Z" fill="#fff" fill-opacity=".22" stroke-width="12"/><circle cx="386" cy="144" r="52" fill="#fff" fill-opacity=".48" stroke-width="10"/><path d="M320 304q8-106 67-106t67 106M461 225q39 0 42-37m-42 38-37-11m-40 105V259" stroke-width="11"/><path d="M500 172v-67m-18 0h36" stroke-width="9"/></g>
+</svg>
