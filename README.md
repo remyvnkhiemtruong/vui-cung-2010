@@ -1,230 +1,70 @@
-# 🌸 Vui Cùng 20/10 – Vietnamese Women's Day Quiz Game
+# English Club Mini Game — Vietnamese Women's Day 🌸
 
-> Trò chơi trắc nghiệm tương tác chào mừng Ngày Phụ Nữ Việt Nam 20/10 mang phong cách game show hiện đại, tôn vinh truyền thống và kiến thức phụ nữ Việt Nam.
+A friendly, **100% English** team/solo quiz for the English Club's October 20 celebration. Built with Next.js, React and TypeScript, and deployed on Vercel.
 
----
+## Audience and learning goals
 
-## 1. Giới thiệu
+- Designed for mixed-ability English learners (roughly CEFR A2–B1).
+- Build confidence by answering short, clear questions rather than memorizing obscure historical dates.
+- Practice useful everyday English, celebrate Vietnamese women, and enjoy a fast-paced game-show atmosphere.
+- Celebrate people without stereotyping gender or assigning roles by gender.
 
-**Vui Cùng 20/10** là ứng dụng web game trắc nghiệm truyền cảm hứng và tôn vinh những người phụ nữ Việt Nam qua các thời kỳ lịch sử, văn hóa, xã hội và pháp luật bình đẳng giới.
+## Format
 
-### ✨ Các tính năng nổi bật:
-- **Game Show Experience**: Giao diện sân khấu trực tiếp hiện đại, hiệu ứng cánh hoa rơi nhẹ nhàng, âm thanh Web Audio sống động (không cần tải file ngoài).
-- **40-question English question bank**: Covers Vietnamese Women's Day, history & notable women, culture & literature, and equality & safety; each round selects exactly 10 balanced random questions.
-- **Game Engine thông minh**:
-  - Đếm ngược thời gian mỗi câu hỏi với cảnh báo gấp rút khi còn $\le 5$ giây.
-  - Điểm cơ bản $100$ điểm + thưởng tốc độ tối đa $+50$ điểm + Combo Streak $+20$ điểm cho mỗi chuỗi đúng từ 3 câu liên tiếp.
-  - Khóa đáp án chống spam click, tự động xử lý khi hết giờ.
-- **Hỗ trợ phím tắt**: Bấm `1`, `2`, `3`, `4` hoặc `A`, `B`, `C`, `D` để chọn đáp án; bấm `Enter` để qua câu tiếp theo hoặc bắt đầu game.
-- **Bảng thành tích & Xem lại (Review)**:
-  - Phân loại 4 danh hiệu vinh danh kèm hiệu ứng pháo hoa Confetti rực rỡ.
-  - Bảng xem lại toàn diện 12 câu với so sánh đáp án người chơi và lời giải chi tiết.
-  - Lưu trữ kỷ lục điểm số cao nhất cục bộ trên thiết bị qua `localStorage`.
-- **Randomized rounds**: Every play uses 10/40 questions, balances the topic mix, shuffles A/B/C/D positions, and guarantees at least one image question when visual questions are available.
-- **Hoàn toàn Client-Side & Static**: Không cần database backend, tải trang tức thì, phù hợp triển khai trên Vercel.
+Each new round randomly selects **10 questions from a curated bank of 54**, with no duplicates. The order of questions **and** the A/B/C/D positions are shuffled. Every session includes:
 
----
+| Round | Questions | Difficulty |
+| --- | ---: | --- |
+| 20/10 Celebration | 3 | 2 warm-up, 1 standard |
+| English Challenge | 3 | 1 warm-up, 1 standard, 1 challenge |
+| Inspiring Women | 2 | 1 warm-up, 1 standard |
+| Picture Round | 2 | 1 warm-up, 1 standard |
+| **Total** | **10** | **5 warm-up, 4 standard, 1 challenge** |
 
-## 2. Công nghệ sử dụng
+There are **25 seconds per question**. Correct answers earn 100 points, up to 50 speed points, and +20 extra points for streaks of at least three. A session usually takes about **6–10 minutes** including the host's introduction and short answer reactions.
 
-| Công nghệ | Phiên bản | Mục đích sử dụng |
-| :--- | :--- | :--- |
-| **Next.js** | `16.3.8` (App Router, Turbopack) | React Framework tối ưu render tĩnh |
-| **React** | `19.2.8` | Xây dựng giao diện thành phần phản ứng |
-| **TypeScript** | `5.x` | Đảm bảo tính toàn vẹn kiểu dữ liệu |
-| **Tailwind CSS** | `4.x` | Thiết kế giao diện hiện đại, responsive đa thiết bị |
-| **Lucide React** | `1.52.0` | Hệ thống icon SVG sắc nét |
-| **Canvas Confetti** | `1.9.4` | Hiệu ứng chúc mừng pháo hoa chiến thắng |
-| **Web Audio API** | Native Browser | Tổng hợp âm thanh trò chơi không phụ thuộc file mp3 ngoài |
+## Illustrations
 
----
+The previous two solid-color placeholders have been replaced by **12 original SVG illustrations**, bundled in `public/questions/english-club/`. They work without external image servers, and every round includes two picture questions. Each image provides accessible alt text through the question and an English attribution.
 
-## 3. Cài đặt Node.js
+## Host instructions
 
-Để chạy và biên dịch dự án, máy tính cần cài đặt **Node.js** phiên bản khuyến nghị **>= 18.18.0** hoặc **>= 20.x**.
+1. Open the Vercel Preview and enter a player/team name.
+2. Display the website on a projector or large TV; allow the audience to read the question before answering.
+3. Players can click/tap answers or use **A, B, C, D / 1, 2, 3, 4**. Press **Enter** after an answer to continue.
+4. Take 15–30 seconds to ask a volunteer to explain an interesting answer in English after selected rounds.
+5. Press **Play Again** for a fresh ten-question round. The high score is stored only in this browser, not in a shared online leaderboard.
 
-1. Truy cập trang chủ chính thức: [https://nodejs.org/](https://nodejs.org/)
-2. Tải về phiên bản **LTS (Long Term Support)** phù hợp với hệ điều hành của bạn (Windows, macOS hoặc Linux).
-3. Chạy file cài đặt vừa tải về và làm theo hướng dẫn trên màn hình.
-4. Kiểm tra cài đặt thành công bằng cách mở Terminal / PowerShell và gõ:
-   ```bash
-   node -v
-   npm -v
-   ```
-   *(Nếu hiển thị số phiên bản như `v20.x.x` và `10.x.x` là đã thành công).*
+A ready-to-use MC script is provided in `docs/english-club-host-guide.md`.
 
----
+## Content quality and source checking
 
-## 4. Cài đặt thư viện (`npm install`)
+- Bank: `src/data/questions.ts`
+- Type contracts: `src/types/quiz.ts`
+- Selection logic: `buildQuizRound()` and `ROUND_PLAN`
+- Build-time bank validator: `scripts/check-quiz-bank.mjs`
+- All factual questions carry an optional `sourceUrl`, shown after answering.
+- `npm run build` runs validation (including **100 simulated rounds**) before Next.js compilation.
+- The check fails the deployment for duplicate IDs or answers, missing images, unexpected ratios, incorrect answer mappings, or insufficient question coverage.
 
-Sau khi tải mã nguồn về máy, mở Terminal / Command Prompt tại thư mục dự án và chạy:
+### Selected reliable references
 
-```bash
-npm install
-```
+- Council of Europe: [CEFR A2/B1 language descriptors](https://www.coe.int/en/web/common-european-framework-reference-languages/table-%201-cefr-3.3-common-reference-levels-global-scale)
+- British Council: [Fluency activities for lower levels](https://www.teachingenglish.org.uk/en/teaching-resources/teaching-secondary/activities/pre-intermediate-a2/fluency-activities-lower)
+- Official account of [Vietnamese Women's Day](https://sotuphap.hochiminhcity.gov.vn/)
+- [UNESCO International Women's Day](https://www.unesco.org/en/days/women)
+- [Nobel Prize: Marie Curie](https://www.nobelprize.org/prizes/physics/1903/marie-curie/questions-and-answers/)
+- [Nobel Prize: Malala Yousafzai](https://www.nobelprize.org/prizes/peace/2014/yousafzai/biographical/)
+- [NASA: Katherine Johnson](https://www.nasa.gov/centers-and-facilities/langley/katherine-johnson-biography/)
+- [Smithsonian: Amelia Earhart](https://www.si.edu/object/amelia-earhart:nasm_A19500108000)
 
-Lệnh này sẽ tự động tải và cài đặt toàn bộ dependencies được khai báo trong `package.json`.
-
----
-
-## 5. Chạy môi trường phát triển (`npm run dev`)
-
-Để khởi động máy chủ thử nghiệm cục bộ với tính năng Hot-Reload:
+## Development
 
 ```bash
+npm ci
 npm run dev
-```
-
-Mở trình duyệt web và truy cập địa chỉ:
-```
-http://localhost:3000
-```
-
-Mọi thay đổi trong mã nguồn sẽ được tự động cập nhật ngay lập tức trên trình duyệt.
-
----
-
-## 6. Biên dịch Production (`npm run build`)
-
-Để kiểm tra tính toàn vẹn, kiểm tra lỗi TypeScript/Linter và đóng gói mã nguồn thành bản tĩnh tối ưu:
-
-```bash
+npm run lint
 npm run build
 ```
 
-Khi build thành công, màn hình sẽ hiển thị:
-```
-✓ Compiled successfully
-✓ Finished TypeScript
-✓ Generating static pages (4/4)
-Route (app)
-○ / (Static)  prerendered as static content
-```
-
-Để chạy thử bản production vừa build trên máy:
-```bash
-npm run start
-```
-
----
-
-## 7. Hướng dẫn Deploy lên Vercel
-
-Dự án được tối ưu hóa 100% để triển khai chỉ với 1 click lên nền tảng **Vercel**:
-
-### Cách 1: Deploy qua GitHub (Khuyên dùng)
-1. Đẩy mã nguồn dự án lên một kho lưu trữ (repository) trên [GitHub](https://github.com).
-2. Đăng nhập vào [Vercel](https://vercel.com/) bằng tài khoản GitHub.
-3. Bấm nút **"Add New..."** $\rightarrow$ chọn **"Project"**.
-4. Chọn repository vừa tạo và nhấn **"Import"**.
-5. Trong phần thiết lập Project:
-   - **Framework Preset**: Chọn `Next.js` (Vercel tự động nhận diện).
-   - **Root Directory**: `./` (để mặc định).
-   - **Build Command**: `npm run build` (mặc định).
-   - **Output Directory**: `.next` (mặc định).
-   - Không cần cấu hình thêm bất kỳ biến môi trường (`Environment Variables`) nào.
-6. Bấm nút **"Deploy"**. Trong vòng 1 phút, trang web của bạn sẽ hoạt động trực tuyến với chứng chỉ SSL miễn phí!
-
-### Cách 2: Deploy qua Vercel CLI
-Nếu bạn có Vercel CLI cài trên máy:
-```bash
-npm install -g vercel
-vercel
-```
-Làm theo các bước hướng dẫn trên dòng lệnh để hoàn tất deploy.
-
----
-
-## 8. Hướng dẫn cách thay đổi hoặc thêm câu hỏi
-
-Toàn bộ ngân hàng câu hỏi được tách biệt tại file:
-```
-src/data/questions.ts
-```
-
-### Cấu trúc một câu hỏi:
-```typescript
-{
-  id: "cau-1",
-  type: "text-choice", // Hoặc "multiple-choice" | "image-choice"
-  question: "Nội dung câu hỏi ở đây...",
-  options: [
-    { key: "A", text: "Nội dung đáp án A" },
-    { key: "B", text: "Nội dung đáp án B" },
-    { key: "C", text: "Nội dung đáp án C" },
-    { key: "D", text: "Nội dung đáp án D" },
-  ],
-  correctAnswer: "A", // "A" | "B" | "C" | "D"
-  explanation: "Giải thích chi tiết tại sao đáp án này đúng...",
-  image: "/questions/ten-anh.png", // Tùy chọn (chỉ dùng cho câu hỏi có ảnh)
-}
-```
-
-### Cách chỉnh sửa:
-1. Mở file `src/data/questions.ts`.
-2. Để sửa câu hỏi có sẵn: tìm đến ID tương ứng và thay đổi trường `question`, `options`, `correctAnswer` hoặc `explanation`.
-3. Để thêm câu hỏi mới: thêm một object vào mảng `questionBank`. Mỗi lượt chơi mặc định lấy `10` câu thông qua `QUESTIONS_PER_ROUND`; hàm `buildQuizRound()` cân bằng nhóm chủ đề rồi xáo trộn câu và đáp án.
-4. Nên bổ sung `category` và `explanation` cho mọi câu; tránh câu hỏi mơ hồ, định kiến hoặc phụ thuộc vào cách diễn đạt chưa được kiểm chứng.
-
----
-
-## 9. Hướng dẫn cách thay hình ảnh minh họa
-
-Dự án hỗ trợ các câu hỏi minh họa trực quan (`image-choice`).
-
-### Vị trí lưu trữ ảnh:
-Đặt các file hình ảnh vào thư mục:
-```
-public/questions/
-```
-*Ví dụ:* `public/questions/domestic-violence.png`, `public/questions/housework.png`.
-
-### Cách gắn ảnh vào câu hỏi:
-1. Chép file ảnh của bạn (định dạng `.png`, `.jpg`, `.webp`) vào thư mục `public/questions/`.
-2. Mở file `src/data/questions.ts`, tìm câu hỏi muốn thêm ảnh và gán đường dẫn:
-   ```typescript
-   image: "/questions/ten-anh-cua-ban.png",
-   type: "image-choice",
-   ```
-3. **Cơ chế an toàn (Fallback UI)**:
-   - Nếu đường dẫn ảnh bị lỗi hoặc file chưa kịp tải lên, component `QuestionMedia` sẽ tự động hiển thị khung minh họa thay thế đẹp mắt kèm thông báo mà **tuyệt đối không làm crash ứng dụng**.
-   - Hình ảnh hiển thị dạng `contain` để không bao giờ bị cắt mất chữ hoặc chi tiết quan trọng.
-
----
-
-## 10. Hướng dẫn cách điều chỉnh thời gian Timer
-
-Thời lượng đếm ngược cho mỗi câu hỏi được quản lý tập trung qua một hằng số duy nhất.
-
-### Vị trí cấu hình:
-Mở file `src/utils/gameEngine.ts` tại dòng 9:
-
-```typescript
-export const QUESTION_TIME_LIMIT = 20; // Số giây mỗi câu (mặc định là 20)
-```
-
-### Cách thay đổi:
-- Đổi giá trị số `20` thành thời gian mong muốn (ví dụ: `15` giây hoặc `30` giây):
-  ```typescript
-  export const QUESTION_TIME_LIMIT = 30; // Chuyển sang 30 giây mỗi câu
-  ```
-- **Tự động đồng bộ**: Khi bạn thay đổi giá trị này:
-  - Đồng hồ đếm ngược tròn SVG sẽ tự động cập nhật thời gian tối đa và tỉ lệ vòng đếm.
-  - Cảnh báo đếm ngược gấp rút (vòng đỏ nhấp nháy, âm thanh tíc-tắc) tự động kích hoạt khi thời gian còn $\le 5$ giây.
-  - Huy hiệu (Badge) và thẻ luật chơi trên màn hình trang chủ (Home Screen) sẽ **tự động cập nhật số giây mới** tương ứng.
-
----
-
-## 🏆 Đánh giá kiểm tra trước khi Deploy (Pre-flight QA)
-
-- [x] **Production Build**: `npm run build` đạt kết quả **PASS** (100% static prerendered).
-- [x] **TypeScript & Linter**: 0 lỗi, 0 cảnh báo.
-- [x] **Responsive**: Thiết kế đáp ứng Mobile 360px, iPad 768px, Laptop 1366px và màn chiếu hội trường Full HD 1080p.
-- [x] **Question Bank v3**: 40 English questions, 10 questions per round, balanced topics, shuffled questions/answers, and sourced image questions.
-- [ ] **Nội dung chính thức**: Nếu dùng để chấm thi/truyền thông chính thức, cần duyệt nguồn cho từng câu trước khi phát hành.
-- [x] **Accessibility**: Tương thích bàn phím, điều hướng số `1-4`, chữ `A-D`, `Enter`, hỗ trợ chế độ giảm chuyển động (`prefers-reduced-motion`).
-- [x] **SEO & Metadata**: Đầy đủ Title, Description tiếng Việt, thẻ Open Graph và Twitter Card.
-
----
-
-*Chúc các bạn có một chương trình kỷ niệm Ngày Phụ Nữ Việt Nam 20/10 thật ý nghĩa và tràn đầy niềm vui! 🌷*
+`master` serves the existing production release. New English Club changes are first made on the `upgrade/question-bank-v2` branch and reviewed in Vercel Preview.
