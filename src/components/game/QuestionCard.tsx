@@ -49,7 +49,7 @@ export default function QuestionCard({
     question.difficulty === 'standard' ? 'MAIN ROUND' : 'FINAL CHALLENGE';
 
   return (
-    <div key={question.id} className="question-shell animate-question-in">
+    <div key={question.id} className={`question-shell animate-question-in ${isAnswered ? 'is-answered' : ''}`}>
       <section className="stage-card question-card" aria-label="Quiz question">
         <div className="question-labels text-[10px] sm:text-xs font-extrabold">
           <div className="flex min-w-0 flex-wrap gap-1.5">
