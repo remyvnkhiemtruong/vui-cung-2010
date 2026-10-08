@@ -3,6 +3,7 @@
 CREATE TABLE IF NOT EXISTS live_quiz_rooms (
   code varchar(6) PRIMARY KEY,
   host_token_hash varchar(64) NOT NULL,
+  creator_hash varchar(64) NOT NULL,
   phase varchar(12) NOT NULL DEFAULT 'lobby' CHECK (phase IN ('lobby','question','reveal','finished')),
   question_index integer NOT NULL DEFAULT -1,
   questions jsonb NOT NULL CHECK (jsonb_typeof(questions) = 'array'),
@@ -39,6 +40,25 @@ CREATE TABLE IF NOT EXISTS live_quiz_answers (
   submitted_at timestamptz NOT NULL,
   PRIMARY KEY (room_code, player_id, question_index)
 );
+
+-- Basic room-creation rate limit (eight rooms/15min per origin IP hash).
+CREATE INDEX IF NOT EXISTS live_quiz_room_creation_rate
+  ON live_quiz_rooms (creator_hash, created_at);
+
+CREATE OR REPLACE FUNCTION live_quiz_create_room(
+  p_code text, p_hash text, p_questions jsonb, p_creator text
+) RETURNS text LANGUAGE plpgsql AS $
+DECLARE n integer;
+BEGIN
+  PERFORM pg_advisory_xact_lock(hashtext(p_creator)::bigint);
+  SELECT count(*) INTO n FROM live_quiz_rooms
+    WHERE creator_hash=p_creator AND created_at > now() - interval '15 minutes';
+  IF n >= 8 THEN RETURN 'rate_limited'; END IF;
+  INSERT INTO live_quiz_rooms (code,host_token_hash,creator_hash,questions)
+    VALUES (p_code,p_hash,p_creator,p_questions);
+  RETURN 'created';
+END;
+$;
 
 -- Room-level lock makes concurrent joins respect the 50-player cap.
 CREATE OR REPLACE FUNCTION live_quiz_join(
