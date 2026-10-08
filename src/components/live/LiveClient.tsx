@@ -190,6 +190,9 @@ export function HostConsole(){
             {joinUrl&&<QR url={joinUrl}/>}
             <p className="text-center text-sm font-bold">Waiting for students: {room.playerCount}/50</p>
             <p className="max-w-full break-all text-center text-xs text-slate-500">{joinUrl}</p>
+            {joinUrl&&<Button variant="light" onClick={()=>void navigator.clipboard.writeText(joinUrl).then(()=>setMessage('Invite link copied!')).catch(()=>setMessage('Please copy the invite link shown above.'))}>
+              <Copy className="h-4 w-4"/> COPY INVITE LINK
+            </Button>}
           </div>}
           {room&&(room.phase==='question'||room.phase==='reveal')&&<CurrentQuestion room={room} remaining={remaining}/>}
           {room?.phase==='finished'&&<div className="flex flex-1 flex-col items-center justify-center gap-2">
