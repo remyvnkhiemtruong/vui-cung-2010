@@ -47,7 +47,7 @@ CREATE INDEX IF NOT EXISTS live_quiz_room_creation_rate
 
 CREATE OR REPLACE FUNCTION live_quiz_create_room(
   p_code text, p_hash text, p_questions jsonb, p_creator text
-) RETURNS text LANGUAGE plpgsql AS $
+) RETURNS text LANGUAGE plpgsql AS $create_room$
 DECLARE n integer;
 BEGIN
   PERFORM pg_advisory_xact_lock(hashtext(p_creator)::bigint);
@@ -58,7 +58,7 @@ BEGIN
     VALUES (p_code,p_hash,p_creator,p_questions);
   RETURN 'created';
 END;
-$;
+$create_room$;
 
 -- Room-level lock makes concurrent joins respect the 50-player cap.
 CREATE OR REPLACE FUNCTION live_quiz_join(
