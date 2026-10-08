@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Vietnamese Women's Day Quiz | October 20",
-  description: "An interactive quiz celebrating Vietnamese Women's Day on October 20.",
+  title: "English Club Mini Game | Vietnamese Women's Day",
+  description: "An English Club mini game: 10 random questions with vocabulary, inspiring women, and picture clues for October 20.",
   keywords: [
     "20/10",
     "Vietnamese Women's Day",
@@ -14,16 +14,16 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "20/10 Quiz Team" }],
   openGraph: {
-    title: "Vietnamese Women's Day Quiz | October 20",
-    description: "An interactive quiz celebrating Vietnamese Women's Day on October 20.",
+    title: "English Club Mini Game | Vietnamese Women's Day",
+    description: "An English Club mini game: 10 random questions with vocabulary, inspiring women, and picture clues for October 20.",
     type: "website",
     locale: "en_US",
     siteName: "Vietnamese Women's Day Quiz",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vietnamese Women's Day Quiz | October 20",
-    description: "An interactive quiz celebrating Vietnamese Women's Day on October 20.",
+    title: "English Club Mini Game | Vietnamese Women's Day",
+    description: "An English Club mini game: 10 random questions with vocabulary, inspiring women, and picture clues for October 20.",
   },
 };
 
