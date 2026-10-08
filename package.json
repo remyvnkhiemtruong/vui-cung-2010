@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prebuild": "node scripts/check-quiz-bank.mjs",
+    "prebuild": "node scripts/check-quiz-bank.mjs && npm run test:live",
     "test:live": "node --test tests/live-rules.test.cjs"
   },
   "dependencies": {
