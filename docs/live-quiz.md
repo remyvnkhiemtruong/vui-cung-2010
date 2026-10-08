@@ -57,3 +57,7 @@ Do not store secrets in GitHub. Do not use `NEXT_PUBLIC_` prefix.
 `npm run test:live` runs unit/static validation for scoring, 50 simulated players, phase transitions, SQL safety invariants, and non-disclosure in public responses. `npm run build` runs both the prior 54-question/100-round bank validation and these Live tests before compiling Next.js.
 
 The 50-player test is a **pure scoring simulation**, not a 50-client network throughput test. Do not infer real load capacity from unit tests alone.
+
+## Response progress indicator
+
+During each active question, both the MC dashboard and projector show **ANSWERS RECEIVED: X/Y**, a progress bar, and a green **ALL STUDENTS HAVE ANSWERED** confirmation when all joined participants have submitted an answer. The numerator is counted by PostgreSQL from accepted answers for the current room and question, not by browser clicks; duplicate submissions do not increase it. The denominator is the room's player count (maximum 50). The value updates with the existing approximately 2.2-second polling cycle. It resets automatically on the next question. This indicator does **not** automatically reveal answers: the MC explicitly clicks **REVEAL ANSWER**.

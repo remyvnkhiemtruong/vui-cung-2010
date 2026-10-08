@@ -29,6 +29,13 @@ export async function GET(request:Request,{params}:Context) {
       :await sql`SELECT display_name,score,streak,total_correct_ms,joined_at
          FROM live_quiz_players WHERE room_code=${code}
          ORDER BY score DESC,total_correct_ms ASC,joined_at ASC LIMIT 50`;
+    // Count accepted submissions for this exact room and question, not client clicks.
+    // DB primary key guarantees each player contributes at most one answer.
+    const [responseRow]=index>=0 && (phase==='question'||phase==='reveal')
+      ?await sql`SELECT count(*)::int AS answered_count FROM live_quiz_answers
+        WHERE room_code=${code} AND question_index=${index}`
+      :[{answered_count:0}];
+    const answeredCount=Math.min(players.length,Math.max(0,Number(responseRow?.answered_count??0)));
     const raw=index>=0?round[index]:undefined;
     // Never transmit correct answers before host reveals them.
     const question=raw?{
@@ -61,6 +68,6 @@ export async function GET(request:Request,{params}:Context) {
       score:Number(p.score),streak:Number(p.streak)}));
     return json({code,phase,index,total:round.length,question,seconds,
       remainingMs,serverTime:Date.now(),playerCount:players.length,
-      maxPlayers:50,leaderboard,me});
+      answeredCount,maxPlayers:50,leaderboard,me});
   }catch(err){return errorResponse(err);}
 }

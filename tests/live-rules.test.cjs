@@ -76,3 +76,16 @@ test('one-click create has no MC passcode and uses throttled DB function',()=>{
   assert(migration.includes("IF n >= 8 THEN RETURN 'rate_limited'"));
   assert(migration.includes('pg_advisory_xact_lock'));
 });
+
+test('MC and projector see server-confirmed response progress before reveal',()=>{
+  const state=fs.readFileSync('src/app/api/live/[code]/route.ts','utf8');
+  const ui=fs.readFileSync('src/components/live/LiveClient.tsx','utf8');
+  assert(state.includes('SELECT count(*)::int AS answered_count FROM live_quiz_answers'));
+  assert(state.includes('room_code=${code} AND question_index=${index}'));
+  assert(state.includes('answeredCount,maxPlayers:50'));
+  assert(state.includes("phase==='question'||phase==='reveal'"));
+  assert(ui.includes("room?.phase==='question'&&<ResponseProgress room={room}/>"));
+  assert(ui.includes("room?.phase==='question'&&<ResponseProgress room={room} compact/>"));
+  assert(ui.includes("ALL STUDENTS HAVE ANSWERED"));
+  assert(ui.includes("only the MC can reveal the answer"));
+});

@@ -9,7 +9,7 @@ type Phase='lobby'|'question'|'reveal'|'finished';
 type Option={key:'A'|'B'|'C'|'D',text:string};
 type LiveQuestion={id:string|number,question:string,category?:string,image?:string|null,options:Option[],correctAnswer?:string,explanation?:string,sourceUrl?:string};
 type Rank={rank:number,name:string,score:number,streak:number};
-type Snapshot={code:string,phase:Phase,index:number,total:number,question:LiveQuestion|null,seconds:number,remainingMs:number,playerCount:number,maxPlayers:number,leaderboard:Rank[],me?:{displayName:string,score:number,answered:boolean}|null};
+type Snapshot={code:string,phase:Phase,index:number,total:number,question:LiveQuestion|null,seconds:number,remainingMs:number,playerCount:number,answeredCount:number,maxPlayers:number,leaderboard:Rank[],me?:{displayName:string,score:number,answered:boolean}|null};
 type PlayerSession={id:string,token:string,name:string};
 type HostSession={code:string,token:string};
 const colors=['#e11d48','#2563eb','#c58c06','#059669'];
@@ -76,6 +76,41 @@ function Ranking({room,limit=10}:{room:Snapshot,limit?:number}){
     </div>)}
   </div>;
 }
+/**
+ * Server-confirmed responses for the current question; both MC and projector
+ * receive the same count in their ~2.2-second room snapshots.
+ */
+function ResponseProgress({room,compact=false}:{room:Snapshot,compact?:boolean}){
+  const total=room.playerCount;
+  const answered=Math.max(0,Math.min(total,room.answeredCount??0));
+  const pending=Math.max(0,total-answered);
+  const complete=total>0 && pending===0;
+  const percentage=total>0 ? Math.round(answered/total*100) : 0;
+  return <div role="status"
+    aria-label={`${answered} of ${total} students have answered the current question`}
+    className={`shrink-0 rounded-xl border ${complete?'border-emerald-200 bg-emerald-50':'border-rose-200 bg-rose-50'} ${compact?'px-3 py-2':'px-3 py-2 sm:px-4 sm:py-3'}`}>
+    <div className="flex items-center justify-between gap-2">
+      <div className="flex min-w-0 items-center gap-2">
+        {complete?<CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600"/>:<Users className="h-5 w-5 shrink-0 text-rose-600"/>}
+        <span className={`truncate text-xs font-black sm:text-sm ${complete?'text-emerald-800':'text-rose-800'}`}>
+          {complete?'ALL STUDENTS HAVE ANSWERED':'ANSWERS RECEIVED'}
+        </span>
+      </div>
+      <strong className={`shrink-0 text-lg font-black tabular-nums sm:text-2xl ${complete?'text-emerald-700':'text-rose-700'}`}>
+        {answered}<span className="text-slate-500">/{total}</span>
+      </strong>
+    </div>
+    <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-white" aria-hidden="true">
+      <div className={`h-full rounded-full transition-[width] duration-500 ${complete?'bg-emerald-500':'bg-rose-500'}`}
+        style={{width:`${percentage}%`}}/>
+    </div>
+    {!compact&&<p className="mt-1 text-[11px] font-semibold text-slate-600">
+      {complete?'Ready to reveal — only the MC can reveal the answer.':
+        `${pending} ${pending===1?'student has':'students have'} not answered yet.`}
+    </p>}
+  </div>;
+}
+
 function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false,busy=false}:{room:Snapshot,remaining:number,showOptions?:boolean,onAnswer?:(choice:Option['key'])=>void,locked?:boolean,busy?:boolean}){
   const q=room.question;
   if(!q)return <p className="text-center text-slate-600">Waiting for the next question...</p>;
@@ -195,6 +230,7 @@ export function HostConsole(){
             </Button>}
           </div>}
           {room&&(room.phase==='question'||room.phase==='reveal')&&<CurrentQuestion room={room} remaining={remaining}/>}
+          {room?.phase==='question'&&<ResponseProgress room={room}/>}
           {room?.phase==='finished'&&<div className="flex flex-1 flex-col items-center justify-center gap-2">
             <Trophy className="h-12 w-12 text-amber-500"/><h2 className="text-2xl font-black">GAME FINISHED</h2><p>Final ranking is available on the projector.</p>
           </div>}
@@ -293,6 +329,7 @@ export function Projection({code}:{code:string}){
           <p>{room.playerCount}/50 players ready</p>
         </div>}
         {(room?.phase==='question'||room?.phase==='reveal')&&<CurrentQuestion room={room} remaining={remaining}/>}
+        {room?.phase==='question'&&<ResponseProgress room={room} compact/>}
         {room?.phase==='finished'&&<div className="flex flex-1 flex-col items-center justify-center text-center">
           <Medal className="h-16 w-16 text-amber-500"/><h2 className="text-2xl font-black sm:text-5xl">CONGRATULATIONS!</h2>
           <p className="mt-2 text-lg text-rose-700">Happy Vietnamese Women's Day!</p>
