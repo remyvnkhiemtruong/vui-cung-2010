@@ -119,7 +119,7 @@ export default function HomeScreen({
             Vietnamese Women's Day Special
           </div>
           <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-700 italic mt-3 max-w-2xl mx-auto">
-            “10 quick questions • English skills • Inspiring women • Picture clues”
+            “October 20 celebrations • Vietnamese women • Picture clues”
           </p>
         </div>
 
