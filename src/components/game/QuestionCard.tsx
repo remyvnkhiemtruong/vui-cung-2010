@@ -286,7 +286,7 @@ export default function QuestionCard({
                 >
                   Learn more about this fact ↗
                 </a>
-              )
+              )}
             </div>
 
             {/* Next / Result Action Button */}
