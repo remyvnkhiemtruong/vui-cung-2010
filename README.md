@@ -11,7 +11,7 @@ A friendly, **100% English** team/solo quiz for the English Club's October 20 ce
 
 ## Format
 
-Each new round randomly selects **10 questions from a curated bank of 54**, with no duplicates. The order of questions **and** the A/B/C/D positions are shuffled. Every session includes:
+Each new round randomly selects **10 questions from a curated bank of 54**, with no duplicates. Questions are randomized **within each stage** (five warm-ups, four main-round questions, one final challenge). The A/B/C/D answer positions are shuffled independently on each play. Every session includes:
 
 | Round | Questions | Difficulty |
 | --- | ---: | --- |
@@ -45,7 +45,7 @@ A ready-to-use MC script is provided in `docs/english-club-host-guide.md`.
 - Build-time bank validator: `scripts/check-quiz-bank.mjs`
 - All factual questions carry an optional `sourceUrl`, shown after answering.
 - `npm run build` runs validation (including **100 simulated rounds**) before Next.js compilation.
-- The check fails the deployment for duplicate IDs or answers, missing images, unexpected ratios, incorrect answer mappings, or insufficient question coverage.
+- The check fails the deployment for duplicate IDs or answers, missing images, unexpected ratios, incorrect answer mappings, or insufficient question coverage. It also checks that the challenge appears last.
 
 ### Selected reliable references
 
