@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+ <title id="title">Teamwork illustration</title>
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9333ea"/><stop offset="1" stop-color="#c084fc"/></linearGradient>
+ <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="790" height="480" rx="28" fill="url(#g)"/>
+ <circle cx="620" cy="48" r="236" fill="url(#r)"/><circle cx="90" cy="424" r="190" fill="#fff" fill-opacity=".07"/>
+ <path d="M38 58h48m-24-24v48M676 388h44m-22-22v44" stroke="#fff" stroke-opacity=".34" stroke-width="8" stroke-linecap="round"/>
+ <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><g fill="#fff" fill-opacity=".17" stroke-width="10"><circle cx="272" cy="176" r="54"/><circle cx="517" cy="176" r="54"/><circle cx="395" cy="128" r="63"/></g><path d="M212 366v-36q0-77 75-77 35 0 56 31m237 82v-36q0-77-75-77-35 0-56 31M286 378v-63q0-81 109-81t109 81v63Z" fill="#fff" fill-opacity=".15" stroke-width="11"/><path d="m321 357 58 42 85-74" stroke-width="11"/></g>
+ </svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+ <title id="title">Book illustration</title>
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+ <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="790" height="480" rx="28" fill="url(#g)"/>
+ <circle cx="620" cy="48" r="236" fill="url(#r)"/><circle cx="90" cy="424" r="190" fill="#fff" fill-opacity=".07"/>
+ <path d="M38 58h48m-24-24v48M676 388h44m-22-22v44" stroke="#fff" stroke-opacity=".34" stroke-width="8" stroke-linecap="round"/>
+ <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M169 172q93-38 214 22v192q-116-51-214-22Zm214 22q121-60 238-22v192q-104-29-238 22Z" fill="#fff" fill-opacity=".14" stroke-width="12"/><path d="M383 193v194M216 228q70-21 123 11M433 239q58-32 129-22M216 278q70-21 123 11M433 291q58-32 129-22" stroke-width="8"/></g>
+ </svg>
