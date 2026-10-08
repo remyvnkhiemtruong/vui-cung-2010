@@ -147,7 +147,7 @@ export function LiveHome(){
     <div className="mx-auto flex h-full max-w-3xl flex-col items-center justify-center gap-4">
       <div className="text-center"><Gamepad2 className="mx-auto mb-2 h-12 w-12 text-rose-600"/>
         <h2 className="text-2xl font-black sm:text-4xl">Vietnamese Women's Day</h2>
-        <p className="mt-2 text-sm text-slate-600">10 shared questions • Up to 50 players • Live ranking</p>
+        <p className="mt-2 text-sm text-slate-600">200 unique questions • Up to 50 players • No repeats</p>
       </div>
       <Panel className="w-full max-w-xl">
         <label htmlFor="roomCode" className="text-xs font-bold text-rose-800">ENTER YOUR 6-CHARACTER ROOM CODE</label>
