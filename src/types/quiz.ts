@@ -14,6 +14,8 @@ export interface Question {
   options: QuestionOption[];
   correctAnswer: OptionKey;
   image?: string;
+  imageCredit?: string;
+  imageSourceUrl?: string;
   explanation?: string;
   category?: string;
 }
