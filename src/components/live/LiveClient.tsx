@@ -120,22 +120,47 @@ export function LiveHome(){
           placeholder="ABC123" className="my-2 w-full rounded-xl border-2 border-rose-200 p-3 text-center text-2xl font-black tracking-widest focus:border-rose-500 focus:outline-none"/>
         <Button disabled={code.length!==6} onClick={()=>router.push('/live/join/'+code)}><Smartphone className="h-4 w-4"/> JOIN GAME</Button>
       </Panel>
-      <Link href="/live/host" className="inline-flex items-center gap-2 text-sm font-bold text-rose-800 underline"><Shield className="h-4 w-4"/> Host / MC dashboard</Link>
+      <Link href="/live/host" className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-6 py-3 text-sm font-black text-white shadow hover:bg-rose-700">
+        <Play className="h-4 w-4"/> CREATE ROOM & INVITE STUDENTS
+      </Link>
       <Link href="/" className="text-xs text-slate-500 underline">Return to the solo quiz</Link>
     </div>
   </LiveLayout>;
 }
 
 export function HostConsole(){
-  const [passcode,setPasscode]=useState(''),[session,setSession]=useState<HostSession|null>(null);
+  const [session,setSession]=useState<HostSession|null>(null);
+  const creatingRef=useRef(false);
   const [origin,setOrigin]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
-  useEffect(()=>{setOrigin(window.location.origin);const raw=sessionStorage.getItem('live-quiz-host');if(raw){try{setSession(JSON.parse(raw) as HostSession)}catch{}}},[]);
+  useEffect(()=>{
+    setOrigin(window.location.origin);
+    const raw=sessionStorage.getItem('live-quiz-host');
+    if(raw){try{const previous=JSON.parse(raw) as HostSession;setSession(previous);return;}catch{sessionStorage.removeItem('live-quiz-host');}}
+    if(creatingRef.current)return;
+    creatingRef.current=true;
+    void createRoom();
+  // Creation is intentionally once on entry and can be retried manually on failure.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
   const {room,issue,refresh,remaining}=useRoom(session?.code??'------');
-  const create=async()=>{
+  const createRoom=async()=>{
+    if(busy)return;
     setBusy(true);setMessage('');
-    try{const data=await requestJson<{code:string,hostToken:string}>('/api/live',{method:'POST',body:JSON.stringify({passcode})});
-      const value={code:data.code,token:data.hostToken};sessionStorage.setItem('live-quiz-host',JSON.stringify(value));setSession(value);setPasscode('');
-    }catch(e){setMessage(e instanceof Error?e.message:'Could not create room.')}finally{setBusy(false)}
+    try{
+      const data=await requestJson<{code:string,hostToken:string}>('/api/live',{
+        method:'POST',body:JSON.stringify({})
+      });
+      const value={code:data.code,token:data.hostToken};
+      sessionStorage.setItem('live-quiz-host',JSON.stringify(value));
+      setSession(value);
+    }catch(e){setMessage(e instanceof Error?e.message:'Could not create room.')}
+    finally{setBusy(false)}
+  };
+  const newRoom=()=>{
+    // Explicit new-room action: do not reuse the previous session.
+    sessionStorage.removeItem('live-quiz-host');
+    setSession(null);
+    void createRoom();
   };
   const act=async(action:string)=>{
     if(!session)return;setBusy(true);setMessage('');
@@ -145,13 +170,16 @@ export function HostConsole(){
   const joinUrl=origin&&session?origin+'/live/join/'+session.code:'';
   return <LiveLayout title="HOST CONTROL" subtitle="Create and control the live game">
     {!session?<div className="mx-auto flex h-full max-w-md flex-col justify-center gap-3">
-      <Panel><Shield className="mb-2 h-8 w-8 text-rose-600"/><h2 className="text-xl font-black">CREATE A LIVE ROOM</h2>
-        <p className="mb-3 text-sm text-slate-600">Enter the private MC passcode. Do not share it with students.</p>
-        <input autoComplete="off" type="password" value={passcode} onChange={e=>setPasscode(e.target.value)}
-          placeholder="Host passcode" className="mb-3 w-full rounded-xl border-2 border-rose-200 p-3"/>
-        <Button disabled={busy||passcode.length<12} onClick={()=>void create()}><Play className="h-4 w-4"/> CREATE ROOM</Button>
+      <Panel>
+        <Shield className="mb-2 h-8 w-8 text-rose-600"/>
+        <h2 className="text-xl font-black">PREPARING YOUR ROOM</h2>
+        <p className="my-3 text-sm text-slate-600">
+          {busy ? 'Creating your private host controls and public invite QR...' : 'Room creation is ready.'}
+        </p>
+        {!busy&&<Button onClick={()=>void createRoom()}><RotateCcw className="h-4 w-4"/> TRY AGAIN</Button>}
         {message&&<p role="alert" className="mt-2 text-xs font-semibold text-rose-700">{message}</p>}
-      </Panel></div>:
+      </Panel>
+    </div>:
       <div className="grid h-full min-h-0 grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(280px,1fr)]">
         <Panel className="flex min-h-0 flex-col gap-3 overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -173,6 +201,7 @@ export function HostConsole(){
             {room?.phase==='reveal'&&<Button disabled={busy} onClick={()=>void act('next')}>{room.index+1>=room.total?'FINISH GAME':'NEXT QUESTION'} <ArrowRight className="h-4 w-4"/></Button>}
             {(room?.phase==='question'||room?.phase==='reveal')&&<Button variant="light" disabled={busy} onClick={()=>{if(confirm('End this room now?'))void act('finish')}}>END EARLY</Button>}
             {session&&<Button variant="light" onClick={()=>window.open('/live/screen/'+session.code,'_blank','noopener,noreferrer')}><Monitor className="h-4 w-4"/> PROJECTOR</Button>}
+            {room?.phase==='finished'&&<Button variant="light" onClick={newRoom}><RotateCcw className="h-4 w-4"/> NEW ROOM</Button>}
           </div>
         </Panel>
         <Panel className="flex min-h-0 flex-col gap-2 overflow-hidden">
