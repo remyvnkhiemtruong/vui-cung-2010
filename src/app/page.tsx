@@ -87,7 +87,7 @@ export default function QuizApp() {
 
         {/* Footer */}
         <footer className="relative z-10 w-full py-3 text-center text-xs text-rose-800/70 select-none">
-          Kỷ niệm Ngày Phụ Nữ Việt Nam 20/10 • Thiết kế cho trường học &amp; sân khấu sự kiện
+          Celebrating Vietnamese Women's Day • Designed for schools and live events
         </footer>
       </div>
     </main>
