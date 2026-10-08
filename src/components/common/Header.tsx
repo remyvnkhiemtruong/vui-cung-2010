@@ -1,29 +1,26 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import SoundToggle from './SoundToggle';
 
 export default function Header() {
   return (
-    <header className="relative z-10 w-full py-3 sm:py-4 px-4 flex flex-col items-center justify-center text-center">
-      {/* Sound Toggle Button Top-Right */}
-      <div className="absolute right-4 top-3 sm:top-4 z-20">
+    <header className="app-header relative z-10 flex w-full items-center justify-center px-3 py-1.5 text-center">
+      <div className="min-w-0">
+        <span className="header-extra block text-[10px] font-extrabold uppercase tracking-wider text-rose-700">
+          English Club Mini Game
+        </span>
+        <h1 className="header-title text-xl sm:text-3xl font-black leading-none text-rose-950">
+          CELEBRATE <span className="text-rose-600">20/10</span>
+        </h1>
+        <p className="header-subtitle text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-rose-700">
+          Vietnamese Women&apos;s Day <Heart className="inline h-3 w-3 fill-rose-400" aria-hidden="true" />
+        </p>
+      </div>
+      <div className="absolute right-2 top-1.5">
         <SoundToggle />
       </div>
-
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-xs sm:text-sm font-semibold mb-2 shadow-xs">
-        <Sparkles className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
-        <span>ENGLISH CLUB • WOMEN'S DAY SPECIAL</span>
-        <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-      </div>
-
-      <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-rose-950 uppercase drop-shadow-xs">
-        CELEBRATE <span className="text-rose-600 underline decoration-rose-300 decoration-wavy decoration-2">20/10</span>
-      </h1>
-      <p className="text-xs sm:text-sm md:text-base font-medium text-rose-800/80 mt-1 tracking-wider uppercase">
-        OCTOBER 20 • CELEBRATIONS • VIETNAMESE WOMEN
-      </p>
     </header>
   );
 }
