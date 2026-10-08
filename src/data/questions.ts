@@ -1077,5 +1077,12 @@ export function buildQuizRound(
     }
   }
 
-  return shuffleQuestions(selected).map(shuffleQuestionOptions);
+  // Keep questions unpredictable, but build confidence before the final challenge.
+  // Each difficulty group is shuffled independently.
+  const order = ['warm-up', 'standard', 'challenge'];
+  const ordered = order.flatMap(level =>
+    shuffleQuestions(selected.filter(q => q.difficulty === level))
+  );
+  const remaining = selected.filter(q => !q.difficulty);
+  return [...ordered, ...shuffleQuestions(remaining)].map(shuffleQuestionOptions);
 }
