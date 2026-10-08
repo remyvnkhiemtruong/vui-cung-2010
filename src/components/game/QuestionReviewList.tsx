@@ -61,7 +61,7 @@ export default function QuestionReviewList({
         let statusBadge = (
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-200">
             <XCircle className="w-3.5 h-3.5 text-rose-600" />
-            Chưa đúng
+            Incorrect
           </span>
         );
         let borderStyle = 'border-rose-200/90 bg-rose-50/20';
@@ -70,7 +70,7 @@ export default function QuestionReviewList({
           statusBadge = (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              Chính xác (+{item.scoreAwarded}đ)
+              Correct (+{item.scoreAwarded} pts)
             </span>
           );
           borderStyle = 'border-emerald-200/90 bg-emerald-50/20';
@@ -78,7 +78,7 @@ export default function QuestionReviewList({
           statusBadge = (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-200">
               <Clock className="w-3.5 h-3.5 text-amber-600" />
-              Hết giờ (0đ)
+              Time up (0 pts)
             </span>
           );
           borderStyle = 'border-amber-200/90 bg-amber-50/20';
@@ -100,7 +100,7 @@ export default function QuestionReviewList({
                 </span>
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-rose-500" />
-                  {item.question.category || '20/10 Quiz'}
+                  {item.question.category || 'October 20 Quiz'}
                 </span>
               </div>
 
@@ -132,12 +132,12 @@ export default function QuestionReviewList({
                 </div>
                 <div className="min-w-0">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 leading-none mb-1">
-                    Bạn chọn:
+                    Your answer:
                   </div>
                   <div className="font-extrabold leading-snug">
                     {item.isTimeout ? (
                       <span className="italic text-amber-800">
-                        Hết giờ (Không chọn kịp)
+                        Time expired (no answer)
                       </span>
                     ) : item.selectedKey ? (
                       <span>
@@ -147,7 +147,7 @@ export default function QuestionReviewList({
                         {item.selectedText}
                       </span>
                     ) : (
-                      <span className="italic text-slate-400">Chưa trả lời</span>
+                      <span className="italic text-slate-400">No answer</span>
                     )}
                   </div>
                 </div>
@@ -160,7 +160,7 @@ export default function QuestionReviewList({
                 </div>
                 <div className="min-w-0">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 leading-none mb-1">
-                    Đáp án đúng:
+                    Correct answer:
                   </div>
                   <div className="font-extrabold text-emerald-900 leading-snug">
                     <span className="underline decoration-emerald-500">
@@ -177,7 +177,7 @@ export default function QuestionReviewList({
               <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-start gap-1.5 text-xs text-slate-600">
                 <Lightbulb className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  <strong>Ghi chú:</strong> {item.explanation}
+                  <strong>Explanation:</strong> {item.explanation}
                 </span>
               </div>
             )}
