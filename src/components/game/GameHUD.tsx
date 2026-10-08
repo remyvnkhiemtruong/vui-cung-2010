@@ -41,13 +41,13 @@ export default function GameHUD({
               </div>
               <div className="min-w-0">
                 <div className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none hidden sm:block">
-                  Người chơi
+                  Player
                 </div>
                 <div
                   className="text-xs sm:text-sm font-extrabold text-slate-900 truncate max-w-[65px] xs:max-w-[90px] sm:max-w-[140px] md:max-w-[180px]"
                   title={playerName}
                 >
-                  {playerName || 'Khách'}
+                  {playerName || 'Guest'}
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@ export default function GameHUD({
             {/* Question Counter Pill */}
             <div className="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-purple-50/90 border border-purple-100 shadow-xs shrink-0">
               <span className="text-[10px] sm:text-xs font-bold text-purple-500 uppercase tracking-wider hidden xs:inline">
-                Câu
+                Question
               </span>
               <span className="text-xs sm:text-base md:text-lg font-black text-purple-800">
                 {currentStep}
@@ -111,7 +111,7 @@ export default function GameHUD({
               <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white shrink-0" />
               <div>
                 <div className="text-[8px] sm:text-[9px] font-bold text-amber-100 uppercase tracking-wider leading-none hidden sm:block">
-                  Điểm
+                  Score
                 </div>
                 <div
                   key={score}
@@ -127,7 +127,7 @@ export default function GameHUD({
         {/* Bottom: Full Game Progress Bar */}
         <div className="w-full flex items-center gap-2 sm:gap-3 pt-0.5 sm:pt-1">
           <div className="text-[9px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider shrink-0">
-            Tiến độ
+            Progress
           </div>
           <div className="grow bg-rose-100/70 h-2 sm:h-2.5 rounded-full overflow-hidden p-0.5 shadow-inner">
             <div
