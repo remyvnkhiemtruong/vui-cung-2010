@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Vietnamese Women's Day Quiz | October 20",
     description: "An interactive quiz celebrating Vietnamese Women's Day on October 20.",
     type: "website",
-    locale: "vi_VN",
+    locale: "en_US",
     siteName: "Vietnamese Women's Day Quiz",
   },
   twitter: {
@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="h-full">
+    <html lang="en" className="h-full">
       <body className="min-h-full flex flex-col antialiased selection:bg-rose-500 selection:text-white">
         {children}
       </body>
