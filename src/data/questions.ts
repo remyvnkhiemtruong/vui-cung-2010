@@ -771,5 +771,27 @@ export function buildQuizRound(
     }
   }
 
+  // Keep visual variety: when image questions exist, ensure every round
+  // contains at least one image question.
+  if (!selected.some((question) => question.image)) {
+    const imageCandidates = shuffledBank.filter(
+      (question) =>
+        question.image && !selected.some((item) => item.id === question.id)
+    );
+
+    if (imageCandidates.length > 0 && selected.length > 0) {
+      const imageQuestion =
+        imageCandidates[Math.floor(Math.random() * imageCandidates.length)];
+
+      const sameCategoryIndex = selected.findIndex(
+        (question) => question.category === imageQuestion.category
+      );
+      const replaceIndex =
+        sameCategoryIndex >= 0 ? sameCategoryIndex : selected.length - 1;
+
+      selected[replaceIndex] = imageQuestion;
+    }
+  }
+
   return shuffleQuestions(selected).map(shuffleQuestionOptions);
 }
