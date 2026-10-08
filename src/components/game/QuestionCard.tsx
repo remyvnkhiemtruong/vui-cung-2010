@@ -104,13 +104,13 @@ export default function QuestionCard({
             {question.type === 'image-choice' && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 shadow-xs">
                 <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
-                Câu hỏi hình ảnh
+                Image question
               </span>
             )}
           </div>
 
           <span className="text-xs sm:text-sm font-semibold text-slate-500 hidden sm:flex items-center gap-1">
-            <HelpCircle className="w-4 h-4 text-slate-400" /> Chọn 1 đáp án hoặc nhấn phím A, B, C, D
+            <HelpCircle className="w-4 h-4 text-slate-400" /> Choose one answer or press A, B, C, or D
           </span>
         </div>
 
@@ -128,6 +128,8 @@ export default function QuestionCard({
               src={question.image}
               alt={question.question}
               category={question.category}
+              credit={question.imageCredit}
+              sourceUrl={question.imageSourceUrl}
               className="md:w-5/12"
             />
           )}
@@ -178,7 +180,7 @@ export default function QuestionCard({
                 type="button"
                 disabled={isAnswered}
                 onClick={() => onSelectOption(option.key)}
-                aria-label={`Lựa chọn ${option.key}: ${option.text}`}
+                aria-label={`Option ${option.key}: ${option.text}`}
                 className={`
                   group quiz-option-btn w-full text-left p-4 sm:p-5 rounded-2xl border-2 flex items-start gap-3.5 sm:gap-4 transition-all duration-200 cursor-pointer disabled:cursor-default focus:outline-hidden focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-2
                   ${containerStyle}
@@ -235,12 +237,12 @@ export default function QuestionCard({
                   <>
                     <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
                     <span className="font-black text-emerald-900 text-lg sm:text-2xl tracking-tight">
-                      CHÍNH XÁC! 🎉
+                      CORRECT! 🎉
                     </span>
                     {scoreGained !== undefined && scoreGained > 0 && (
                       <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-600 text-white font-black text-xs sm:text-sm shadow-xs">
                         <Flame className="w-3.5 h-3.5 fill-white" />
-                        +{scoreGained} điểm
+                        +{scoreGained} points
                       </span>
                     )}
                   </>
@@ -248,14 +250,14 @@ export default function QuestionCard({
                   <>
                     <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0" />
                     <span className="font-black text-rose-900 text-lg sm:text-2xl tracking-tight">
-                      HẾT GIỜ! ⏰
+                      TIME'S UP! ⏰
                     </span>
                   </>
                 ) : (
                   <>
                     <XCircle className="w-6 h-6 text-rose-600 shrink-0" />
                     <span className="font-black text-rose-900 text-lg sm:text-2xl tracking-tight">
-                      CHƯA CHÍNH XÁC
+                      NOT QUITE
                     </span>
                   </>
                 )}
@@ -263,7 +265,7 @@ export default function QuestionCard({
 
               {/* Correct Answer Display */}
               <div className="text-sm sm:text-base font-bold text-slate-800">
-                Đáp án đúng:{' '}
+                Correct answer:{' '}
                 <span className="text-emerald-800 font-extrabold underline decoration-emerald-400">
                   {question.correctAnswer}. {correctOption?.text}
                 </span>
@@ -283,7 +285,7 @@ export default function QuestionCard({
               onClick={onNext}
               className="w-full md:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-rose-600 hover:from-rose-700 hover:to-rose-600 text-white font-black text-base sm:text-lg shadow-xl shadow-rose-500/30 flex items-center justify-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer shrink-0 focus:outline-hidden focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
             >
-              <span>{isLastQuestion ? 'XEM KẾT QUẢ' : 'CÂU TIẾP THEO →'}</span>
+              <span>{isLastQuestion ? 'VIEW RESULTS' : 'NEXT QUESTION →'}</span>
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
