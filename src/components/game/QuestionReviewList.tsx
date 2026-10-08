@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   CheckCircle2,
   XCircle,
@@ -111,6 +112,19 @@ export default function QuestionReviewList({
             <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 leading-snug mb-3">
               {item.question.question}
             </h3>
+
+            {item.question.image && (
+              <div className="mb-3 max-w-xs overflow-hidden rounded-xl border border-rose-100 bg-rose-50">
+                <Image
+                  src={item.question.image}
+                  alt={`Illustration for ${item.question.question}`}
+                  width={380}
+                  height={228}
+                  className="h-auto w-full object-contain"
+                  unoptimized
+                />
+              </div>
+            )}
 
             {/* Answers Comparison Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3 text-xs sm:text-sm">
