@@ -45,8 +45,8 @@ export default function ResultScreen({
   const getRankInfo = () => {
     if (accuracy >= 90) {
       return {
-        title: 'BẬC THẦY 20/10 🌸',
-        subtext: 'Tuyệt đỉnh xuất sắc! Bạn am hiểu sâu sắc và có niềm tự hào lớn lao về người phụ nữ Việt Nam!',
+        title: 'OCTOBER 20 MASTER 🌸',
+        subtext: 'Outstanding! You showed excellent knowledge of Vietnamese women, history, culture, and equality.',
         badgeColor: 'from-amber-400 via-rose-500 to-pink-500',
         textColor: 'text-amber-800',
         borderColor: 'border-amber-300',
@@ -54,8 +54,8 @@ export default function ResultScreen({
       };
     } else if (accuracy >= 75) {
       return {
-        title: 'CHUYÊN GIA PHỤ NỮ VIỆT NAM 🌷',
-        subtext: 'Thành tích rất ấn tượng! Kiến thức về lịch sử, truyền thống và phụ nữ Việt Nam của bạn vô cùng đáng nể!',
+        title: 'VIETNAMESE WOMEN EXPERT 🌷',
+        subtext: 'Impressive result! You have strong knowledge of Vietnamese women, history, and traditions.',
         badgeColor: 'from-rose-500 to-pink-500',
         textColor: 'text-rose-800',
         borderColor: 'border-rose-300',
@@ -63,8 +63,8 @@ export default function ResultScreen({
       };
     } else if (accuracy >= 50) {
       return {
-        title: 'NGƯỜI CHƠI TIỀM NĂNG ✨',
-        subtext: 'Chúc mừng bạn! Bạn đã hoàn thành phần thi với số điểm rất tốt và vượt qua hơn nửa chặng đường.',
+        title: 'RISING QUIZ STAR ✨',
+        subtext: 'Well done! You completed the challenge and answered more than half of the questions correctly.',
         badgeColor: 'from-pink-500 to-purple-500',
         textColor: 'text-purple-800',
         borderColor: 'border-purple-300',
@@ -72,8 +72,8 @@ export default function ResultScreen({
       };
     } else {
       return {
-        title: 'THỬ LẠI ĐỂ PHÁ KỶ LỤC 💪',
-        subtext: 'Cảm ơn bạn đã tham gia! Cùng ôn lại những câu chuyện lịch sử thú vị và bứt phá điểm số cao hơn nhé!',
+        title: 'TRY AGAIN & BEAT YOUR SCORE 💪',
+        subtext: 'Thanks for playing! Review the explanations and come back for a new random set of questions.',
         badgeColor: 'from-slate-600 to-rose-600',
         textColor: 'text-slate-800',
         borderColor: 'border-slate-300',
@@ -136,17 +136,17 @@ export default function ResultScreen({
         <div className="text-center mb-6 sm:mb-8">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-100 text-rose-700 font-extrabold text-xs sm:text-sm uppercase tracking-wider mb-2 shadow-xs">
             <Sparkles className="w-3.5 h-3.5 text-rose-600" />
-            <span>Kỷ Niệm Ngày Phụ Nữ Việt Nam 20/10</span>
+            <span>Celebrating Vietnamese Women's Day • October 20</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
-            HOÀN THÀNH THỬ THÁCH 20/10
+            QUIZ COMPLETE
           </h1>
 
           <div className="text-lg sm:text-2xl font-bold text-rose-700 mt-2">
-            Người chơi:{' '}
+            Player:{' '}
             <span className="font-black text-slate-900 underline decoration-rose-300">
-              {stats.playerName || 'Khách'}
+              {stats.playerName || 'Guest'}
             </span>
           </div>
 
@@ -167,13 +167,13 @@ export default function ResultScreen({
         {/* Total Score Highlight Card */}
         <div className="w-full bg-gradient-to-br from-rose-600 via-rose-500 to-pink-600 rounded-3xl p-6 sm:p-8 text-white text-center shadow-xl shadow-rose-500/30 mb-6 sm:mb-8 relative overflow-hidden">
           <div className="text-xs sm:text-sm font-bold uppercase tracking-widest text-rose-100">
-            TỔNG ĐIỂM ĐẠT ĐƯỢC
+            TOTAL SCORE
           </div>
           <div className="text-5xl sm:text-7xl font-black tracking-tight my-2 drop-shadow-sm">
             {stats.score.toLocaleString()}
           </div>
           <div className="text-xs sm:text-sm text-rose-100 font-medium">
-            Bao gồm điểm chính xác (+100/câu), thưởng tốc độ &amp; combo streak
+            Includes +100 per correct answer, speed bonuses, and streak bonuses
           </div>
         </div>
 
@@ -189,7 +189,7 @@ export default function ResultScreen({
               </span>
             </div>
             <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Số câu đúng
+              Correct answers
             </div>
           </div>
 
@@ -203,7 +203,7 @@ export default function ResultScreen({
               </span>
             </div>
             <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Số câu sai / Hết giờ
+              Wrong / timed out
             </div>
           </div>
 
@@ -214,7 +214,7 @@ export default function ResultScreen({
               {accuracy}%
             </div>
             <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Độ chính xác
+              Accuracy
             </div>
           </div>
 
@@ -225,7 +225,7 @@ export default function ResultScreen({
               {stats.maxStreak}
             </div>
             <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Streak cao nhất
+              Best streak
             </div>
           </div>
         </div>
@@ -236,13 +236,13 @@ export default function ResultScreen({
             <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-bold text-amber-900 flex-wrap">
               <Award className="w-4 h-4 text-amber-600 shrink-0" />
               <span>
-                Kỷ lục trên thiết bị này:{' '}
+                Device high score:{' '}
                 <strong className="text-amber-950 font-black">
                   {highScore.playerName}
                 </strong>{' '}
                 –{' '}
                 <strong className="text-rose-700 font-black">
-                  {bestScoreVal.toLocaleString()} điểm
+                  {bestScoreVal.toLocaleString()} points
                 </strong>{' '}
                 ({highScore.accuracy}%)
               </span>
@@ -266,13 +266,13 @@ export default function ResultScreen({
           >
             <div className="flex items-center gap-2">
               <ListFilter className="w-4 h-4 text-rose-600" />
-              <span>XEM LẠI CÂU TRẢ LỜI</span>
+              <span>REVIEW ANSWERS</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold">
-                {totalQuestions} câu
+                {totalQuestions} questions
               </span>
             </div>
             <div className="flex items-center gap-1 text-xs text-rose-600">
-              <span>{showReview ? 'Thu gọn' : 'Chi tiết'}</span>
+              <span>{showReview ? 'Collapse' : 'Details'}</span>
               {showReview ? (
                 <ChevronUp className="w-5 h-5" />
               ) : (
@@ -303,7 +303,7 @@ export default function ResultScreen({
             onClick={onPlayAgain}
             leftIcon={<RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />}
           >
-            CHƠI LẠI
+            PLAY AGAIN
           </Button>
 
           <Button
@@ -314,7 +314,7 @@ export default function ResultScreen({
             onClick={onGoHome}
             leftIcon={<Home className="w-5 h-5 sm:w-6 sm:h-6" />}
           >
-            VỀ TRANG CHỦ
+            BACK TO HOME
           </Button>
         </div>
       </Card>
