@@ -293,7 +293,7 @@ export default function ResultScreen({
           )}
         </div>
 
-        {/* Action Buttons: Chơi lại & Về trang chủ */}
+        {/* Action buttons: Play again & Back to home */}
         <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-4">
           <Button
             type="button"
