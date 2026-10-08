@@ -1,25 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import {
-  Trophy,
-  RotateCcw,
-  Home,
-  Flame,
-  CheckCircle,
-  XCircle,
-  Percent,
-  Award,
-  Sparkles,
-  ChevronDown,
-  ChevronUp,
-  ListFilter,
+  Award, Trophy, RotateCcw, Home, Flame, CheckCircle2,
+  XCircle, ArrowLeft, ArrowRight, ListChecks, Medal,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { PlayerStats, HighScoreRecord, Question } from '@/types/quiz';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
-import QuestionReviewList from './QuestionReviewList';
 
 interface ResultScreenProps {
   stats: PlayerStats;
@@ -31,292 +20,172 @@ interface ResultScreenProps {
 }
 
 export default function ResultScreen({
-  stats,
-  totalQuestions,
-  questions,
-  highScore,
-  onPlayAgain,
-  onGoHome,
+  stats, totalQuestions, questions, highScore, onPlayAgain, onGoHome,
 }: ResultScreenProps) {
-  const [showReview, setShowReview] = useState(false);
+  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
   const accuracy = Math.round((stats.correctCount / totalQuestions) * 100) || 0;
+  const bestScore = highScore?.bestScore ?? highScore?.score;
+  const rank =
+    accuracy >= 90 ? 'OCTOBER 20 MASTER 🌸' :
+    accuracy >= 75 ? 'VIETNAMESE WOMEN EXPERT 🌷' :
+    accuracy >= 50 ? 'RISING QUIZ STAR ✨' : 'KEEP LEARNING & CELEBRATING 💪';
 
-  // Exact Rank Titles based on user requirements
-  const getRankInfo = () => {
-    if (accuracy >= 90) {
-      return {
-        title: 'OCTOBER 20 MASTER 🌸',
-        subtext: 'Outstanding! You showed excellent knowledge of Vietnamese women, history, culture, and equality.',
-        badgeColor: 'from-amber-400 via-rose-500 to-pink-500',
-        textColor: 'text-amber-800',
-        borderColor: 'border-amber-300',
-        bgColor: 'bg-amber-50',
-      };
-    } else if (accuracy >= 75) {
-      return {
-        title: 'VIETNAMESE WOMEN EXPERT 🌷',
-        subtext: 'Impressive result! You have strong knowledge of Vietnamese women, history, and traditions.',
-        badgeColor: 'from-rose-500 to-pink-500',
-        textColor: 'text-rose-800',
-        borderColor: 'border-rose-300',
-        bgColor: 'bg-rose-50',
-      };
-    } else if (accuracy >= 50) {
-      return {
-        title: 'RISING QUIZ STAR ✨',
-        subtext: 'Well done! You completed the challenge and answered more than half of the questions correctly.',
-        badgeColor: 'from-pink-500 to-purple-500',
-        textColor: 'text-purple-800',
-        borderColor: 'border-purple-300',
-        bgColor: 'bg-purple-50',
-      };
-    } else {
-      return {
-        title: 'TRY AGAIN & BEAT YOUR SCORE 💪',
-        subtext: 'Thanks for playing! Review the explanations and come back for a new random set of questions.',
-        badgeColor: 'from-slate-600 to-rose-600',
-        textColor: 'text-slate-800',
-        borderColor: 'border-slate-300',
-        bgColor: 'bg-slate-50',
-      };
-    }
-  };
-
-  const rank = getRankInfo();
-
-  // Fire celebratory confetti when accuracy >= 75%
   useEffect(() => {
-    if (accuracy >= 75) {
-      if (
-        typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ) {
-        return;
-      }
-
-      const end = Date.now() + 2000;
-      const colors = ['#f43f5e', '#ec4899', '#fbbf24', '#ffffff', '#10b981'];
-
-      (function frame() {
-        confetti({
-          particleCount: 4,
-          angle: 60,
-          spread: 60,
-          origin: { x: 0, y: 0.7 },
-          colors: colors,
-        });
-        confetti({
-          particleCount: 4,
-          angle: 120,
-          spread: 60,
-          origin: { x: 1, y: 0.7 },
-          colors: colors,
-        });
-
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      })();
-    }
+    if (accuracy < 75 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const end = Date.now() + 1100;
+    let frame = 0;
+    const celebrate = () => {
+      confetti({ particleCount: 5, spread: 55, origin: { x: 0.1, y: 0.65 } });
+      confetti({ particleCount: 5, spread: 55, origin: { x: 0.9, y: 0.65 } });
+      if (Date.now() < end) frame = requestAnimationFrame(celebrate);
+    };
+    celebrate();
+    return () => cancelAnimationFrame(frame);
   }, [accuracy]);
 
-  const bestScoreVal = highScore?.bestScore ?? highScore?.score;
+  const active = reviewIndex === null ? null : questions[reviewIndex];
+  const record = active ? stats.answers.find(a => a.questionId === active.id) : null;
+  const correct = active?.options.find(o => o.key === active.correctAnswer);
+  const chosen = active?.options.find(o => o.key === record?.selectedAnswer);
 
   return (
-    <div className="w-full max-w-3xl lg:max-w-4xl mx-auto px-4 py-4 sm:py-6 flex flex-col items-center select-none animate-in fade-in duration-300">
-      <Card glow className="w-full flex flex-col items-center p-6 sm:p-10 md:p-12">
-        {/* Stage Crown / Medal Icon */}
-        <div
-          className={`w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr ${rank.badgeColor} flex items-center justify-center text-white shadow-xl shadow-rose-500/25 mb-4 animate-bounce`}
-        >
-          <Trophy className="w-10 h-10 sm:w-12 sm:h-12 drop-shadow-md" />
-        </div>
-
-        {/* Main Heading & Player Name */}
-        <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-rose-100 text-rose-700 font-extrabold text-xs sm:text-sm uppercase tracking-wider mb-2 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-rose-600" />
-            <span>Celebrating Vietnamese Women's Day • October 20</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
-            QUIZ COMPLETE
-          </h1>
-
-          <div className="text-lg sm:text-2xl font-bold text-rose-700 mt-2">
-            Player:{' '}
-            <span className="font-black text-slate-900 underline decoration-rose-300">
-              {stats.playerName || 'Guest'}
-            </span>
-          </div>
-
-          {/* Fun Title Badge */}
-          <div className="mt-3">
-            <div
-              className={`inline-block px-5 py-2 rounded-2xl border-2 font-black text-base sm:text-xl shadow-sm ${rank.bgColor} ${rank.borderColor} ${rank.textColor}`}
-            >
-              {rank.title}
+    <div className="results-screen">
+      <Card glow className="results-card">
+        {reviewIndex === null ? (
+          <>
+            <div className="text-center">
+              <div className="mb-1 inline-flex items-center justify-center gap-2 rounded-full bg-rose-100 px-3 py-1 text-[10px] sm:text-xs font-bold text-rose-700">
+                <Trophy className="h-4 w-4" /> Vietnamese Women&apos;s Day
+              </div>
+              <h2 className="results-title text-slate-900">QUIZ COMPLETE!</h2>
+              <p className="mt-1 truncate text-sm font-bold text-rose-800" title={stats.playerName}>
+                {stats.playerName || 'Guest'}
+              </p>
+              <p className="mt-1 text-xs sm:text-sm font-extrabold text-rose-700">{rank}</p>
             </div>
-          </div>
 
-          <p className="text-xs sm:text-sm text-slate-600 mt-2.5 max-w-lg mx-auto leading-relaxed">
-            {rank.subtext}
-          </p>
-        </div>
+            <div className="rounded-2xl bg-gradient-to-br from-rose-600 to-pink-600 px-4 py-3 text-center text-white shadow-lg">
+              <p className="text-[10px] sm:text-xs font-extrabold tracking-widest">TOTAL SCORE</p>
+              <p className="results-score">{stats.score.toLocaleString()}</p>
+              <p className="text-[10px] sm:text-xs text-rose-100">Correct answers · Speed bonus · Streak bonus</p>
+            </div>
 
-        {/* Total Score Highlight Card */}
-        <div className="w-full bg-gradient-to-br from-rose-600 via-rose-500 to-pink-600 rounded-3xl p-6 sm:p-8 text-white text-center shadow-xl shadow-rose-500/30 mb-6 sm:mb-8 relative overflow-hidden">
-          <div className="text-xs sm:text-sm font-bold uppercase tracking-widest text-rose-100">
-            TOTAL SCORE
-          </div>
-          <div className="text-5xl sm:text-7xl font-black tracking-tight my-2 drop-shadow-sm">
-            {stats.score.toLocaleString()}
-          </div>
-          <div className="text-xs sm:text-sm text-rose-100 font-medium">
-            Includes +100 per correct answer, speed bonuses, and streak bonuses
-          </div>
-        </div>
+            <div className="results-stats" aria-label="Game statistics">
+              <div className="results-stat bg-emerald-50">
+                <CheckCircle2 className="mx-auto h-4 w-4 text-emerald-700" />
+                <strong className="block text-emerald-800">{stats.correctCount}/{totalQuestions}</strong>
+                <span className="text-[10px] sm:text-xs font-bold text-slate-600">Correct</span>
+              </div>
+              <div className="results-stat bg-rose-50">
+                <XCircle className="mx-auto h-4 w-4 text-rose-700" />
+                <strong className="block text-rose-800">{stats.wrongCount}</strong>
+                <span className="text-[10px] sm:text-xs font-bold text-slate-600">Wrong / Timed out</span>
+              </div>
+              <div className="results-stat bg-blue-50">
+                <Medal className="mx-auto h-4 w-4 text-blue-700" />
+                <strong className="block text-blue-800">{accuracy}%</strong>
+                <span className="text-[10px] sm:text-xs font-bold text-slate-600">Accuracy</span>
+              </div>
+              <div className="results-stat bg-amber-50">
+                <Flame className="mx-auto h-4 w-4 text-orange-700" />
+                <strong className="block text-orange-800">{stats.maxStreak}</strong>
+                <span className="text-[10px] sm:text-xs font-bold text-slate-600">Best streak</span>
+              </div>
+            </div>
 
-        {/* 4 Key Metrics Grid */}
-        <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          {/* Metric 1: Correct / 12 */}
-          <div className="bg-emerald-50/90 border border-emerald-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-xs">
-            <CheckCircle className="w-6 h-6 mx-auto text-emerald-600 mb-1" />
-            <div className="text-xl sm:text-3xl font-black text-emerald-800">
-              {stats.correctCount}{' '}
-              <span className="text-xs sm:text-sm text-emerald-600 font-bold">
-                /{totalQuestions}
-              </span>
-            </div>
-            <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Correct answers
-            </div>
-          </div>
+            {highScore && bestScore !== undefined && (
+              <div className="flex items-center justify-center gap-2 text-center text-[10px] sm:text-xs font-bold text-amber-800">
+                <Award className="h-4 w-4 shrink-0" />
+                <span className="truncate">Device best: {highScore.playerName} — {bestScore.toLocaleString()} pts</span>
+              </div>
+            )}
 
-          {/* Metric 2: Wrong / 12 */}
-          <div className="bg-rose-50/90 border border-rose-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-xs">
-            <XCircle className="w-6 h-6 mx-auto text-rose-600 mb-1" />
-            <div className="text-xl sm:text-3xl font-black text-rose-800">
-              {stats.wrongCount}{' '}
-              <span className="text-xs sm:text-sm text-rose-600 font-bold">
-                /{totalQuestions}
-              </span>
+            <div className="results-actions">
+              <button type="button" onClick={() => setReviewIndex(0)}
+                className="inline-flex items-center justify-center gap-1 rounded-xl border-2 border-rose-200 bg-white px-2 py-2.5 text-xs sm:text-sm font-black text-rose-800 hover:bg-rose-50">
+                <ListChecks className="h-4 w-4" /> REVIEW
+              </button>
+              <button type="button" onClick={onPlayAgain}
+                className="inline-flex items-center justify-center gap-1 rounded-xl bg-rose-600 px-2 py-2.5 text-xs sm:text-sm font-black text-white hover:bg-rose-700">
+                <RotateCcw className="h-4 w-4" /> PLAY AGAIN
+              </button>
+              <button type="button" onClick={onGoHome}
+                className="inline-flex items-center justify-center gap-1 rounded-xl border-2 border-rose-200 bg-white px-2 py-2.5 text-xs sm:text-sm font-black text-rose-800 hover:bg-rose-50">
+                <Home className="h-4 w-4" /> HOME
+              </button>
             </div>
-            <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Wrong / timed out
+          </>
+        ) : active ? (
+          <div className="results-review">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p className="text-[10px] sm:text-xs font-extrabold uppercase text-rose-700">ANSWER REVIEW</p>
+                <h2 className="text-base sm:text-xl font-black text-slate-900">Question {reviewIndex + 1} of {totalQuestions}</h2>
+              </div>
+              <button type="button" onClick={() => setReviewIndex(null)}
+                className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-xs font-extrabold text-rose-800 hover:bg-rose-50">
+                BACK TO RESULTS
+              </button>
             </div>
-          </div>
 
-          {/* Metric 3: Accuracy % */}
-          <div className="bg-blue-50/90 border border-blue-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-xs">
-            <Percent className="w-6 h-6 mx-auto text-blue-600 mb-1" />
-            <div className="text-xl sm:text-3xl font-black text-blue-800">
-              {accuracy}%
-            </div>
-            <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Accuracy
-            </div>
-          </div>
+            <div className="min-h-0 flex-1 flex flex-col justify-center gap-2">
+              {active.image && (
+                <div className="flex items-center justify-center">
+                  <Image
+                    src={active.image}
+                    alt={`Illustration for ${active.question}`}
+                    width={300}
+                    height={185}
+                    className="review-illustration"
+                    unoptimized
+                  />
+                </div>
+              )}
+              <p className="text-[10px] sm:text-xs font-bold uppercase text-rose-700">{active.category}</p>
+              <h3 className="review-question text-slate-900">{active.question}</h3>
 
-          {/* Metric 4: Highest Streak */}
-          <div className="bg-orange-50/90 border border-orange-200 rounded-2xl p-3.5 sm:p-4 text-center shadow-xs">
-            <Flame className="w-6 h-6 mx-auto text-orange-600 mb-1" />
-            <div className="text-xl sm:text-3xl font-black text-orange-800">
-              {stats.maxStreak}
-            </div>
-            <div className="text-[11px] sm:text-xs font-bold text-slate-500 mt-0.5">
-              Best streak
-            </div>
-          </div>
-        </div>
+              <div className="review-info">
+                <div>
+                  <span className="text-[10px] font-bold uppercase text-rose-700">Your answer</span>
+                  <p className={`text-xs sm:text-base font-extrabold ${record?.isCorrect ? 'text-emerald-800' : 'text-rose-800'}`}>
+                    {record?.selectedAnswer ? `${record.selectedAnswer}. ${chosen?.text}` : "Time's up"}
+                  </p>
+                </div>
+                <div className="!bg-emerald-50">
+                  <span className="text-[10px] font-bold uppercase text-emerald-700">Correct answer</span>
+                  <p className="text-xs sm:text-base font-extrabold text-emerald-900">
+                    {active.correctAnswer}. {correct?.text}
+                  </p>
+                </div>
+              </div>
 
-        {/* LocalStorage Record Banner */}
-        {highScore && bestScoreVal !== undefined && (
-          <div className="w-full mb-6 p-3.5 sm:p-4 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-center shadow-xs">
-            <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-bold text-amber-900 flex-wrap">
-              <Award className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>
-                Device high score:{' '}
-                <strong className="text-amber-950 font-black">
-                  {highScore.playerName}
-                </strong>{' '}
-                –{' '}
-                <strong className="text-rose-700 font-black">
-                  {bestScoreVal.toLocaleString()} points
-                </strong>{' '}
-                ({highScore.accuracy}%)
-              </span>
-              {highScore.date && (
-                <span className="text-[11px] text-amber-700/80">
-                  • {highScore.date}
-                </span>
+              {active.explanation && (
+                <p className="text-xs sm:text-sm leading-snug text-slate-700">
+                  <strong>Explanation: </strong>{active.explanation}
+                </p>
+              )}
+              {active.sourceUrl && (
+                <a href={active.sourceUrl} target="_blank" rel="noopener noreferrer"
+                   className="text-[10px] sm:text-xs font-bold text-rose-700 underline">
+                  Read the historical source ↗
+                </a>
               )}
             </div>
+
+            <div className="review-nav">
+              <button type="button" disabled={reviewIndex === 0}
+                onClick={() => setReviewIndex(i => Math.max(0, (i ?? 0) - 1))}
+                className="inline-flex items-center justify-center gap-1 rounded-xl border border-rose-300 bg-white px-2 py-2.5 text-xs sm:text-sm font-black text-rose-800 disabled:opacity-40">
+                <ArrowLeft className="h-4 w-4" /> PREVIOUS
+              </button>
+              <button type="button" disabled={reviewIndex === questions.length - 1}
+                onClick={() => setReviewIndex(i => Math.min(questions.length - 1, (i ?? 0) + 1))}
+                className="inline-flex items-center justify-center gap-1 rounded-xl bg-rose-600 px-2 py-2.5 text-xs sm:text-sm font-black text-white disabled:opacity-40">
+                NEXT <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
-        )}
-
-        {/* Review Section Toggle Button & Content */}
-        <div className="w-full mb-6">
-          <button
-            type="button"
-            onClick={() => setShowReview(!showReview)}
-            aria-expanded={showReview}
-            aria-controls="review-list-section"
-            className="w-full py-3.5 px-5 rounded-2xl bg-white hover:bg-rose-50/80 border-2 border-rose-200 text-rose-800 font-extrabold text-sm sm:text-base flex items-center justify-between shadow-xs transition-all cursor-pointer hover:border-rose-400 focus:outline-hidden focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
-          >
-            <div className="flex items-center gap-2">
-              <ListFilter className="w-4 h-4 text-rose-600" />
-              <span>REVIEW ANSWERS</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 font-bold">
-                {totalQuestions} questions
-              </span>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-rose-600">
-              <span>{showReview ? 'Collapse' : 'Details'}</span>
-              {showReview ? (
-                <ChevronUp className="w-5 h-5" />
-              ) : (
-                <ChevronDown className="w-5 h-5" />
-              )}
-            </div>
-          </button>
-
-          {/* Expandable Review Card List */}
-          {showReview && (
-            <div id="review-list-section" className="mt-4 pt-2">
-              <QuestionReviewList
-                answers={stats.answers}
-                questions={questions}
-                totalQuestions={totalQuestions}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Action buttons: Play again & Back to home */}
-        <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <Button
-            type="button"
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={onPlayAgain}
-            leftIcon={<RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />}
-          >
-            PLAY AGAIN
-          </Button>
-
-          <Button
-            type="button"
-            variant="secondary"
-            size="lg"
-            fullWidth
-            onClick={onGoHome}
-            leftIcon={<Home className="w-5 h-5 sm:w-6 sm:h-6" />}
-          >
-            BACK TO HOME
-          </Button>
-        </div>
+        ) : null}
       </Card>
     </div>
   );

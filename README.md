@@ -54,6 +54,18 @@ Twelve new SVG illustrations are served from `public/questions/october20/` with 
 - The mini game is designed for a **6–10 minute club segment**.
 - [English-only MC script](docs/english-club-host-guide.md)
 
+
+## Responsive presentation layout and attribution
+
+The website uses a **100dvh viewport-locked layout** on desktop, projectors, tablets, and phones. The start form, quiz, and results screen are designed to fit inside the browser viewport **without scrolling the page**. After selecting an answer, the option grid is replaced with feedback to free vertical space. Reviewing results uses **Previous / Next** buttons to navigate one answer at a time, rather than a long scrollable list.
+
+For best results during a live presentation, use standard browser zoom (100%) and a typical landscape projector resolution. Browser accessibility settings, exceptionally small viewports, and enlarged system fonts can require further layout adjustments.
+
+**Created by:** Truong Minh Khiem  
+**Affiliation:** Ho Chi Minh City University of Education
+
+These credits appear in English in the fixed footer on all three game screens, and the author and affiliation are included in page metadata.
+
 ## Tests and development
 
 ```bash

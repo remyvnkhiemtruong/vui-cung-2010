@@ -1,36 +1,33 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+const title = "English Club Mini Game | Vietnamese Women's Day";
+const description = "An English-language October 20 mini game about Vietnamese Women's Day, celebrations, and inspiring Vietnamese women.";
+
 export const metadata: Metadata = {
-  title: "English Club Mini Game | Vietnamese Women's Day",
-  description: "An English Club mini game: 10 random questions with vocabulary, inspiring women, and picture clues for October 20.",
-  keywords: [
-    "20/10",
-    "Vietnamese Women's Day",
-    "Vietnamese Women's Day",
-    "Quiz 20/10",
-    "October 20 Quiz",
-    "Game show 20/10",
-  ],
-  authors: [{ name: "20/10 Quiz Team" }],
+  title,
+  description,
+  keywords: ["Vietnamese Women's Day", "October 20", "20/10", "English Club", "Mini Game", "Vietnamese Women"],
+  authors: [{ name: "Truong Minh Khiem" }],
+  creator: "Truong Minh Khiem",
+  other: { "author-affiliation": "Ho Chi Minh City University of Education" },
   openGraph: {
-    title: "English Club Mini Game | Vietnamese Women's Day",
-    description: "An English Club mini game: 10 random questions with vocabulary, inspiring women, and picture clues for October 20.",
+    title,
+    description,
     type: "website",
     locale: "en_US",
-    siteName: "Vietnamese Women's Day Quiz",
+    siteName: "Vietnamese Women's Day | English Club",
   },
   twitter: {
     card: "summary_large_image",
-    title: "English Club Mini Game | Vietnamese Women's Day",
-    description: "An English Club mini game: 10 random questions with vocabulary, inspiring women, and picture clues for October 20.",
+    title,
+    description,
   },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -40,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col antialiased selection:bg-rose-500 selection:text-white">
+      <body className="h-full min-h-0 antialiased selection:bg-rose-500 selection:text-white">
         {children}
       </body>
     </html>
