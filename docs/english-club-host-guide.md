@@ -1,37 +1,42 @@
-# English Club Mini Game — MC Run Sheet
+# October 20 English Club Mini Game — MC Guide
 
-**Event:** Vietnamese Women's Day, October 20  
-**Format:** 10 random questions, 25 seconds each, 4 categories  
-**Audience:** Mixed English levels, approximately CEFR A2–B1  
-**Estimated segment:** 6–10 minutes
+**Theme:** Vietnamese Women's Day (October 20), celebration activities, and Vietnamese women's achievements.  
+**Format:** 10 random questions, 25 seconds each, all shown in English  
+**Suggested duration:** 6–10 minutes  
+**Game flow:** Five warm-ups → four main-round questions → one final challenge
 
 ## Before the event
-- Open the latest Vercel Preview on the projection computer.
-- Test audio, keyboard shortcuts, mobile layout, and all 12 picture assets.
-- Decide whether a participant or a team controls the quiz. The current version is **single-session**; it is not a real-time multi-phone contest.
-- Make sure the screen is readable from the back of the room.
 
-## Opening (30 seconds)
-> "Hello everyone, and welcome to our English Club Mini Game! Today we're celebrating Vietnamese Women's Day. Let's have some fun with English, inspiring women, and pictures. Don't worry about perfect English — just give it a try!"
+- Open the production website on a laptop connected to a projector.
+- Test sound, screen readability, keyboard choices, and the 12 locally hosted picture illustrations.
+- Participants can take turns controlling one shared screen; the website does not provide simultaneous multi-phone multiplayer.
+- Prepare small prizes or thank-you cards if available.
 
-## Explain the rules (30 seconds)
-> "We have **ten questions**, and each one has **four answers: A, B, C, and D**. You get **25 seconds per question**. A correct answer earns points, and answering quickly can earn you a bonus. Let's see how many you can get!"
+## Opening speech (30 seconds)
+
+> "Welcome to the English Club's October 20 Mini Game! Today we celebrate Vietnamese Women's Day. We'll discover the story behind the date, enjoy fun celebration activities, and learn about inspiring Vietnamese women. It's not a grammar test — just ten quick questions to celebrate together!"
+
+## Rules (20 seconds)
+
+> "There are ten questions and four possible answers: A, B, C, and D. You have 25 seconds to choose. Some questions show pictures of October 20 activities. Each correct answer earns points, and quicker answers can earn a bonus. Let's begin!"
 
 ## During the game
-- Read the question aloud once, at a moderate pace.
-- Point to the answer options, but do not translate the entire question automatically. Offer a brief English synonym if the room is stuck.
-- After each answer, give one encouraging reaction: **"Nice try!"**, **"Well done!"**, or **"Great teamwork!"**
-- For a language question, invite someone to use the correct word in a sentence.
-- For a picture question, ask a volunteer to describe the image in one English sentence.
-- Keep moving; this is a short celebration game, not a graded examination.
 
-## Closing (30 seconds)
-> "Great job, everyone! Thank you for joining our English Club challenge. The most important thing is that we practised English, worked together, and celebrated inspiring women. Happy Vietnamese Women's Day!"
+- Announce each new stage: **Warm-Up**, **Main Round**, or **Final Challenge**.
+- Read each question aloud once. Let the teams discuss briefly.
+- For historic figures, share one sentence explaining why that woman is being honored on October 20.
+- For pictures, invite one member to describe the **October 20 activity**, not general vocabulary.
+- Use friendly reactions: **"Great choice!"**, **"Well done!"**, **"Nice try!"**.
+- Keep the celebration positive and respectful.
 
-## Optional follow-up (1–2 minutes)
-Ask one or two volunteers:
-- "Who is a woman you admire, and why?"
-- "What is one new English word you learned today?"
-- "How can we support each other in our club?"
+## Closing speech (30 seconds)
 
-**Note:** The score shown on the result page belongs to the current player/team. The stored record is local to that browser. For a real-time multi-team scoreboard, a separate backend feature will be needed.
+> "Thank you for playing! October 20 is a chance to appreciate Vietnamese women's achievements, courage, and contributions in our families, schools, and communities. Let's keep sharing kindness and respect every day. Happy Vietnamese Women's Day!"
+
+## Optional discussion (1–2 minutes)
+
+- "Which Vietnamese woman inspires you most?"
+- "What October 20 activity would you like our club to organize?"
+- "Who would you like to thank today, and why?"
+
+**Note:** The high score is saved in this browser only. The mini game does not collect scores from other devices.
