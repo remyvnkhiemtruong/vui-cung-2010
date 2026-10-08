@@ -3,14 +3,14 @@ import { hashToken, isRoomCode, json, errorResponse,hostTokenFrom } from '@/lib/
 export const runtime='nodejs';export const dynamic='force-dynamic';
 type Context={params:Promise<{code:string}>};
 export async function POST(request:Request,{params}:Context){
-  // Capture server arrival time BEFORE waiting for the DB row lock.
-  const arrivedAt=new Date().toISOString();
   try{
     const {code}=await params;
     if(!isRoomCode(code))return json({error:'Invalid room code.'},400);
     const token=hostTokenFrom(request);
     if(!token)return json({error:'Player token is missing.'},401);
     const body=await request.json().catch(()=>null);
+    // Capture arrival after parsing the submitted body but before waiting for a DB lock.
+    const arrivedAt=new Date().toISOString();
     const id=body?.playerId,choice=body?.choice,index=body?.index;
     if(typeof id!=='string'||!/^[0-9a-f-]{36}$/i.test(id)||
       !['A','B','C','D'].includes(choice)||!Number.isInteger(index)||
