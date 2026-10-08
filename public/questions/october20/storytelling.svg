@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+<title id="title">Storytelling - October 20 celebration activity illustration</title>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1d4ed8"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
+<rect width="790" height="480" rx="28" fill="url(#bg)"/>
+<circle cx="700" cy="54" r="234" fill="#fff" fill-opacity=".09"/>
+<circle cx="40" cy="425" r="199" fill="#fff" fill-opacity=".08"/>
+<path d="M72 50h45m-23-23v46M682 380h42m-21-21v42" stroke="#fff" stroke-opacity=".42" stroke-width="8" stroke-linecap="round"/>
+<g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M177 148q98-47 220 23v218q-111-55-220-28Zm220 23q117-70 221-23v213q-107-27-221 28Z" fill="#fff" fill-opacity=".16" stroke-width="11"/><path d="M397 175v212M237 238q55-12 104 17M453 238q55-29 108-14" stroke-width="8"/><path d="m396 69 14 28 31 4-23 21 6 31-28-15-27 15 5-31-23-21 31-4Z" fill="#fff" stroke-width="5"/></g>
+</svg>

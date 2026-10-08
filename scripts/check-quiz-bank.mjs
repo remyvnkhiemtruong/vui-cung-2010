@@ -11,16 +11,16 @@ const root = process.cwd();
 const bank = readFileSync(join(root, 'src/data/questions.ts'), 'utf8');
 const entries = [...bank.matchAll(/  createQuestion\(\{([\s\S]*?)\n  \}\),?/g)].map(m => m[1]);
 const expectedCounts = {
-  '20/10 Celebration': 12,
-  'English Challenge': 18,
-  'Inspiring Women': 12,
-  'Picture Round': 12,
+  'October 20: Origins': 12,
+  'October 20: Activities': 18,
+  'Vietnamese Women': 12,
+  'October 20: Picture Quiz': 12,
 };
 const expectedDifficulties = {
-  '20/10 Celebration': { 'warm-up': 6, standard: 6 },
-  'English Challenge': { 'warm-up': 6, standard: 6, challenge: 6 },
-  'Inspiring Women': { 'warm-up': 6, standard: 6 },
-  'Picture Round': { 'warm-up': 6, standard: 6 },
+  'October 20: Origins': { 'warm-up': 6, standard: 6 },
+  'October 20: Activities': { 'warm-up': 6, standard: 6, challenge: 6 },
+  'Vietnamese Women': { 'warm-up': 6, standard: 6 },
+  'October 20: Picture Quiz': { 'warm-up': 6, standard: 6 },
 };
 
 function assert(condition, message) {
@@ -34,6 +34,7 @@ function field(data, key) {
 assert(entries.length === 54, 'Expected exactly 54 valid questions, found ' + entries.length);
 const ids = new Set();
 const prompts = new Set();
+const forbidden = /\b(?:grammar|grammatical|plural|synonym|idiom|present simple|relative clause|articles?|preposition|serena williams|marie curie|malala|nasa|smithsonian|amelia earhart)\b/i;
 const counts = Object.fromEntries(Object.keys(expectedCounts).map(k => [k, 0]));
 const difficultyCounts = Object.fromEntries(Object.keys(expectedCounts).map(k => [k, {}]));
 let pictureCount = 0;
@@ -49,6 +50,7 @@ for (const item of entries) {
   assert(id && !ids.has(id), 'Duplicate or missing ID: ' + id);
   ids.add(id);
   assert(question && !prompts.has(question), 'Duplicate or missing question: ' + id);
+  assert(!forbidden.test(question), 'Off-topic language/foreign-figure question: ' + id);
   prompts.add(question);
   assert(category in expectedCounts, 'Unknown category: ' + id);
   assert(difficulty in expectedDifficulties[category], 'Invalid difficulty: ' + id);
@@ -60,9 +62,9 @@ for (const item of entries) {
   counts[category]++;
   difficultyCounts[category][difficulty] = (difficultyCounts[category][difficulty] || 0) + 1;
 
-  if (category === 'Picture Round') {
+  if (category === 'October 20: Picture Quiz') {
     pictureCount++;
-    assert(image?.startsWith('/questions/english-club/') && image.endsWith('.svg'), 'Missing local picture: ' + id);
+    assert(image?.startsWith('/questions/october20/') && image.endsWith('.svg'), 'Missing local picture: ' + id);
     const filepath = join(root, 'public', image.slice(1));
     assert(existsSync(filepath), 'Missing SVG file: ' + filepath);
     const svg = readFileSync(filepath, 'utf8');
@@ -96,10 +98,10 @@ const quizModule = { exports: {} };
 runInNewContext(compiled, { module: quizModule, exports: quizModule.exports });
 const { questionBank, buildQuizRound } = quizModule.exports;
 const expectedRoundCategories = {
-  '20/10 Celebration': 3,
-  'English Challenge': 3,
-  'Inspiring Women': 2,
-  'Picture Round': 2,
+  'October 20: Origins': 3,
+  'October 20: Activities': 3,
+  'Vietnamese Women': 2,
+  'October 20: Picture Quiz': 2,
 };
 const expectedRoundLevels = { 'warm-up': 5, standard: 4, challenge: 1 };
 const seenRounds = new Set();
@@ -132,4 +134,4 @@ for (let run = 0; run < 100; run++) {
   seenRounds.add(round.map(q => q.id).sort().join(','));
 }
 assert(seenRounds.size > 1, 'Question selection is not randomized');
-console.log('English Club quiz bank validated: 54 unique questions, 10 balanced per round, 12 local SVGs, 100 simulated rounds passed.');
+console.log('October 20 mini game validated: 54 themed questions, 12 local SVGs, 100 balanced random rounds and answer mapping passed.');

@@ -22,7 +22,7 @@ export default function Header() {
         CELEBRATE <span className="text-rose-600 underline decoration-rose-300 decoration-wavy decoration-2">20/10</span>
       </h1>
       <p className="text-xs sm:text-sm md:text-base font-medium text-rose-800/80 mt-1 tracking-wider uppercase">
-        QUICK QUIZ • VOCABULARY • FUN FACTS • PICTURES
+        OCTOBER 20 • CELEBRATIONS • VIETNAMESE WOMEN
       </p>
     </header>
   );

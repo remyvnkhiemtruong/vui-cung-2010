@@ -19,7 +19,7 @@ import {
 } from '@/utils/gameEngine';
 import { soundManager } from '@/utils/sound';
 
-const STORAGE_KEY_HIGH_SCORE = 'english_club_20_10_10q_v4';
+const STORAGE_KEY_HIGH_SCORE = 'english_club_october20_only_10q_v5';
 
 function subscribeHighScore(callback: () => void) {
   window.addEventListener('storage', callback);
