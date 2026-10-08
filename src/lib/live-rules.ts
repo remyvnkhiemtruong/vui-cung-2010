@@ -1,7 +1,7 @@
 /** Server-compatible, framework-independent rules. */
 export const LIVE_MAX_PLAYERS = 50;
 export const LIVE_SECONDS = 25;
-export const LIVE_ROUND_SIZE = 10;
+export const LIVE_ROUND_SIZE = 200;
 export type Phase = 'lobby'|'question'|'reveal'|'finished';
 export type Choice = 'A'|'B'|'C'|'D';
 export function liveScore(correct:boolean,remainingMs:number,seconds=LIVE_SECONDS,streak=0) {
