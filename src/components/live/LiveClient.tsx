@@ -27,6 +27,7 @@ function useRoom(code:string,player?:PlayerSession|null){
   const [sampleAt,setSampleAt]=useState(Date.now());
   const [tick,setTick]=useState(Date.now());
   const refresh=useCallback(async()=>{
+    if(!/^[A-Z0-9]{6}$/.test(code))return;
     try{
       const headers:Record<string,string>={};
       if(player){headers.Authorization='Bearer '+player.token;headers['X-Live-Player-Id']=player.id;}
@@ -34,7 +35,7 @@ function useRoom(code:string,player?:PlayerSession|null){
       setRoom(next);setSampleAt(Date.now());setIssue('');
     }catch(err){setIssue(err instanceof Error?err.message:'Cannot reach the live server.');}
   },[code,player?.id,player?.token]);
-  useEffect(()=>{void refresh();const timer=setInterval(()=>void refresh(),2200);return()=>clearInterval(timer)},[refresh]);
+  useEffect(()=>{if(!/^[A-Z0-9]{6}$/.test(code))return;void refresh();const timer=setInterval(()=>void refresh(),2200);return()=>clearInterval(timer)},[code,refresh]);
   useEffect(()=>{const timer=setInterval(()=>setTick(Date.now()),160);return()=>clearInterval(timer)},[]);
   const ms=room?.phase==='question'?
     Math.max(0,room.remainingMs-(tick-sampleAt)):0;
@@ -84,10 +85,10 @@ function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false
       <span className="flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-lg font-black text-amber-900"><Clock3 className="h-4 w-4"/>{room.phase==='question'?remaining+'s':'REVEALED'}</span>
     </div>
     <div className={'flex min-h-0 flex-1 flex-col items-center justify-center gap-3 '+(q.image?'sm:flex-row':'')}>
-      {q.image&&<img src={q.image} alt={q.question} className="max-h-[24dvh] w-full max-w-sm rounded-xl object-contain sm:w-2/5"/>}
+      {q.image&&<img src={q.image} alt={q.question} className="live-quiz-image max-h-[24dvh] w-full max-w-sm rounded-xl object-contain sm:w-2/5"/>}
       <h2 className="text-center text-lg font-black leading-tight sm:text-2xl lg:text-4xl">{q.question}</h2>
     </div>
-    <div className="grid shrink-0 grid-cols-2 gap-2">
+    <div className="live-quiz-options grid shrink-0 grid-cols-2 gap-2">
       {q.options.map((o,i)=>{
         const isCorrect=room.phase==='reveal'&&q.correctAnswer===o.key;
         return <button key={o.key} type="button" onClick={()=>onAnswer?.(o.key)}
