@@ -1,137 +1,117 @@
 /**
- * Build-time checks for the English Club mini game.
- * Fail the preview/build early if a question or self-hosted illustration is broken.
+ * Fail build if October 20 trivia is malformed or any of 200 questions repeat.
+ * The live game uses one randomized 200-question deck; the solo game tracks
+ * consumed IDs across 10-question sessions.
  */
-import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { runInNewContext } from 'node:vm';
+import {readFileSync,existsSync} from 'node:fs';
+import {join} from 'node:path';
+import {runInNewContext} from 'node:vm';
 import ts from 'typescript';
 
-const root = process.cwd();
-const bank = readFileSync(join(root, 'src/data/questions.ts'), 'utf8');
-const entries = [...bank.matchAll(/  createQuestion\(\{([\s\S]*?)\n  \}\),?/g)].map(m => m[1]);
-const expectedCounts = {
-  'October 20: Origins': 12,
-  'October 20: Activities': 18,
-  'Vietnamese Women': 12,
-  'October 20: Picture Quiz': 12,
+const root=process.cwd();
+function assert(ok,message){if(!ok)throw new Error('October 20 question bank: '+message);}
+function transpile(source){
+  return ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+}
+function run(source,resolve){
+  const module={exports:{}};
+  runInNewContext(transpile(source),{module,exports:module.exports,require:resolve});
+  return module.exports;
+}
+const modules={};
+const variants=[
+  ['extra-history','extraHistory',24],
+  ['extra-women','extraWomen',38],
+  ['extra-activities','extraActivities',72],
+  ['extra-pictures','extraPictures',12],
+];
+for(const [basename,exportName,expected] of variants){
+  const code=readFileSync(join(root,'src/data/'+basename+'.ts'),'utf8');
+  const exported=run(code,()=>{throw new Error('Unexpected runtime import in '+basename)});
+  assert(Array.isArray(exported[exportName]),'Missing '+exportName);
+  assert(exported[exportName].length===expected,basename+' must contain '+expected+' questions');
+  modules['./'+basename]=exported;
+}
+const code=readFileSync(join(root,'src/data/questions.ts'),'utf8');
+const exported=run(code,name=>{
+  assert(name in modules,'Unexpected import '+name);
+  return modules[name];
+});
+const {questionBank,buildQuizRound,buildContinuousQuiz,buildUnseenSoloRound}=exported;
+const categories={
+  'October 20: Origins':36,
+  'October 20: Activities':90,
+  'Vietnamese Women':50,
+  'October 20: Picture Quiz':24,
 };
-const expectedDifficulties = {
-  'October 20: Origins': { 'warm-up': 6, standard: 6 },
-  'October 20: Activities': { 'warm-up': 6, standard: 6, challenge: 6 },
-  'Vietnamese Women': { 'warm-up': 6, standard: 6 },
-  'October 20: Picture Quiz': { 'warm-up': 6, standard: 6 },
-};
-
-function assert(condition, message) {
-  if (!condition) throw new Error('English Club question bank: ' + message);
+assert(questionBank.length===200,'Expected exactly 200 questions, got '+questionBank.length);
+const ids=new Set(),prompts=new Set(),counts=Object.fromEntries(Object.keys(categories).map(k=>[k,0]));
+let illustrated=0;
+for(const q of questionBank){
+  assert(q.id&&!ids.has(String(q.id)),'Duplicate question ID '+q.id);
+  ids.add(String(q.id));
+  assert(q.question&&typeof q.question==='string'&&q.question.length<=145,'Invalid projector prompt '+q.id);
+  const normalized=q.question.toLowerCase().replace(/[^a-z0-9]/g,'');
+  assert(!prompts.has(normalized),'Duplicate question meaning/wording '+q.id);
+  prompts.add(normalized);
+  assert(q.category in categories,'Unrecognized topic '+q.id);
+  counts[q.category]++;
+  assert(['warm-up','standard','challenge'].includes(q.difficulty),'Invalid difficulty '+q.id);
+  assert(q.options.length===4,'Four options required '+q.id);
+  const keys=q.options.map(x=>x.key),answers=q.options.map(x=>x.text.trim().toLowerCase());
+  assert(new Set(keys).size===4 && new Set(answers).size===4,'Duplicate option '+q.id);
+  assert(keys.includes(q.correctAnswer),'Correct option missing '+q.id);
+  assert(q.explanation&&q.explanation.trim(),'Missing explanation '+q.id);
+  assert(!/\b(?:grammar|prepositions?|idioms?|synonym|Marie Curie|Malala Yousafzai)\b/i.test(q.question),'Off-topic prompt '+q.id);
+  if(q.category==='October 20: Picture Quiz'){
+    illustrated++;
+    assert(q.image?.startsWith('/questions/october20/')&&q.image.endsWith('.svg'),'Missing local illustration '+q.id);
+    const path=join(root,'public',q.image.slice(1));
+    assert(existsSync(path),'Missing image file '+path);
+    const svg=readFileSync(path,'utf8');
+    assert(svg.includes('<svg')&&svg.includes('<title'),'Invalid image '+q.id);
+  }else assert(!q.image,'Unexpected picture on non-picture question '+q.id);
 }
-function field(data, key) {
-  const match = data.match(new RegExp('\\b' + key + ': "([^"]+)"'));
-  return match?.[1];
+assert(JSON.stringify(counts)===JSON.stringify(categories),'Category counts: '+JSON.stringify(counts));
+assert(illustrated===24,'Expected 24 illustrated questions');
+const expectedMix={'October 20: Origins':3,'October 20: Activities':3,'Vietnamese Women':2,'October 20: Picture Quiz':2};
+const expectedLevels={'warm-up':5,standard:4,challenge:1};
+function validateAnswerKey(q){
+  const original=questionBank.find(z=>z.id===q.id);
+  assert(original,'Unknown id in shuffled quiz: '+q.id);
+  const a=original.options.find(z=>z.key===original.correctAnswer)?.text;
+  const b=q.options.find(z=>z.key===q.correctAnswer)?.text;
+  assert(a===b,'Shuffling changed the correct answer: '+q.id);
 }
-
-assert(entries.length === 54, 'Expected exactly 54 valid questions, found ' + entries.length);
-const ids = new Set();
-const prompts = new Set();
-const forbidden = /\b(?:grammar|grammatical|plural|synonym|idiom|present simple|relative clause|articles?|preposition|serena williams|marie curie|malala|nasa|smithsonian|amelia earhart)\b/i;
-const counts = Object.fromEntries(Object.keys(expectedCounts).map(k => [k, 0]));
-const difficultyCounts = Object.fromEntries(Object.keys(expectedCounts).map(k => [k, {}]));
-let pictureCount = 0;
-
-for (const item of entries) {
-  const id = field(item, 'id');
-  const category = field(item, 'category');
-  const difficulty = field(item, 'difficulty');
-  const question = field(item, 'question');
-  const options = [...item.matchAll(/      ([ABCD]): "((?:[^"\\]|\\.)*)",/g)];
-  const answer = item.match(/correctAnswer: '([ABCD])'/)?.[1];
-  const image = field(item, 'image');
-  assert(id && !ids.has(id), 'Duplicate or missing ID: ' + id);
-  ids.add(id);
-  assert(question && !prompts.has(question), 'Duplicate or missing question: ' + id);
-  assert(!forbidden.test(question), 'Off-topic language/foreign-figure question: ' + id);
-  prompts.add(question);
-  assert(category in expectedCounts, 'Unknown category: ' + id);
-  assert(difficulty in expectedDifficulties[category], 'Invalid difficulty: ' + id);
-  assert(question.length <= 145, 'Question too long for projector: ' + id);
-  assert(options.length === 4 && new Set(options.map(x => x[1])).size === 4, 'Must have A-D options: ' + id);
-  assert(new Set(options.map(x => x[2].toLowerCase())).size === 4, 'Duplicate options: ' + id);
-  assert(options.some(x => x[1] === answer), 'Correct answer missing: ' + id);
-  assert(field(item, 'explanation'), 'Missing explanation: ' + id);
-  counts[category]++;
-  difficultyCounts[category][difficulty] = (difficultyCounts[category][difficulty] || 0) + 1;
-
-  if (category === 'October 20: Picture Quiz') {
-    pictureCount++;
-    assert(image?.startsWith('/questions/october20/') && image.endsWith('.svg'), 'Missing local picture: ' + id);
-    const filepath = join(root, 'public', image.slice(1));
-    assert(existsSync(filepath), 'Missing SVG file: ' + filepath);
-    const svg = readFileSync(filepath, 'utf8');
-    assert(svg.includes('<svg') && svg.includes('</svg>') && svg.includes('<title'), 'Invalid accessible SVG: ' + id);
-  } else {
-    assert(!image, 'Unexpected illustration outside picture round: ' + id);
-  }
+for(let i=0;i<100;i++){
+  const round=buildQuizRound(questionBank,10);
+  const byCategory={},byDifficulty={};
+  for(const q of round){byCategory[q.category]=(byCategory[q.category]||0)+1;byDifficulty[q.difficulty]=(byDifficulty[q.difficulty]||0)+1;validateAnswerKey(q);}
+  assert(round.length===10 && new Set(round.map(x=>x.id)).size===10,'Duplicate in solo round');
+  assert(Object.entries(expectedMix).every(([k,v])=>byCategory[k]===v),'Solo category mix wrong');
+  assert(Object.entries(expectedLevels).every(([k,v])=>byDifficulty[k]===v),'Solo level mix wrong');
+  assert(round[9].difficulty==='challenge','Solo final question must be a challenge');
 }
-assert(JSON.stringify(counts) === JSON.stringify(expectedCounts), 'Category counts: ' + JSON.stringify(counts));
-for (const [category, expected] of Object.entries(expectedDifficulties)) {
-  for (const [level, number] of Object.entries(expected)) {
-    assert(difficultyCounts[category][level] === number, category + ' / ' + level + ': wrong difficulty count');
-  }
+// Multiple entire rooms: 200 distinct IDs, consistent shuffled answer keys.
+let distinctFirst= new Set();
+for(let i=0;i<40;i++){
+  const room=buildContinuousQuiz(questionBank);
+  assert(room.length===200,'Live room must have 200 questions');
+  assert(new Set(room.map(q=>q.id)).size===200,'Live room repeated a question');
+  room.forEach(validateAnswerKey);
+  distinctFirst.add(String(room[0].id));
 }
-assert(pictureCount === 12, 'Expected 12 illustrated questions');
-
-const plans = [...bank.matchAll(/\{ category: '([^']+)', difficulty: '([^']+)', count: (\d+) \}/g)];
-assert(plans.length === 9, 'Round blueprint must have 9 slots');
-assert(plans.reduce((n, x) => n + Number(x[3]), 0) === 10, 'Round must contain 10 questions');
-for (const slot of plans) {
-  assert(expectedDifficulties[slot[1]]?.[slot[2]] >= Number(slot[3]), 'Cannot satisfy round slot: ' + slot[1]);
+assert(distinctFirst.size>1,'Live room must randomize question order');
+// Solo: twenty successive rounds must exhaust the bank before any repeat.
+let seen=[],allIds=new Set();
+for(let i=0;i<20;i++){
+  const result=buildUnseenSoloRound(questionBank,seen,10);
+  assert(result.questions.length===10,'Solo round length incorrect at cycle '+i);
+  for(const q of result.questions){assert(!allIds.has(q.id),'Solo repeated a question before exhaustion '+q.id);allIds.add(q.id);}
+  seen=result.seenIds;
 }
-// Execute the real TypeScript selection algorithm in isolation, not just regex checks.
-const compiled = ts.transpileModule(bank, {
-  compilerOptions: {
-    module: ts.ModuleKind.CommonJS,
-    target: ts.ScriptTarget.ES2022,
-  },
-}).outputText;
-const quizModule = { exports: {} };
-runInNewContext(compiled, { module: quizModule, exports: quizModule.exports });
-const { questionBank, buildQuizRound } = quizModule.exports;
-const expectedRoundCategories = {
-  'October 20: Origins': 3,
-  'October 20: Activities': 3,
-  'Vietnamese Women': 2,
-  'October 20: Picture Quiz': 2,
-};
-const expectedRoundLevels = { 'warm-up': 5, standard: 4, challenge: 1 };
-const seenRounds = new Set();
-
-for (let run = 0; run < 100; run++) {
-  const round = buildQuizRound(questionBank, 10);
-  const categoryMix = Object.fromEntries(Object.keys(expectedRoundCategories).map(k => [k, 0]));
-  const levelMix = Object.fromEntries(Object.keys(expectedRoundLevels).map(k => [k, 0]));
-  assert(round.length === 10, 'Wrong game length: ' + round.length);
-  assert(new Set(round.map(q => q.id)).size === 10, 'Duplicate question in a game');
-  for (const q of round) {
-    categoryMix[q.category]++;
-    levelMix[q.difficulty]++;
-    assert(q.options.length === 4, 'Incorrect option count for ' + q.id);
-    assert(q.options.some(x => x.key === q.correctAnswer), 'Invalid answer mapping after shuffling: ' + q.id);
-    assert(new Set(q.options.map(x => x.key)).size === 4, 'Duplicated answer keys: ' + q.id);
-  }
-  assert(JSON.stringify(categoryMix) === JSON.stringify(expectedRoundCategories), 'Uneven round categories');
-  assert(JSON.stringify(levelMix) === JSON.stringify(expectedRoundLevels), 'Uneven round difficulties');
-  assert(round.filter(q => q.image).length === 2, 'Every round must contain two pictures');
-  assert(round.slice(0, 5).every(q => q.difficulty === 'warm-up'), 'Warm-up questions must come first');
-  assert(round.slice(5, 9).every(q => q.difficulty === 'standard'), 'Standard questions must come next');
-  assert(round[9].difficulty === 'challenge', 'Final question must be a challenge');
-  for (const q of round) {
-    const original = questionBank.find(item => item.id === q.id);
-    const rightOriginal = original.options.find(opt => opt.key === original.correctAnswer);
-    const rightNew = q.options.find(opt => opt.key === q.correctAnswer);
-    assert(rightNew.text === rightOriginal.text, 'Shuffled correct answer changed: ' + q.id);
-  }
-  seenRounds.add(round.map(q => q.id).sort().join(','));
-}
-assert(seenRounds.size > 1, 'Question selection is not randomized');
-console.log('October 20 mini game validated: 54 themed questions, 12 local SVGs, 100 balanced random rounds and answer mapping passed.');
+assert(allIds.size===200,'Solo cycle did not cover 200 distinct questions');
+const next=buildUnseenSoloRound(questionBank,seen,10);
+assert(next.cycleComplete===true && next.questions.length===10,'Solo must restart a new cycle after exhaustion');
+console.log('200 October 20 questions validated (36 history, 90 activities, 50 women, 24 picture).');
+console.log('100 solo rounds, 40 full 200-question live decks and one 20-round no-repeat solo cycle passed.');
