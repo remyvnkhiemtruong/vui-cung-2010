@@ -3,6 +3,7 @@
 import React from 'react';
 import { User, Trophy, Flame } from 'lucide-react';
 import CircularTimer from './CircularTimer';
+import { QUESTION_TIME_LIMIT } from '@/utils/gameEngine';
 
 interface GameHUDProps {
   playerName: string;
@@ -21,7 +22,7 @@ export default function GameHUD({
   score,
   streak,
   timeLeft,
-  maxTime = 20,
+  maxTime = QUESTION_TIME_LIMIT,
 }: GameHUDProps) {
   const currentStep = currentIndex + 1;
   const progressPercent = Math.min(100, (currentStep / totalQuestions) * 100);
