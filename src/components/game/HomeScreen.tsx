@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Play, Clock3, Trophy, Flame, Sparkles, HelpCircle, Award } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -117,6 +118,9 @@ export default function HomeScreen({
         <div className="flex flex-wrap items-center justify-center gap-2 text-center text-[11px] sm:text-xs text-slate-600">
           <HelpCircle className="h-3.5 w-3.5 text-rose-600" aria-hidden="true" />
           <span>Choose A, B, C or D · Play solo or as a team</span>
+          <Link href="/live" className="rounded-full bg-rose-600 px-3 py-1 text-xs font-extrabold text-white hover:bg-rose-700">
+            LIVE MULTIPLAYER →
+          </Link>
           {highScore && (
             <span className="inline-flex items-center gap-1 font-bold text-amber-800">
               <Award className="h-3.5 w-3.5" />
