@@ -531,9 +531,9 @@ export const questionBank: Question[] = [
     question: "Which two sisters led a famous uprising in Vietnam?",
     options: {
       A: "Trung Trac and Trung Nhi",
-      B: "Marie Curie and Ada Lovelace",
-      C: "Queen Victoria and Elizabeth II",
-      D: "Venus and Serena Williams",
+      B: "Lady Trieu and Nguyen Thi Dinh",
+      C: "Le Thi Xuyen and Nguyen Thi Binh",
+      D: "Dang Thuy Tram and Vo Thi Sau",
     },
     correctAnswer: 'A',
     explanation: "The Trung Sisters led an uprising against Eastern Han rule in 40 CE.",
