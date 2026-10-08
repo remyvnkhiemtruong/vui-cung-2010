@@ -120,6 +120,15 @@ for (let run = 0; run < 100; run++) {
   assert(JSON.stringify(categoryMix) === JSON.stringify(expectedRoundCategories), 'Uneven round categories');
   assert(JSON.stringify(levelMix) === JSON.stringify(expectedRoundLevels), 'Uneven round difficulties');
   assert(round.filter(q => q.image).length === 2, 'Every round must contain two pictures');
+  assert(round.slice(0, 5).every(q => q.difficulty === 'warm-up'), 'Warm-up questions must come first');
+  assert(round.slice(5, 9).every(q => q.difficulty === 'standard'), 'Standard questions must come next');
+  assert(round[9].difficulty === 'challenge', 'Final question must be a challenge');
+  for (const q of round) {
+    const original = questionBank.find(item => item.id === q.id);
+    const rightOriginal = original.options.find(opt => opt.key === original.correctAnswer);
+    const rightNew = q.options.find(opt => opt.key === q.correctAnswer);
+    assert(rightNew.text === rightOriginal.text, 'Shuffled correct answer changed: ' + q.id);
+  }
   seenRounds.add(round.map(q => q.id).sort().join(','));
 }
 assert(seenRounds.size > 1, 'Question selection is not randomized');
