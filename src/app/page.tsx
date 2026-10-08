@@ -11,37 +11,19 @@ import { useQuizGame } from '@/hooks/useQuizGame';
 
 export default function QuizApp() {
   const {
-    screen,
-    currentQuestion,
-    currentIndex,
-    totalQuestions,
-    questions,
-    bankSize,
-    selectedOption,
-    isAnswered,
-    timeLeft,
-    scoreGainedLast,
-    stats,
-    highScore,
-    startGame,
-    handleSelectOption,
-    handleNextQuestion,
-    handlePlayAgain,
-    handleGoHome,
+    screen, currentQuestion, currentIndex, totalQuestions, questions, bankSize,
+    selectedOption, isAnswered, timeLeft, scoreGainedLast, stats, highScore,
+    startGame, handleSelectOption, handleNextQuestion, handlePlayAgain, handleGoHome,
   } = useQuizGame();
 
   return (
-    <main className="relative min-h-screen flex flex-col justify-between overflow-x-hidden">
-      {/* Background Petals Effect */}
+    <main className="app-shell">
       <PetalCanvas />
 
-      {/* Main Content Area */}
-      <div className="relative z-10 flex flex-col grow justify-between py-2 sm:py-4">
-        {/* Stage Header (Shown during gameplay & result) */}
+      <div className="app-layout relative z-10">
         {screen !== 'start' && <Header />}
 
-        {/* Dynamic Screen View */}
-        <div className="grow flex items-center justify-center my-2 sm:my-4">
+        <div className="app-content">
           {screen === 'start' && (
             <HomeScreen
               onStart={startGame}
@@ -52,7 +34,7 @@ export default function QuizApp() {
           )}
 
           {screen === 'playing' && (
-            <div className="w-full flex flex-col items-center">
+            <div className="app-game">
               <GameHUD
                 playerName={stats.playerName}
                 currentIndex={currentIndex}
@@ -85,9 +67,10 @@ export default function QuizApp() {
           )}
         </div>
 
-        {/* Footer */}
-        <footer className="relative z-10 w-full py-3 text-center text-xs text-rose-800/70 select-none">
-          English Club Mini Game • Vietnamese Women's Day • October 20
+        <footer className="app-footer" aria-label="Website credits">
+          <span>Created by <strong>Truong Minh Khiem</strong></span>
+          <span className="footer-separator" aria-hidden="true"> • </span>
+          <span>Ho Chi Minh City University of Education</span>
         </footer>
       </div>
     </main>
