@@ -101,6 +101,11 @@ export default function QuestionCard({
               <Sparkles className="w-3.5 h-3.5 text-rose-600" />
               {question.category || '20/10 Quiz'}
             </span>
+            {question.difficulty && (
+              <span className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-800 border border-amber-200">
+                {question.difficulty === 'warm-up' ? 'WARM-UP' : question.difficulty === 'standard' ? 'MAIN ROUND' : 'FINAL CHALLENGE'}
+              </span>
+            )}
             {question.type === 'image-choice' && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 shadow-xs">
                 <ImageIcon className="w-3.5 h-3.5 text-blue-600" />
@@ -125,6 +130,7 @@ export default function QuestionCard({
           {/* Responsive Illustration Image with graceful error fallback */}
           {question.image && (
             <QuestionMedia
+              key={question.id}
               src={question.image}
               alt={question.question}
               category={question.category}
