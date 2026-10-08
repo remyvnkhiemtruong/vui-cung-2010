@@ -10,7 +10,7 @@
 
 ### ✨ Các tính năng nổi bật:
 - **Game Show Experience**: Giao diện sân khấu trực tiếp hiện đại, hiệu ứng cánh hoa rơi nhẹ nhàng, âm thanh Web Audio sống động (không cần tải file ngoài).
-- **Ngân hàng 30 câu hỏi tiếng Việt**: Gồm lịch sử – nhân vật, 20/10 & Hội LHPN Việt Nam, văn hóa – tri thức, bình đẳng giới & kỹ năng; mỗi lượt chọn cân bằng 15 câu.
+- **40-question English question bank**: Covers Vietnamese Women's Day, history & notable women, culture & literature, and equality & safety; each round selects exactly 10 balanced random questions.
 - **Game Engine thông minh**:
   - Đếm ngược thời gian mỗi câu hỏi với cảnh báo gấp rút khi còn $\le 5$ giây.
   - Điểm cơ bản $100$ điểm + thưởng tốc độ tối đa $+50$ điểm + Combo Streak $+20$ điểm cho mỗi chuỗi đúng từ 3 câu liên tiếp.
@@ -20,7 +20,7 @@
   - Phân loại 4 danh hiệu vinh danh kèm hiệu ứng pháo hoa Confetti rực rỡ.
   - Bảng xem lại toàn diện 12 câu với so sánh đáp án người chơi và lời giải chi tiết.
   - Lưu trữ kỷ lục điểm số cao nhất cục bộ trên thiết bị qua `localStorage`.
-- **Chống học thuộc đáp án**: Mỗi lượt chơi chọn ngẫu nhiên 15/30 câu theo nhóm chủ đề và xáo trộn cả thứ tự đáp án A/B/C/D.
+- **Randomized rounds**: Every play uses 10/40 questions, balances the topic mix, shuffles A/B/C/D positions, and guarantees at least one image question when visual questions are available.
 - **Hoàn toàn Client-Side & Static**: Không cần database backend, tải trang tức thì, phù hợp triển khai trên Vercel.
 
 ---
@@ -163,7 +163,7 @@ src/data/questions.ts
 ### Cách chỉnh sửa:
 1. Mở file `src/data/questions.ts`.
 2. Để sửa câu hỏi có sẵn: tìm đến ID tương ứng và thay đổi trường `question`, `options`, `correctAnswer` hoặc `explanation`.
-3. Để thêm câu hỏi mới: thêm một object vào mảng `questionBank`. Mỗi lượt chơi mặc định lấy `15` câu thông qua `QUESTIONS_PER_ROUND`; hàm `buildQuizRound()` cân bằng nhóm chủ đề rồi xáo trộn câu và đáp án.
+3. Để thêm câu hỏi mới: thêm một object vào mảng `questionBank`. Mỗi lượt chơi mặc định lấy `10` câu thông qua `QUESTIONS_PER_ROUND`; hàm `buildQuizRound()` cân bằng nhóm chủ đề rồi xáo trộn câu và đáp án.
 4. Nên bổ sung `category` và `explanation` cho mọi câu; tránh câu hỏi mơ hồ, định kiến hoặc phụ thuộc vào cách diễn đạt chưa được kiểm chứng.
 
 ---
@@ -220,7 +220,7 @@ export const QUESTION_TIME_LIMIT = 20; // Số giây mỗi câu (mặc định l
 - [x] **Production Build**: `npm run build` đạt kết quả **PASS** (100% static prerendered).
 - [x] **TypeScript & Linter**: 0 lỗi, 0 cảnh báo.
 - [x] **Responsive**: Thiết kế đáp ứng Mobile 360px, iPad 768px, Laptop 1366px và màn chiếu hội trường Full HD 1080p.
-- [x] **Question Bank v2**: 30 câu tiếng Việt, 15 câu/lượt, cân bằng chủ đề, xáo trộn câu và vị trí đáp án.
+- [x] **Question Bank v3**: 40 English questions, 10 questions per round, balanced topics, shuffled questions/answers, and sourced image questions.
 - [ ] **Nội dung chính thức**: Nếu dùng để chấm thi/truyền thông chính thức, cần duyệt nguồn cho từng câu trước khi phát hành.
 - [x] **Accessibility**: Tương thích bàn phím, điều hướng số `1-4`, chữ `A-D`, `Enter`, hỗ trợ chế độ giảm chuyển động (`prefers-reduced-motion`).
 - [x] **SEO & Metadata**: Đầy đủ Title, Description tiếng Việt, thẻ Open Graph và Twitter Card.
