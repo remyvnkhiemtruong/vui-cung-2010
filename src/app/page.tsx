@@ -15,6 +15,8 @@ export default function QuizApp() {
     currentQuestion,
     currentIndex,
     totalQuestions,
+    questions,
+    bankSize,
     selectedOption,
     isAnswered,
     timeLeft,
@@ -45,6 +47,7 @@ export default function QuizApp() {
               onStart={startGame}
               highScore={highScore}
               totalQuestions={totalQuestions}
+              bankSize={bankSize}
             />
           )}
 
@@ -74,6 +77,7 @@ export default function QuizApp() {
             <ResultScreen
               stats={stats}
               totalQuestions={totalQuestions}
+              questions={questions}
               highScore={highScore}
               onPlayAgain={handlePlayAgain}
               onGoHome={handleGoHome}
@@ -83,7 +87,7 @@ export default function QuizApp() {
 
         {/* Footer */}
         <footer className="relative z-10 w-full py-3 text-center text-xs text-rose-800/70 select-none">
-          Kỷ niệm Ngày Phụ Nữ Việt Nam 20/10 • Thiết kế cho trường học &amp; sân khấu sự kiện
+          English Club Mini Game • Vietnamese Women's Day • October 20
         </footer>
       </div>
     </main>

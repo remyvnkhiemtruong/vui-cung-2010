@@ -88,7 +88,7 @@ export default function CircularTimer({
             {timeLeft}
           </span>
           <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500">
-            giây
+            sec
           </span>
         </div>
 

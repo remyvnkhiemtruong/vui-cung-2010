@@ -1,20 +1,25 @@
 'use client';
 
-import { useReducer, useEffect, useCallback, useSyncExternalStore, useMemo } from 'react';
+import { useReducer, useEffect, useCallback, useSyncExternalStore, useMemo, useState } from 'react';
 import {
   HighScoreRecord,
   OptionKey,
   Question,
   PlayerStats,
 } from '@/types/quiz';
-import { questionBank, isCorrectAnswer } from '@/data/questions';
+import {
+  questionBank,
+  isCorrectAnswer,
+  buildQuizRound,
+  QUESTIONS_PER_ROUND,
+} from '@/data/questions';
 import {
   quizGameReducer,
   createInitialGameState,
 } from '@/utils/gameEngine';
 import { soundManager } from '@/utils/sound';
 
-const STORAGE_KEY_HIGH_SCORE = 'quiz_2010_high_score';
+const STORAGE_KEY_HIGH_SCORE = 'english_club_20_10_10q_v4';
 
 function subscribeHighScore(callback: () => void) {
   window.addEventListener('storage', callback);
@@ -44,6 +49,10 @@ export function useQuizGame() {
     createInitialGameState
   );
 
+  const [activeQuestions, setActiveQuestions] = useState<Question[]>(
+    () => questionBank.slice(0, QUESTIONS_PER_ROUND)
+  );
+
   const rawHighScore = useSyncExternalStore(
     subscribeHighScore,
     getHighScoreSnapshot,
@@ -59,9 +68,9 @@ export function useQuizGame() {
     }
   }, [rawHighScore]);
 
-  const totalQuestions = questionBank.length;
+  const totalQuestions = activeQuestions.length;
   const currentQuestion: Question =
-    questionBank[state.currentQuestionIndex] || questionBank[0];
+    activeQuestions[state.currentQuestionIndex] || activeQuestions[0] || questionBank[0];
 
   // Active Timer Effect
   useEffect(() => {
@@ -98,6 +107,7 @@ export function useQuizGame() {
 
   // Action dispatches
   const startGame = useCallback((playerName: string) => {
+    setActiveQuestions(buildQuizRound(questionBank, QUESTIONS_PER_ROUND));
     soundManager.playStart();
     dispatch({
       type: 'START_GAME',
@@ -144,6 +154,7 @@ export function useQuizGame() {
   }, [totalQuestions, state.currentQuestionIndex]);
 
   const replayGame = useCallback(() => {
+    setActiveQuestions(buildQuizRound(questionBank, QUESTIONS_PER_ROUND));
     soundManager.playStart();
     dispatch({
       type: 'REPLAY_GAME',
@@ -167,7 +178,7 @@ export function useQuizGame() {
         score: state.score,
         bestScore: state.score,
         accuracy,
-        date: new Date().toLocaleDateString('vi-VN'),
+        date: new Date().toLocaleDateString('en-US'),
       };
 
       try {
@@ -237,6 +248,8 @@ export function useQuizGame() {
     // Derived helpers
     currentQuestion,
     totalQuestions,
+    questions: activeQuestions,
+    bankSize: questionBank.length,
     highScore,
     stats,
 

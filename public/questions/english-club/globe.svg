@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+ <title id="title">Globe illustration</title>
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#60a5fa"/></linearGradient>
+ <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="790" height="480" rx="28" fill="url(#g)"/>
+ <circle cx="620" cy="48" r="236" fill="url(#r)"/><circle cx="90" cy="424" r="190" fill="#fff" fill-opacity=".07"/>
+ <path d="M38 58h48m-24-24v48M676 388h44m-22-22v44" stroke="#fff" stroke-opacity=".34" stroke-width="8" stroke-linecap="round"/>
+ <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><circle cx="395" cy="252" r="164" stroke-width="11" fill="#fff" fill-opacity=".12"/><ellipse cx="395" cy="252" rx="75" ry="164" stroke-width="8" fill="none"/><path d="M235 252h320M265 169h260M265 335h260M395 88v328" stroke-width="8"/><path d="M488 387q-31 35-71 46M395 432v28m-72 0h144" stroke-width="11"/></g>
+ </svg>

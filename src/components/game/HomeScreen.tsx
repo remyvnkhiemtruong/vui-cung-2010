@@ -25,13 +25,15 @@ export interface HomeScreenProps {
   onStart: (playerName: string) => void;
   highScore: HighScoreRecord | null;
   totalQuestions?: number;
+  bankSize?: number;
   timeLimit?: number;
 }
 
 export default function HomeScreen({
   onStart,
   highScore,
-  totalQuestions = 12,
+  totalQuestions = 10,
+  bankSize = totalQuestions,
   timeLimit = QUESTION_TIME_LIMIT,
 }: HomeScreenProps) {
   const [playerName, setPlayerName] = useState('');
@@ -66,13 +68,13 @@ export default function HomeScreen({
     e.preventDefault();
 
     if (!trimmedName) {
-      setErrorMessage('Vui lòng nhập tên người chơi hoặc tên đội để bắt đầu!');
+      setErrorMessage('Please enter a player or team name to start.');
       inputRef.current?.focus();
       return;
     }
 
     if (trimmedName.length > 30) {
-      setErrorMessage('Tên người chơi không được vượt quá 30 ký tự.');
+      setErrorMessage('Player or team name cannot exceed 30 characters.');
       return;
     }
 
@@ -95,29 +97,29 @@ export default function HomeScreen({
         {/* Top Celebration Ribbon / Pill */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-5">
           <Badge variant="rose" icon={<Sparkles className="w-4 h-4 text-rose-500 animate-pulse" />}>
-            Chào Mừng 20/10
+            ENGLISH CLUB MINI GAME
           </Badge>
           <Badge variant="amber" icon={<HelpCircle className="w-4 h-4 text-amber-600" />}>
-            {totalQuestions} Questions
+            {bankSize} questions • {totalQuestions} random per round
           </Badge>
           <Badge variant="emerald" icon={<Clock className="w-4 h-4 text-emerald-600" />}>
-            {timeLimit} Seconds / Question
+            {timeLimit} seconds / question
           </Badge>
         </div>
 
         {/* Hero Title Section */}
         <div className="text-center mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-rose-950 uppercase leading-none drop-shadow-xs">
-            VUI CÙNG{' '}
+            CELEBRATE{' '}
             <span className="text-rose-600 underline decoration-rose-300 decoration-wavy decoration-3">
               20/10
             </span>
           </h1>
           <div className="text-base sm:text-2xl font-black text-rose-800 tracking-wider uppercase mt-2.5">
-            Vietnamese Women&apos;s Day Quiz
+            Vietnamese Women's Day Special
           </div>
           <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-700 italic mt-3 max-w-2xl mx-auto">
-            “Thử thách kiến thức – Tôn vinh phụ nữ Việt Nam”
+            “10 quick questions • English skills • Inspiring women • Picture clues”
           </p>
         </div>
 
@@ -130,11 +132,11 @@ export default function HomeScreen({
             >
               <span className="flex items-center gap-1.5 text-rose-950">
                 <User className="w-4 h-4 text-rose-600" />
-                Tên Người Chơi / Tên Đội Thi:
+                Player / Team Name:
                 <span className="text-rose-600">*</span>
               </span>
               <span className="text-xs text-slate-400 font-normal">
-                {playerName.length}/30 ký tự
+                {playerName.length}/30 characters
               </span>
             </label>
 
@@ -145,7 +147,7 @@ export default function HomeScreen({
                 type="text"
                 value={playerName}
                 onChange={handleInputChange}
-                placeholder="Nhập tên của bạn hoặc tên đội (VD: Đội Hoa Hướng Dương...)"
+                placeholder="Enter your name or team name (e.g. Sunflower Team)"
                 maxLength={30}
                 required
                 className={`
@@ -162,7 +164,7 @@ export default function HomeScreen({
                 <button
                   type="button"
                   onClick={handleClearInput}
-                  aria-label="Xóa tên"
+                  aria-label="Clear name"
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
                 >
                   <X className="w-5 h-5" />
@@ -189,10 +191,10 @@ export default function HomeScreen({
               disabled={!isValid}
               leftIcon={<Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white" />}
             >
-              BẮT ĐẦU CHƠI
+              START QUIZ
             </Button>
             <p className="text-center text-xs text-slate-500 mt-2">
-              Bấm Enter hoặc chạm vào nút để bước lên sân khấu
+              Friendly A2–B1 level • Play solo or as a team
             </p>
           </div>
         </form>
@@ -200,7 +202,7 @@ export default function HomeScreen({
         {/* Game Rules / Highlights for Projectors & Players */}
         <div className="w-full pt-6 sm:pt-8 border-t border-rose-100/90">
           <div className="text-center text-xs sm:text-sm font-extrabold text-slate-500 uppercase tracking-wider mb-4">
-            Thể Lệ Cuộc Thi &amp; Cách Tính Điểm
+            GAME RULES &amp; SCORING
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -210,10 +212,10 @@ export default function HomeScreen({
                 <Clock className="w-5 h-5" />
               </div>
               <div className="font-extrabold text-slate-800 text-sm sm:text-base">
-                {timeLimit}s / Câu hỏi
+                {timeLimit}s / Question
               </div>
               <p className="text-xs text-slate-600 mt-1">
-                Thời gian đếm ngược trực tiếp cho mỗi câu hỏi trắc nghiệm và hình ảnh.
+                A live countdown applies to every text and image question.
               </p>
             </div>
 
@@ -223,10 +225,10 @@ export default function HomeScreen({
                 <Trophy className="w-5 h-5" />
               </div>
               <div className="font-extrabold text-slate-800 text-sm sm:text-base">
-                +100đ + Thưởng Tốc Độ
+                +100 pts + Speed Bonus
               </div>
               <p className="text-xs text-slate-600 mt-1">
-                Trả lời đúng nhận +100 điểm, trả lời càng nhanh nhận thêm tối đa +50 điểm.
+                A correct answer earns +100 points, plus up to +50 for speed.
               </p>
             </div>
 
@@ -236,10 +238,10 @@ export default function HomeScreen({
                 <Flame className="w-5 h-5" />
               </div>
               <div className="font-extrabold text-slate-800 text-sm sm:text-base">
-                Combo Streak +20đ
+                Combo Streak +20 pts
               </div>
               <p className="text-xs text-slate-600 mt-1">
-                Duy trì chuỗi đúng từ 3 câu liên tiếp để bứt phá bảng xếp hạng.
+                Keep a streak of 3 or more correct answers to earn the combo bonus.
               </p>
             </div>
           </div>
@@ -251,8 +253,8 @@ export default function HomeScreen({
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs sm:text-sm font-semibold shadow-xs">
               <Award className="w-4 h-4 text-amber-500 shrink-0" />
               <span>
-                Kỷ lục sân khấu: <strong>{highScore.playerName}</strong> đạt{' '}
-                <strong>{highScore.score.toLocaleString()} điểm</strong> ({highScore.accuracy}%)
+                Device high score: <strong>{highScore.playerName}</strong> scored{' '}
+                <strong>{highScore.score.toLocaleString()} points</strong> ({highScore.accuracy}%)
               </span>
             </div>
           </div>

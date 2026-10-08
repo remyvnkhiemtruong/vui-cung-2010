@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+ <title id="title">Microphone illustration</title>
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#db2777"/><stop offset="1" stop-color="#f472b6"/></linearGradient>
+ <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="790" height="480" rx="28" fill="url(#g)"/>
+ <circle cx="620" cy="48" r="236" fill="url(#r)"/><circle cx="90" cy="424" r="190" fill="#fff" fill-opacity=".07"/>
+ <path d="M38 58h48m-24-24v48M676 388h44m-22-22v44" stroke="#fff" stroke-opacity=".34" stroke-width="8" stroke-linecap="round"/>
+ <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><rect x="323" y="112" width="145" height="235" rx="72" fill="#fff" fill-opacity=".17" stroke-width="12"/><path d="M279 268q0 143 119 143t119-143M398 410v48M335 462h126M357 172h83M357 220h83" stroke-width="12"/></g>
+ </svg>

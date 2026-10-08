@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+ <title id="title">Lightbulb illustration</title>
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d97706"/><stop offset="1" stop-color="#fbbf24"/></linearGradient>
+ <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="790" height="480" rx="28" fill="url(#g)"/>
+ <circle cx="620" cy="48" r="236" fill="url(#r)"/><circle cx="90" cy="424" r="190" fill="#fff" fill-opacity=".07"/>
+ <path d="M38 58h48m-24-24v48M676 388h44m-22-22v44" stroke="#fff" stroke-opacity=".34" stroke-width="8" stroke-linecap="round"/>
+ <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M308 248c0-121 174-145 185-16 5 62-38 83-55 120l-8 22h-71l-8-22c-16-34-43-56-43-104Z" fill="#fff" fill-opacity=".19" stroke-width="12"/><path d="M360 386h69m-63 23h56m-44 18h31M395 75v-31M269 124l-26-25m284 25 26-25M259 262h-34m335 0h-34" stroke-width="12"/></g>
+ </svg>

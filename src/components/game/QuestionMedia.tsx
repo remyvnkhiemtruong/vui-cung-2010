@@ -8,6 +8,8 @@ interface QuestionMediaProps {
   src?: string;
   alt: string;
   category?: string;
+  credit?: string;
+  sourceUrl?: string;
   className?: string;
 }
 
@@ -15,6 +17,8 @@ export default function QuestionMedia({
   src,
   alt,
   category,
+  credit,
+  sourceUrl,
   className = '',
 }: QuestionMediaProps) {
   const [hasError, setHasError] = useState(false);
@@ -31,14 +35,14 @@ export default function QuestionMedia({
           ${className}
         `}
         role="figure"
-        aria-label={`Hình ảnh minh họa: ${alt}`}
+        aria-label={`Question illustration: ${alt}`}
       >
         <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-2.5 shadow-xs">
           <FileQuestion className="w-6 h-6 sm:w-7 sm:h-7" />
         </div>
 
         <div className="font-extrabold text-slate-800 text-sm sm:text-base leading-snug mb-1">
-          Hình Ảnh Minh Họa Câu Hỏi
+          Question Illustration
         </div>
 
         <p className="text-xs text-slate-500 max-w-xs mb-3 line-clamp-2">
@@ -48,10 +52,10 @@ export default function QuestionMedia({
         {/* Developer Notice Badge */}
         <div className="px-3 py-1.5 rounded-xl bg-white/90 border border-slate-200 text-[11px] text-slate-600 shadow-xs max-w-xs">
           <span className="font-mono text-rose-600 font-bold">
-            {src || 'Chưa cấu hình path'}
+            {src || 'Image source is not configured'}
           </span>
           <div className="text-[10px] text-slate-400 mt-0.5">
-            [Dev: Đặt ảnh tại thư mục public để hiển thị]
+            [Image unavailable — the quiz will continue normally]
           </div>
         </div>
       </div>
@@ -73,7 +77,7 @@ export default function QuestionMedia({
         <div className="absolute inset-0 bg-rose-50/60 animate-pulse flex flex-col items-center justify-center z-0">
           <ImageIcon className="w-8 h-8 text-rose-300 animate-bounce" />
           <span className="text-xs font-semibold text-rose-400 mt-2">
-            Đang tải hình ảnh...
+            Loading image...
           </span>
         </div>
       )}
@@ -100,9 +104,28 @@ export default function QuestionMedia({
       <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-white/90 backdrop-blur-xs text-rose-800 border border-rose-200/80 shadow-xs">
           <Sparkles className="w-3 h-3 text-rose-600" />
-          {category || 'Hình ảnh quan sát'}
+          {category || 'Visual question'}
         </span>
       </div>
+
+      {credit && (
+        <div className="absolute bottom-2.5 right-2.5 z-10 max-w-[80%] text-right">
+          {sourceUrl ? (
+            <a
+              href={sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-block rounded-lg bg-black/65 px-2 py-1 text-[9px] sm:text-[10px] font-medium text-white/90 backdrop-blur-sm hover:bg-black/80"
+            >
+              Image credit: {credit}
+            </a>
+          ) : (
+            <span className="inline-block rounded-lg bg-black/65 px-2 py-1 text-[9px] sm:text-[10px] font-medium text-white/90 backdrop-blur-sm">
+              Image credit: {credit}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

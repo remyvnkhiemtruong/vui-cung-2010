@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   CheckCircle2,
   XCircle,
@@ -9,20 +10,22 @@ import {
   HelpCircle,
   Lightbulb,
 } from 'lucide-react';
-import { PlayerAnswerRecord } from '@/types/quiz';
-import { questionBank } from '@/data/questions';
+import { PlayerAnswerRecord, Question } from '@/types/quiz';
 
 interface QuestionReviewListProps {
   answers: PlayerAnswerRecord[];
+  questions: Question[];
   totalQuestions?: number;
 }
 
 export default function QuestionReviewList({
   answers,
-  totalQuestions = 12,
+  questions,
+  totalQuestions,
 }: QuestionReviewListProps) {
-  // Map all questions from questionBank ensuring exact 1 to 12 ordering
-  const reviewItems = questionBank.slice(0, totalQuestions).map((question, index) => {
+  const reviewItems = questions
+    .slice(0, totalQuestions ?? questions.length)
+    .map((question, index) => {
     const record = answers.find((a) => a.questionId === question.id);
 
     const isAnswered = !!record;
@@ -59,7 +62,7 @@ export default function QuestionReviewList({
         let statusBadge = (
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-200">
             <XCircle className="w-3.5 h-3.5 text-rose-600" />
-            Chưa đúng
+            Incorrect
           </span>
         );
         let borderStyle = 'border-rose-200/90 bg-rose-50/20';
@@ -68,7 +71,7 @@ export default function QuestionReviewList({
           statusBadge = (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              Chính xác (+{item.scoreAwarded}đ)
+              Correct (+{item.scoreAwarded} pts)
             </span>
           );
           borderStyle = 'border-emerald-200/90 bg-emerald-50/20';
@@ -76,7 +79,7 @@ export default function QuestionReviewList({
           statusBadge = (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-200">
               <Clock className="w-3.5 h-3.5 text-amber-600" />
-              Hết giờ (0đ)
+              Time up (0 pts)
             </span>
           );
           borderStyle = 'border-amber-200/90 bg-amber-50/20';
@@ -98,7 +101,7 @@ export default function QuestionReviewList({
                 </span>
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-rose-500" />
-                  {item.question.category || '20/10 Quiz'}
+                  {item.question.category || 'October 20 Quiz'}
                 </span>
               </div>
 
@@ -109,6 +112,19 @@ export default function QuestionReviewList({
             <h3 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 leading-snug mb-3">
               {item.question.question}
             </h3>
+
+            {item.question.image && (
+              <div className="mb-3 max-w-xs overflow-hidden rounded-xl border border-rose-100 bg-rose-50">
+                <Image
+                  src={item.question.image}
+                  alt={`Illustration for ${item.question.question}`}
+                  width={380}
+                  height={228}
+                  className="h-auto w-full object-contain"
+                  unoptimized
+                />
+              </div>
+            )}
 
             {/* Answers Comparison Layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3 text-xs sm:text-sm">
@@ -130,12 +146,12 @@ export default function QuestionReviewList({
                 </div>
                 <div className="min-w-0">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 leading-none mb-1">
-                    Bạn chọn:
+                    Your answer:
                   </div>
                   <div className="font-extrabold leading-snug">
                     {item.isTimeout ? (
                       <span className="italic text-amber-800">
-                        Hết giờ (Không chọn kịp)
+                        Time expired (no answer)
                       </span>
                     ) : item.selectedKey ? (
                       <span>
@@ -145,7 +161,7 @@ export default function QuestionReviewList({
                         {item.selectedText}
                       </span>
                     ) : (
-                      <span className="italic text-slate-400">Chưa trả lời</span>
+                      <span className="italic text-slate-400">No answer</span>
                     )}
                   </div>
                 </div>
@@ -158,7 +174,7 @@ export default function QuestionReviewList({
                 </div>
                 <div className="min-w-0">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 leading-none mb-1">
-                    Đáp án đúng:
+                    Correct answer:
                   </div>
                   <div className="font-extrabold text-emerald-900 leading-snug">
                     <span className="underline decoration-emerald-500">
@@ -170,12 +186,23 @@ export default function QuestionReviewList({
               </div>
             </div>
 
+            {item.question.sourceUrl && (
+              <a
+                href={item.question.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex text-xs font-bold text-rose-700 underline underline-offset-2"
+              >
+                View fact-checking source ↗
+              </a>
+            )}
+
             {/* Explanation Note */}
             {item.explanation && (
               <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-start gap-1.5 text-xs text-slate-600">
                 <Lightbulb className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  <strong>Ghi chú:</strong> {item.explanation}
+                  <strong>Explanation:</strong> {item.explanation}
                 </span>
               </div>
             )}

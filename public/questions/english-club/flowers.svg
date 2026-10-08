@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 480" role="img" aria-labelledby="title">
+ <title id="title">Flowers illustration</title>
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ec4899"/><stop offset="1" stop-color="#fb7185"/></linearGradient>
+ <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+ <rect width="790" height="480" rx="28" fill="url(#g)"/>
+ <circle cx="620" cy="48" r="236" fill="url(#r)"/><circle cx="90" cy="424" r="190" fill="#fff" fill-opacity=".07"/>
+ <path d="M38 58h48m-24-24v48M676 388h44m-22-22v44" stroke="#fff" stroke-opacity=".34" stroke-width="8" stroke-linecap="round"/>
+ <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M300 345 380 245M480 345 402 245M390 352V223" stroke-width="10"/><path d="M270 324 390 390 520 326 486 420H302Z" fill="#ffffff" fill-opacity=".13" stroke-width="9"/><g fill="#fff"><circle cx="384" cy="170" r="21"/><circle cx="349" cy="195" r="21"/><circle cx="361" cy="237" r="21"/><circle cx="410" cy="234" r="21"/><circle cx="421" cy="193" r="21"/><circle cx="384" cy="203" r="17" fill="#fbbf24"/></g><path d="M340 307q-62-12-54-53 50-4 54 53m104 10q10-55 60-53 3 42-60 53" stroke-width="7" fill="#ffffff" fill-opacity=".25"/></g>
+ </svg>
