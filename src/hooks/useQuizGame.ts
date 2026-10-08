@@ -19,7 +19,7 @@ import {
 } from '@/utils/gameEngine';
 import { soundManager } from '@/utils/sound';
 
-const STORAGE_KEY_HIGH_SCORE = 'quiz_2010_high_score_v2';
+const STORAGE_KEY_HIGH_SCORE = 'quiz_2010_high_score_v3_en_10q';
 
 function subscribeHighScore(callback: () => void) {
   window.addEventListener('storage', callback);
@@ -178,7 +178,7 @@ export function useQuizGame() {
         score: state.score,
         bestScore: state.score,
         accuracy,
-        date: new Date().toLocaleDateString('vi-VN'),
+        date: new Date().toLocaleDateString('en-US'),
       };
 
       try {
