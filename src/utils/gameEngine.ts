@@ -6,14 +6,14 @@ import {
   PlayerAnswerRecord,
 } from '@/types/quiz';
 
-export const QUESTION_TIME_LIMIT = 20;
+export const QUESTION_TIME_LIMIT = 25;
 
 /**
  * Pure calculation function for score, speed bonus, and streak bonus.
  *
  * Rules:
  * - baseScore = 100
- * - speedBonus = Math.round((timeLeft / 20) * 50)
+ * - speedBonus = Math.round((timeLeft / timeLimit) * 50)
  * - streakBonus: +20 when streak >= 3 after answering correctly
  * - wrong/timeout: 0 points, streak resets to 0
  */
