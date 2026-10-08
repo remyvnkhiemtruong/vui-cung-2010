@@ -10,7 +10,7 @@ import {
 import {
   questionBank,
   isCorrectAnswer,
-  buildQuizRound,
+  buildUnseenSoloRound,
   QUESTIONS_PER_ROUND,
 } from '@/data/questions';
 import {
@@ -20,6 +20,31 @@ import {
 import { soundManager } from '@/utils/sound';
 
 const STORAGE_KEY_HIGH_SCORE = 'english_club_october20_only_10q_v5';
+
+const SOLO_DECK_STORAGE_KEY = 'english_club_oct20_200q_seen_v1';
+
+function drawNewSoloRound() {
+  let seenIds: string[] = [];
+  try {
+    const raw = localStorage.getItem(SOLO_DECK_STORAGE_KEY);
+    if (raw) {
+      const parsed: unknown = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        seenIds = parsed.filter((x): x is string => typeof x === 'string');
+      }
+    }
+  } catch {
+    // Private browsing: the selected round still has unique questions.
+  }
+  const result = buildUnseenSoloRound(questionBank, seenIds, QUESTIONS_PER_ROUND);
+  try {
+    localStorage.setItem(SOLO_DECK_STORAGE_KEY, JSON.stringify(result.seenIds));
+  } catch {
+    // Ignore storage restrictions and allow normal play.
+  }
+  return result.questions;
+}
+
 
 function subscribeHighScore(callback: () => void) {
   window.addEventListener('storage', callback);
@@ -107,7 +132,7 @@ export function useQuizGame() {
 
   // Action dispatches
   const startGame = useCallback((playerName: string) => {
-    setActiveQuestions(buildQuizRound(questionBank, QUESTIONS_PER_ROUND));
+    setActiveQuestions(drawNewSoloRound());
     soundManager.playStart();
     dispatch({
       type: 'START_GAME',
@@ -154,7 +179,7 @@ export function useQuizGame() {
   }, [totalQuestions, state.currentQuestionIndex]);
 
   const replayGame = useCallback(() => {
-    setActiveQuestions(buildQuizRound(questionBank, QUESTIONS_PER_ROUND));
+    setActiveQuestions(drawNewSoloRound());
     soundManager.playStart();
     dispatch({
       type: 'REPLAY_GAME',
