@@ -87,7 +87,7 @@ export default function QuizApp() {
 
         {/* Footer */}
         <footer className="relative z-10 w-full py-3 text-center text-xs text-rose-800/70 select-none">
-          Celebrating Vietnamese Women's Day • Designed for schools and live events
+          English Club Mini Game • Vietnamese Women's Day • October 20
         </footer>
       </div>
     </main>
