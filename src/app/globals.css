@@ -320,3 +320,20 @@ body { min-height:0; }
   .question-option {padding:4px 6px;gap:5px}
   .home-badges {font-size:10px}
 }
+
+/* Live multiplayer panels fit common phone/projector viewports. */
+@media(max-height:700px){
+  .live-quiz-question { gap:4px; }
+  .live-quiz-image { max-height:16dvh !important; }
+  .live-quiz-options { gap:5px; }
+  .live-quiz-options button { min-height:47px; padding:5px; font-size:11px; }
+}
+@media(max-height:560px){
+  .live-quiz-image { max-height:11dvh !important; }
+  .live-quiz-options button { min-height:39px; }
+  .live-quiz-question h2 { font-size:clamp(15px,3dvh,22px); }
+}
+@media(max-width:360px){
+  .live-quiz-options button { gap:5px; }
+  .live-quiz-options button strong {width:24px;height:24px;flex-shrink:0}
+}
