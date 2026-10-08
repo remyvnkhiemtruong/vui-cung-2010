@@ -277,6 +277,16 @@ export default function QuestionCard({
                   {question.explanation}
                 </p>
               )}
+              {question.sourceUrl && (
+                <a
+                  href={question.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex mt-2 text-xs font-bold text-rose-700 underline underline-offset-2 hover:text-rose-900"
+                >
+                  Learn more about this fact ↗
+                </a>
+              )
             </div>
 
             {/* Next / Result Action Button */}
