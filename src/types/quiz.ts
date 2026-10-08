@@ -1,6 +1,7 @@
 export type OptionKey = 'A' | 'B' | 'C' | 'D';
 
 export type QuestionType = 'multiple-choice' | 'text-choice' | 'image-choice';
+export type QuestionDifficulty = 'warm-up' | 'standard' | 'challenge';
 
 export interface QuestionOption {
   key: OptionKey;
@@ -18,6 +19,8 @@ export interface Question {
   imageSourceUrl?: string;
   explanation?: string;
   category?: string;
+  difficulty?: QuestionDifficulty;
+  sourceUrl?: string;
 }
 
 export type GameScreen = 'start' | 'playing' | 'result';
