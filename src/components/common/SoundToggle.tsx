@@ -28,8 +28,8 @@ export default function SoundToggle({ className = '' }: SoundToggleProps) {
     <button
       type="button"
       onClick={handleToggle}
-      aria-label={isMuted ? 'Bật âm thanh trò chơi' : 'Tắt âm thanh trò chơi'}
-      title={isMuted ? 'Bật âm thanh' : 'Tắt âm thanh'}
+      aria-label={isMuted ? 'Turn game sound on' : 'Turn game sound off'}
+      title={isMuted ? 'Sound on' : 'Sound off'}
       className={`
         relative p-2 sm:p-2.5 rounded-xl border transition-all duration-200 cursor-pointer shadow-xs focus:outline-hidden focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-2
         ${
