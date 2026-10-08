@@ -4,6 +4,8 @@
  */
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { runInNewContext } from 'node:vm';
+import ts from 'typescript';
 
 const root = process.cwd();
 const bank = readFileSync(join(root, 'src/data/questions.ts'), 'utf8');
@@ -83,4 +85,42 @@ assert(plans.reduce((n, x) => n + Number(x[3]), 0) === 10, 'Round must contain 1
 for (const slot of plans) {
   assert(expectedDifficulties[slot[1]]?.[slot[2]] >= Number(slot[3]), 'Cannot satisfy round slot: ' + slot[1]);
 }
-console.log('English Club quiz bank validated: 54 unique questions, 10 balanced per round, 12 illustrated picture prompts.');
+// Execute the real TypeScript selection algorithm in isolation, not just regex checks.
+const compiled = ts.transpileModule(bank, {
+  compilerOptions: {
+    module: ts.ModuleKind.CommonJS,
+    target: ts.ScriptTarget.ES2022,
+  },
+}).outputText;
+const quizModule = { exports: {} };
+runInNewContext(compiled, { module: quizModule, exports: quizModule.exports });
+const { questionBank, buildQuizRound } = quizModule.exports;
+const expectedRoundCategories = {
+  '20/10 Celebration': 3,
+  'English Challenge': 3,
+  'Inspiring Women': 2,
+  'Picture Round': 2,
+};
+const expectedRoundLevels = { 'warm-up': 5, standard: 4, challenge: 1 };
+const seenRounds = new Set();
+
+for (let run = 0; run < 100; run++) {
+  const round = buildQuizRound(questionBank, 10);
+  const categoryMix = Object.fromEntries(Object.keys(expectedRoundCategories).map(k => [k, 0]));
+  const levelMix = Object.fromEntries(Object.keys(expectedRoundLevels).map(k => [k, 0]));
+  assert(round.length === 10, 'Wrong game length: ' + round.length);
+  assert(new Set(round.map(q => q.id)).size === 10, 'Duplicate question in a game');
+  for (const q of round) {
+    categoryMix[q.category]++;
+    levelMix[q.difficulty]++;
+    assert(q.options.length === 4, 'Incorrect option count for ' + q.id);
+    assert(q.options.some(x => x.key === q.correctAnswer), 'Invalid answer mapping after shuffling: ' + q.id);
+    assert(new Set(q.options.map(x => x.key)).size === 4, 'Duplicated answer keys: ' + q.id);
+  }
+  assert(JSON.stringify(categoryMix) === JSON.stringify(expectedRoundCategories), 'Uneven round categories');
+  assert(JSON.stringify(levelMix) === JSON.stringify(expectedRoundLevels), 'Uneven round difficulties');
+  assert(round.filter(q => q.image).length === 2, 'Every round must contain two pictures');
+  seenRounds.add(round.map(q => q.id).sort().join(','));
+}
+assert(seenRounds.size > 1, 'Question selection is not randomized');
+console.log('English Club quiz bank validated: 54 unique questions, 10 balanced per round, 12 local SVGs, 100 simulated rounds passed.');
