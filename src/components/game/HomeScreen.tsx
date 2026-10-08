@@ -97,10 +97,10 @@ export default function HomeScreen({
         {/* Top Celebration Ribbon / Pill */}
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-5">
           <Badge variant="rose" icon={<Sparkles className="w-4 h-4 text-rose-500 animate-pulse" />}>
-            Vietnamese Women's Day
+            ENGLISH CLUB MINI GAME
           </Badge>
           <Badge variant="amber" icon={<HelpCircle className="w-4 h-4 text-amber-600" />}>
-            {bankSize}-question bank • {totalQuestions} random questions per round
+            {bankSize} questions • {totalQuestions} random per round
           </Badge>
           <Badge variant="emerald" icon={<Clock className="w-4 h-4 text-emerald-600" />}>
             {timeLimit} seconds / question
@@ -116,10 +116,10 @@ export default function HomeScreen({
             </span>
           </h1>
           <div className="text-base sm:text-2xl font-black text-rose-800 tracking-wider uppercase mt-2.5">
-            Vietnamese Women's Day Quiz
+            Vietnamese Women's Day Special
           </div>
           <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-700 italic mt-3 max-w-2xl mx-auto">
-            “Test your knowledge • Celebrate Vietnamese women”
+            “10 quick questions • English skills • Inspiring women • Picture clues”
           </p>
         </div>
 
@@ -194,7 +194,7 @@ export default function HomeScreen({
               START QUIZ
             </Button>
             <p className="text-center text-xs text-slate-500 mt-2">
-              Press Enter or click the button to begin
+              Friendly A2–B1 level • Play solo or as a team
             </p>
           </div>
         </form>
