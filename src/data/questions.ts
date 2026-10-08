@@ -1,4 +1,8 @@
 import { Question, OptionKey, QuestionType, QuestionOption } from '@/types/quiz';
+import { extraHistory } from './extra-history';
+import { extraWomen } from './extra-women';
+import { extraActivities } from './extra-activities';
+import { extraPictures } from './extra-pictures';
 
 /**
  * Input definition interface for creating type-safe questions easily.
@@ -920,7 +924,11 @@ export const questionBank: Question[] = [
     explanation: "A short appreciation video can include messages for teachers, mothers and female club members.",
     image: "/questions/october20/video-message.svg",
     imageCredit: "Original October 20 celebration illustration",
-  })
+  }),
+  ...extraHistory.map(createQuestion),
+  ...extraWomen.map(createQuestion),
+  ...extraActivities.map(createQuestion),
+  ...extraPictures.map(createQuestion),
 ];
 
 /**
@@ -1111,4 +1119,43 @@ export function buildQuizRound(
   );
   const remaining = selected.filter(q => !q.difficulty);
   return [...ordered, ...shuffleQuestions(remaining)].map(shuffleQuestionOptions);
+}
+
+
+/**
+ * One immutable room deck containing every question exactly once.
+ *
+ * - Created and persisted when the server creates a Live Quiz room.
+ * - Each player receives the same order and shuffled A-D options.
+ * - The MC may reveal and advance through every question without drawing
+ *   a previously seen one; when all are exhausted the room finishes.
+ */
+export function buildContinuousQuiz(bank: Question[] = questionBank): Question[] {
+  const ids = new Set<Question['id']>();
+  for (const question of bank) {
+    if (ids.has(question.id)) throw new Error('Duplicate question ID: ' + question.id);
+    ids.add(question.id);
+  }
+  return shuffleQuestions(bank).map(shuffleQuestionOptions);
+}
+
+/**
+ * The solo mode uses 10-question rounds but remembers already shown IDs
+ * across "Play Again" clicks. On exhaustion, a new cycle begins.
+ */
+export function buildUnseenSoloRound(
+  bank: Question[],
+  seenIds: ReadonlyArray<string>,
+  count: number = QUESTIONS_PER_ROUND
+): { questions: Question[]; seenIds: string[]; cycleComplete: boolean } {
+  const seen = new Set(seenIds);
+  let available = bank.filter(q => !seen.has(String(q.id)));
+  const cycleComplete = available.length === 0;
+  if (cycleComplete) {
+    available = bank;
+    seen.clear();
+  }
+  const questions = buildQuizRound(available, Math.min(count,available.length));
+  for(const q of questions) seen.add(String(q.id));
+  return { questions, seenIds:Array.from(seen),cycleComplete };
 }
