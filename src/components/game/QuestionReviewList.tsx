@@ -172,6 +172,17 @@ export default function QuestionReviewList({
               </div>
             </div>
 
+            {item.question.sourceUrl && (
+              <a
+                href={item.question.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex text-xs font-bold text-rose-700 underline underline-offset-2"
+              >
+                View fact-checking source ↗
+              </a>
+            )}
+
             {/* Explanation Note */}
             {item.explanation && (
               <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-start gap-1.5 text-xs text-slate-600">
