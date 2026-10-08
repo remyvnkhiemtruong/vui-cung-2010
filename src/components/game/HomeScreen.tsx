@@ -1,20 +1,8 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import {
-  Play,
-  Clock,
-  HelpCircle,
-  Trophy,
-  Flame,
-  User,
-  Sparkles,
-  AlertCircle,
-  X,
-  Award,
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { Play, Clock3, Trophy, Flame, Sparkles, HelpCircle, Award } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { StageDecorations } from '@/components/decorations/StageDecorations';
 import SoundToggle from '@/components/common/SoundToggle';
@@ -37,228 +25,105 @@ export default function HomeScreen({
   timeLimit = QUESTION_TIME_LIMIT,
 }: HomeScreenProps) {
   const [playerName, setPlayerName] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [error, setError] = useState('');
+  const trimmed = playerName.trim();
 
-  // Auto focus input on mount
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  const trimmedName = playerName.trim();
-  const isValid = trimmedName.length >= 1 && trimmedName.length <= 30;
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length <= 30) {
-      setPlayerName(value);
-      if (errorMessage && value.trim().length > 0) {
-        setErrorMessage(null);
-      }
-    }
-  };
-
-  const handleClearInput = () => {
-    setPlayerName('');
-    setErrorMessage(null);
-    inputRef.current?.focus();
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!trimmedName) {
-      setErrorMessage('Please enter a player or team name to start.');
-      inputRef.current?.focus();
+    if (!trimmed) {
+      setError('Please enter a player or team name.');
       return;
     }
-
-    if (trimmedName.length > 30) {
-      setErrorMessage('Player or team name cannot exceed 30 characters.');
-      return;
-    }
-
-    setErrorMessage(null);
-    onStart(trimmedName);
+    setError('');
+    onStart(trimmed);
   };
 
   return (
-    <div className="relative w-full max-w-4xl lg:max-w-5xl mx-auto px-4 py-4 sm:py-8 flex flex-col items-center">
-      {/* Background Stage Lighting & Confetti */}
+    <div className="home-screen relative max-w-6xl">
       <StageDecorations />
+      <Card glow className="home-card relative z-10">
+        <div className="home-badges flex justify-center items-center gap-2 pr-12">
+          <Badge variant="rose" icon={<Sparkles className="w-3.5 h-3.5" />}>
+            ENGLISH CLUB • OCTOBER 20
+          </Badge>
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-[11px] sm:text-xs font-bold text-amber-800">
+            {bankSize} in the bank · {totalQuestions} per game
+          </span>
+        </div>
 
-      {/* Main Stage Card */}
-      <Card glow className="w-full z-10 p-6 sm:p-10 md:p-12 relative">
-        {/* Sound Toggle Top-Right */}
-        <div className="absolute right-4 top-4 z-20">
+        <div className="absolute right-3 top-3 z-20">
           <SoundToggle />
         </div>
 
-        {/* Top Celebration Ribbon / Pill */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-5">
-          <Badge variant="rose" icon={<Sparkles className="w-4 h-4 text-rose-500 animate-pulse" />}>
-            ENGLISH CLUB MINI GAME
-          </Badge>
-          <Badge variant="amber" icon={<HelpCircle className="w-4 h-4 text-amber-600" />}>
-            {bankSize} questions • {totalQuestions} random per round
-          </Badge>
-          <Badge variant="emerald" icon={<Clock className="w-4 h-4 text-emerald-600" />}>
-            {timeLimit} seconds / question
-          </Badge>
-        </div>
-
-        {/* Hero Title Section */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight text-rose-950 uppercase leading-none drop-shadow-xs">
-            CELEBRATE{' '}
-            <span className="text-rose-600 underline decoration-rose-300 decoration-wavy decoration-3">
-              20/10
-            </span>
+        <div className="home-hero">
+          <h1 className="home-title text-rose-950">
+            CELEBRATE <span className="text-rose-600">20/10</span>
           </h1>
-          <div className="text-base sm:text-2xl font-black text-rose-800 tracking-wider uppercase mt-2.5">
-            Vietnamese Women's Day Special
-          </div>
-          <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-700 italic mt-3 max-w-2xl mx-auto">
-            “October 20 celebrations • Vietnamese women • Picture clues”
+          <p className="home-subtitle mt-1 text-rose-800">
+            VIETNAMESE WOMEN&apos;S DAY
+          </p>
+          <p className="mt-1 text-[11px] sm:text-sm text-slate-600">
+            October 20 traditions · Inspiring Vietnamese women · Picture clues
           </p>
         </div>
 
-        {/* Player Name Form */}
-        <form onSubmit={handleSubmit} className="w-full max-w-xl mx-auto mb-8 sm:mb-10">
-          <div className="relative mb-2">
-            <label
-              htmlFor="playerNameInput"
-              className="block text-xs sm:text-sm font-extrabold text-slate-800 mb-2 flex items-center justify-between"
-            >
-              <span className="flex items-center gap-1.5 text-rose-950">
-                <User className="w-4 h-4 text-rose-600" />
-                Player / Team Name:
-                <span className="text-rose-600">*</span>
-              </span>
-              <span className="text-xs text-slate-400 font-normal">
-                {playerName.length}/30 characters
-              </span>
-            </label>
-
-            <div className="relative">
-              <input
-                ref={inputRef}
-                id="playerNameInput"
-                type="text"
-                value={playerName}
-                onChange={handleInputChange}
-                placeholder="Enter your name or team name (e.g. Sunflower Team)"
-                maxLength={30}
-                required
-                className={`
-                  w-full px-5 py-4 sm:py-5 rounded-2xl border-2 bg-white/95 text-slate-900 text-base sm:text-xl font-semibold shadow-inner transition-all placeholder:text-slate-400 placeholder:font-normal focus:outline-hidden
-                  ${
-                    errorMessage
-                      ? 'border-red-400 ring-2 ring-red-200'
-                      : 'border-rose-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-200/50'
-                  }
-                `}
-              />
-
-              {playerName.length > 0 && (
-                <button
-                  type="button"
-                  onClick={handleClearInput}
-                  aria-label="Clear name"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              )}
-            </div>
-
-            {/* Error Message */}
-            {errorMessage && (
-              <div className="flex items-center gap-1.5 text-red-600 text-xs sm:text-sm font-semibold mt-2 animate-in fade-in duration-200">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{errorMessage}</span>
-              </div>
-            )}
-          </div>
-
-          {/* Big Stage Action Button */}
-          <div className="mt-5">
-            <Button
+        <form onSubmit={submit} className="home-form" noValidate>
+          <label htmlFor="playerNameInput" className="mb-1 block text-xs sm:text-sm font-extrabold text-rose-950">
+            Player or team name
+          </label>
+          <div className="home-form-controls">
+            <input
+              id="playerNameInput"
+              type="text"
+              value={playerName}
+              onChange={(e) => { setPlayerName(e.target.value.slice(0, 30)); setError(''); }}
+              placeholder="Enter your name or team"
+              maxLength={30}
+              required
+              aria-invalid={!!error}
+              aria-describedby={error ? 'player-error' : undefined}
+              className="rounded-xl border-2 border-rose-200 bg-white px-4 py-2.5 text-base font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-200"
+            />
+            <button
               type="submit"
-              variant="primary"
-              size="xl"
-              fullWidth
-              disabled={!isValid}
-              leftIcon={<Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white" />}
+              disabled={!trimmed}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-2.5 text-base font-black text-white shadow-lg transition hover:from-rose-700 hover:to-pink-700 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-4 focus-visible:ring-rose-300"
             >
+              <Play className="h-5 w-5 fill-white" aria-hidden="true" />
               START QUIZ
-            </Button>
-            <p className="text-center text-xs text-slate-500 mt-2">
-              Friendly A2–B1 level • Play solo or as a team
-            </p>
+            </button>
           </div>
+          {error && <p id="player-error" role="alert" className="mt-1 text-xs font-bold text-red-700">{error}</p>}
         </form>
 
-        {/* Game Rules / Highlights for Projectors & Players */}
-        <div className="w-full pt-6 sm:pt-8 border-t border-rose-100/90">
-          <div className="text-center text-xs sm:text-sm font-extrabold text-slate-500 uppercase tracking-wider mb-4">
-            GAME RULES &amp; SCORING
+        <div className="home-rules" aria-label="Game rules">
+          <div className="home-rule">
+            <Clock3 aria-hidden="true" className="h-5 w-5 text-rose-600" />
+            <strong>{timeLimit} seconds</strong>
+            <span>for every question</span>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            {/* Rule 1 */}
-            <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-4 border border-rose-100/80 shadow-xs flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center mb-2.5">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div className="font-extrabold text-slate-800 text-sm sm:text-base">
-                {timeLimit}s / Question
-              </div>
-              <p className="text-xs text-slate-600 mt-1">
-                A live countdown applies to every text and image question.
-              </p>
-            </div>
-
-            {/* Rule 2 */}
-            <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-4 border border-rose-100/80 shadow-xs flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-2.5">
-                <Trophy className="w-5 h-5" />
-              </div>
-              <div className="font-extrabold text-slate-800 text-sm sm:text-base">
-                +100 pts + Speed Bonus
-              </div>
-              <p className="text-xs text-slate-600 mt-1">
-                A correct answer earns +100 points, plus up to +50 for speed.
-              </p>
-            </div>
-
-            {/* Rule 3 */}
-            <div className="bg-white/80 backdrop-blur-xs rounded-2xl p-4 border border-rose-100/80 shadow-xs flex flex-col items-center text-center">
-              <div className="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-2.5">
-                <Flame className="w-5 h-5" />
-              </div>
-              <div className="font-extrabold text-slate-800 text-sm sm:text-base">
-                Combo Streak +20 pts
-              </div>
-              <p className="text-xs text-slate-600 mt-1">
-                Keep a streak of 3 or more correct answers to earn the combo bonus.
-              </p>
-            </div>
+          <div className="home-rule">
+            <Trophy aria-hidden="true" className="h-5 w-5 text-amber-600" />
+            <strong>+100 points</strong>
+            <span>plus a speed bonus</span>
+          </div>
+          <div className="home-rule">
+            <Flame aria-hidden="true" className="h-5 w-5 text-orange-600" />
+            <strong>3-answer streak</strong>
+            <span>earns a combo bonus</span>
           </div>
         </div>
 
-        {/* High Score Record Banner */}
-        {highScore && (
-          <div className="mt-6 pt-4 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs sm:text-sm font-semibold shadow-xs">
-              <Award className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>
-                Device high score: <strong>{highScore.playerName}</strong> scored{' '}
-                <strong>{highScore.score.toLocaleString()} points</strong> ({highScore.accuracy}%)
-              </span>
-            </div>
-          </div>
-        )}
+        <div className="flex flex-wrap items-center justify-center gap-2 text-center text-[11px] sm:text-xs text-slate-600">
+          <HelpCircle className="h-3.5 w-3.5 text-rose-600" aria-hidden="true" />
+          <span>Choose A, B, C or D · Play solo or as a team</span>
+          {highScore && (
+            <span className="inline-flex items-center gap-1 font-bold text-amber-800">
+              <Award className="h-3.5 w-3.5" />
+              Best: {highScore.playerName} ({highScore.score.toLocaleString()} pts)
+            </span>
+          )}
+        </div>
       </Card>
     </div>
   );
