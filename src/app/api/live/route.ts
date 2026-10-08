@@ -1,4 +1,4 @@
-import { questionBank, buildQuizRound } from '@/data/questions';
+import { questionBank, buildContinuousQuiz } from '@/data/questions';
 import { db } from '@/lib/live-db';
 import { makeToken, hashToken, json, errorResponse } from '@/lib/live-security';
 import { randomBytes } from 'node:crypto';
@@ -15,7 +15,7 @@ export async function POST(request:Request) {
     const forwarded=request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
     const clientSignature=hashToken(forwarded || 'unknown-visitor');
     const hostToken=makeToken();
-    const questions=JSON.stringify(buildQuizRound(questionBank,10));
+    const questions=JSON.stringify(buildContinuousQuiz(questionBank));
     for(let attempt=0;attempt<8;attempt++){
       const code=roomCode();
       try {
