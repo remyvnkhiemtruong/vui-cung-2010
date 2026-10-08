@@ -191,7 +191,7 @@ export const questionBank: Question[] = [
     correctAnswer: "B",
     image: "https://upload.wikimedia.org/wikipedia/commons/e/e9/T%C6%B0%E1%BB%A3ng_%C4%91%E1%BB%93ng_Nguy%E1%BB%85n_Th%E1%BB%8B_%C4%90%E1%BB%8Bnh.jpg",
     imageCredit: "Bui Thuy Dao Nguyen / Wikimedia Commons, CC BY-SA 3.0",
-    imageSourceUrl: "https://commons.wikimedia.org/wiki/File:Tượng_đồng_Nguyễn_Thị_Định.jpg",
+    imageSourceUrl: "https://commons.wikimedia.org/wiki/File:T%C6%B0%E1%BB%A3ng_%C4%91%E1%BB%93ng_Nguy%E1%BB%85n_Th%E1%BB%8B_%C4%90%E1%BB%8Bnh.jpg",
     explanation: "Nguyen Thi Dinh was a leading figure of the Dong Khoi movement and became closely associated with the 'Long-Haired Army' in Ben Tre.",
     category: "History & Figures",
   }),
