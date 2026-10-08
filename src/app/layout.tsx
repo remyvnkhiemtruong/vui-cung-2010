@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   keywords: ["Vietnamese Women's Day", "October 20", "20/10", "English Club", "Mini Game", "Vietnamese Women"],
   authors: [{ name: "Truong Minh Khiem" }],
   creator: "Truong Minh Khiem",
-  publisher: "Ho Chi Minh City University of Education",
+  other: { "author-affiliation": "Ho Chi Minh City University of Education" },
   openGraph: {
     title,
     description,
