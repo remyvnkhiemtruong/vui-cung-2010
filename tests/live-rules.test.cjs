@@ -63,3 +63,16 @@ test('public API hides active question points and solutions',()=>{
   assert(file.includes('p.score-COALESCE(a.earned_points,0)'));
   assert(file.includes("phase==='question'?Number(player.current_points||0):0"));
 });
+
+test('one-click create has no MC passcode and uses throttled DB function',()=>{
+  const handler=fs.readFileSync('src/app/api/live/route.ts','utf8');
+  const ui=fs.readFileSync('src/components/live/LiveClient.tsx','utf8');
+  const migration=fs.readFileSync('db/live-quiz.sql','utf8');
+  assert(!handler.includes('isHostPasscode'));
+  assert(!handler.includes('body?.passcode'));
+  assert(handler.includes('live_quiz_create_room'));
+  assert(ui.includes('void createRoom()'));
+  assert(!ui.includes('Host passcode'));
+  assert(migration.includes("IF n >= 8 THEN RETURN 'rate_limited'"));
+  assert(migration.includes('pg_advisory_xact_lock'));
+});

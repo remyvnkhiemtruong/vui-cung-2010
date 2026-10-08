@@ -1,12 +1,12 @@
 # English Club Live Quiz – 50-player event
 
-**Implementation status:** Feature branch implemented; Vercel Preview compiles and passes static/unit tests. **Live multi-device operation requires a dedicated Neon database and secrets. No production release should occur before database-backed integration testing.**
+**Implementation status:** Public, one-click room creation is implemented on the feature branch. A separate Neon branch `live-quiz-preview` now has the schema and `DATABASE_URL` is configured for this Vercel Preview branch. Production remains unchanged until database and multi-player tests pass.
 
 ## Routes
 
 - `/` – existing single-player game, unchanged except a Live Multiplayer link.
 - `/live` – enter a six-character room code.
-- `/live/host` – MC enters a private passcode, creates room, shows QR, controls Start, Reveal, Next, Finish.
+- `/live/host` – **automatically creates a room and QR (no login, no password)** and lets the MC Start, Reveal, Next, Finish.
 - `/live/join/ABC123` – students join on their phones with nicknames, submit A/B/C/D.
 - `/live/screen/ABC123` – projector screen with QR, shared questions and Top 10 leaderboard.
 
@@ -15,13 +15,12 @@ A session has 10 shared random questions from the existing 54 English October 20
 ## Database setup – REQUIRED
 
 1. Create a **new Neon PostgreSQL project** specifically for this game (do **not** reuse the HTNV class-management database).
-2. Apply the SQL in `db/live-quiz.sql` in its Neon SQL Editor after reviewing it.
+2. SQL from `db/live-quiz.sql` was applied to the isolated Neon **live-quiz-preview** branch. The `production` Neon branch remains untouched until tests pass.
 3. In Vercel project `2010`, set:
-   - `DATABASE_URL`: pooled Neon connection string, type **encrypted**, target Preview initially.
-   - `LIVE_HOST_PASSCODE`: your chosen host secret, at least 12 characters, target Preview initially. Never share with students.
+   - `DATABASE_URL`: dedicated Neon Preview branch connection string, **encrypted** in Vercel Preview. No host passcode is used.
 4. Redeploy branch `feature/live-quiz-50`. In MC page, create a room and test with actual devices.
 5. After testing and approval, apply/configure the production database and Production environment variables.
-6. Current Vercel project has **Deployment Protection (SSO)** enabled for *.vercel.app domains. Students may see a Vercel login prompt. Use an approved public custom domain or configure deployment protection so student-facing routes are reachable. Keep host protected by the secret passcode.
+6. Vercel SSO protection has been disabled to make the game publicly accessible. A room creator receives a random private **host capability token** for Start/Reveal/Next/Finish; the QR contains only the room code.
 
 Do not store secrets in GitHub. Do not use `NEXT_PUBLIC_` prefix.
 
@@ -39,19 +38,19 @@ Do not store secrets in GitHub. Do not use `NEXT_PUBLIC_` prefix.
 - Refresh keeps the player's session if the tab remains open.
 - Devices tested across Wi-Fi and cellular; projector stays visible at browser zoom 100%.
 - 50 connected real devices or a proper Preview load test stays within performance and Vercel/Neon limits.
-- Public access does not require Vercel login, while the MC passcode remains private.
+- Public access requires no Vercel login or MC passcode; only the room creator's tab holds control permissions.
 
 ## Security / practical limitations
 
-- Room and player tokens are random secret values held in tab sessionStorage; only their SHA-256 hashes are persisted. Host token is never in QR.
+- Room and player tokens are random values held in tab sessionStorage; only their SHA-256 hashes are persisted. A student joining with the public QR cannot operate the host controls. Public room creation is rate-limited to eight rooms per origin IP hash per 15 minutes.
 - PostgreSQL room-level row locks enforce room capacity and one answer per player/question. All authoritative scoring happens inside a PostgreSQL function.
 - While a question is active, public snapshots subtract that question's points from ranks, so ranking does not leak the correct option prematurely.
 - The existing **solo quiz** still bundles correct answers client-side; a motivated participant could inspect that JavaScript bundle. This is suitable for a friendly club game, but not a fully cheat-proof high-stakes examination.
-- Polling at ~2.2s yields about 23 player status requests/sec at 50 players, plus host/projector. We have **not yet load-tested against a live database**.
+- Polling at ~2.2s yields about 23 player status requests/sec at 50 players, plus host/projector. Database-backed load testing is the release gate.
 - Scores do not sync via WebSockets; this is near-real-time polling, which is operationally simpler on Vercel.
 - Names and results are retained in the Neon database until cleaned up. The provided SQL includes an optional 30-day cleanup statement; decide data retention before the event.
 - Losing a browser tab may lose the host/student secret session. Host should keep the MC tab open during the event.
-- Vercel preview may return 503 on API requests until DATABASE_URL is configured.
+- Vercel Preview has a dedicated Neon database connection. Live API testing is required before production.
 
 ## Run tests
 
