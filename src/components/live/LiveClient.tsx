@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {QRCodeSVG} from 'qrcode.react';
 import AuthorCredits from '@/components/common/AuthorCredits';
+import MusicPicker from '@/components/common/MusicPicker';
 import {ArrowRight,CheckCircle2,Clock3,Copy,ExternalLink,Gamepad2,Medal,Monitor,Play,Radio,RotateCcw,Shield,Smartphone,Trophy,Users} from 'lucide-react';
 
 type Phase='lobby'|'question'|'reveal'|'finished';
@@ -51,7 +52,10 @@ function LiveLayout({title,subtitle,children}:{title:string,subtitle:string,chil
       <div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-widest text-rose-600">ENGLISH CLUB • OCTOBER 20</p>
       <h1 className="truncate text-base font-black text-rose-950 sm:text-2xl">{title}</h1>
       <p className="hidden text-xs text-slate-600 sm:block">{subtitle}</p></div>
-      <Link href="/live" className="shrink-0 rounded-xl border border-rose-200 px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-50">LIVE HOME</Link>
+      <div className="flex shrink-0 items-center gap-2">
+        <MusicPicker />
+        <Link href="/live" className="shrink-0 rounded-xl border border-rose-200 px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-50">LIVE HOME</Link>
+      </div>
     </header>
     <div className="min-h-0 flex-1 overflow-hidden px-3 py-2 sm:px-5 sm:py-3">{children}</div>
     <footer className="live-credit-footer" aria-label="Website credits">

@@ -15,7 +15,9 @@ export default function MusicPicker(){
   const selected=MUSIC_TRACKS.find(t=>t.id===track)!;
   const toggle=()=>{
     setUnsupported(false);
-    if(!backgroundMusic.toggle())setUnsupported(!backgroundMusic.getSnapshot().playing);
+    const wasPlaying=backgroundMusic.getSnapshot().playing;
+    const started=backgroundMusic.toggle();
+    if(!wasPlaying&&!started)setUnsupported(true);
   };
   return <div className="music-picker relative">
     <button type="button"

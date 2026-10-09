@@ -62,7 +62,8 @@ class BackgroundMusic {
     if(typeof window==='undefined')return;
     try{
       const id=localStorage.getItem(TRACK_STORAGE);
-      const raw=Number(localStorage.getItem(VOLUME_STORAGE));
+      const storedVolume=localStorage.getItem(VOLUME_STORAGE);
+      const raw=storedVolume===null?NaN:Number(storedVolume);
       const volume=Number.isFinite(raw)&&raw>=0&&raw<=1?raw:SERVER_SNAPSHOT.volume;
       this.snapshot={track:validTrack(id)?id:SERVER_SNAPSHOT.track,playing:false,volume};
     }catch{}

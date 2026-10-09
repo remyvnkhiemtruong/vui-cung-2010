@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { StageDecorations } from '@/components/decorations/StageDecorations';
 import SoundToggle from '@/components/common/SoundToggle';
+import MusicPicker from '@/components/common/MusicPicker';
 import { HighScoreRecord } from '@/types/quiz';
 import { QUESTION_TIME_LIMIT } from '@/utils/gameEngine';
 
@@ -52,7 +53,8 @@ export default function HomeScreen({
           </span>
         </div>
 
-        <div className="absolute right-3 top-3 z-20">
+        <div className="absolute right-3 top-3 z-20 flex items-center gap-1.5">
+          <MusicPicker />
           <SoundToggle />
         </div>
 

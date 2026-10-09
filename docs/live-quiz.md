@@ -1,6 +1,6 @@
 # October 20 English Club — Live Quiz Host Guide
 
-**Teacher's question content:** Ms. Phan Thanh Thùy, English Teacher, Vo Van Kiet High School.
+**Teacher's question content:** Mrs. Phan Thanh Thuy, English Teacher, Vo Van Kiet High School.
 
 **System development:** Trương Minh Khiêm, Cohort 52 Student, Ho Chi Minh City University of Education.
 
