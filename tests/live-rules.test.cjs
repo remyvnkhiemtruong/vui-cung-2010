@@ -129,7 +129,7 @@ test('both unaccented author credits render at bottom across game modes',()=>{
   assert(!home.includes('Phan Thanh Thuy'), 'No author name beneath the home title');
   assert(page.includes("<AuthorCredits variant={screen === 'start' ? 'feature' : 'compact'} />"));
   assert(page.includes('className="app-footer app-credit-footer"'));
-  assert(!page.includes("screen !== 'start' && (\\n          <footer"), 'Footer must appear on the start screen too');
+  assert(!/screen !== 'start' && \\(\\s*<footer/.test(page), 'Footer must appear on the start screen too');
   assert(live.includes('className="live-credit-footer"')&&live.includes('<AuthorCredits variant="compact" />'));
   assert(css.includes('.app-credit-footer .author-credits--feature'));
   assert(layout.includes('Phan Thanh Thuy')&&layout.includes('Truong Minh Khiem'));
