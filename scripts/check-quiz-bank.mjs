@@ -38,7 +38,12 @@ for(let i=0;i<12;i++){
 assert(questionBank.filter(q=>Boolean(q.image)).length===2,'Both image questions from Word must remain');
 for (const q of questionBank.filter(q=>q.image)){
  assert(q.image.startsWith('/questions/teacher-docx/'),'Image source must match uploaded DOCX');
- assert(existsSync(join(root,'public',q.image.slice(1))),'Missing original photo asset: '+q.image);
+ const asset=join(root,'public',q.image.slice(1));
+ assert(existsSync(asset),'Missing original photo asset: '+q.image);
+ const bytes=readFileSync(asset);
+ assert(bytes.length>=1500,'Photo asset unusually small: '+q.image);
+ assert(bytes[0]===0xff&&bytes[1]===0xd8&&bytes.at(-2)===0xff&&bytes.at(-1)===0xd9,
+   'The embedded teacher photo must be a complete JPEG: '+q.image);
 }
 const tested=new Set();
 for(let i=0;i<100;i++){
