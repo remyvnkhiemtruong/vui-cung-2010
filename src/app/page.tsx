@@ -68,11 +68,9 @@ export default function QuizApp() {
           )}
         </div>
 
-        {screen !== 'start' && (
-          <footer className="app-footer app-credit-footer" aria-label="Website credits">
-            <AuthorCredits variant="compact" />
-          </footer>
-        )}
+        <footer className="app-footer app-credit-footer" aria-label="Website credits">
+          <AuthorCredits variant={screen === 'start' ? 'feature' : 'compact'} />
+        </footer>
       </div>
     </main>
   );
