@@ -1,77 +1,27 @@
-# October 20 Mini Game — English Club 🌸
+# English Club • Vietnamese Women's Day (October 20)
 
-**Topic:** Vietnamese Women's Day on October 20 ONLY. Every question is written in English for the English Club, but this is a **celebration quiz, not an English grammar quiz**.
+This game uses **only the 12 questions from the Word document supplied by the English teacher**. All prior generated question banks (54, 200, and proposed 300 questions) have been replaced; none are imported into the active game.
 
-## What's in the bank?
+## Content and credits
 
-The game randomly selects 10 of 54 curated questions, with no duplicates:
+**Question content:** Ms. Phan Thanh Thùy — English Teacher, Vo Van Kiet High School.
 
-| Category | Total bank | Each round | Learning goal |
-|---|---:|---:|---|
-| October 20: Origins | 12 | 3 | Recognized founding date of the Vietnam Women's Union and its history |
-| October 20: Activities | 18 | 3 | Greetings, flower arranging, tributes, performances, community activities |
-| Vietnamese Women | 12 | 2 | Inspiring Vietnamese women highlighted during Women's Day |
-| October 20: Picture Quiz | 12 | 2 | Identify 20/10 activities from original illustrations |
-| **Total** | **54** | **10** | **All questions related to October 20** |
+**System development:** Trương Minh Khiêm — Cohort 52 Student, Ho Chi Minh City University of Education.
 
-Each round contains **five warm-up questions, four standard questions, and one final celebration scenario challenge**. Questions shuffle within each level; answer positions A/B/C/D shuffle. The timer gives **25 seconds per question**. Two picture questions are guaranteed.
+The source document contains 12 items across 3 pages: Vietnamese Women's Day date, ten women at Đồng Lộc Junction, Lý Chiêu Hoàng, Trưng Trắc, Công–Dung–Ngôn–Hạnh, two illustrated questions (domestic violence and housework), a light-hearted October 20 riddle, the 'eight golden words', Nguyễn Thị Định, Đặng Thùy Trâm, and the purpose of October 20.
 
-There are **no questions about English grammar, general idioms, unrelated global celebrities, or abstract legal trivia**.
+The two photo questions use photos cropped **directly from the teacher's original embedded Word images**. Their original answer choices and correct letters are maintained. Two open-ended source questions (four virtues and the riddle) received *three new incorrect answer options* each solely so they work in the game's A/B/C/D format. The question calling Lý Chiêu Hoàng the “first emperor (king)” was clarified as **first female ruler** to avoid a factually misleading question while preserving the supplied correct answer. All other question content and intended answers follow the teacher's document.
 
-## Historical accuracy
+## Rules
 
-The trivia distinguishes two commonly confused dates:
-- October 20, **1930**: the Vietnam Women's Union's officially recognized founding date.
-- October 20, **1946**: launch under its present name, with Le Thi Xuyen as first chairwoman.
-- **1976**: a conference recognized October 20, 1930 as the Union's founding date.
+- **Exactly 12 questions** per solo game and per live room, with no repetitions inside the session.
+- **30 seconds per question**, on the solo timer and in the shared server clock for the Live Quiz.
+- **Live Quiz:** host opens `/live/host` to create a room and QR automatically, up to 50 students join, MC presses Start and controls Reveal and Next, while the projector at `/live/screen/CODE` shows current question, responses received (X/Y), and the live ranking.
+- Everyone in one Live room receives the same randomly shuffled question order and shuffled A/B/C/D choice positions.
+- Existing rooms keep their stored questions and their original timer until the host creates a new room; the update applies to newly created rooms.
+- Score: 100 base points for a correct answer, up to 50 speed points, and a 20-point streak bonus for 3+ correct consecutive answers. The server counts each answer at most once.
+- Browser solo high scores and seen-question history use separate keys so old results from prior question banks do not carry forward.
 
-Celebration activity questions use everyday examples, such as thank-you cards, meaningful speeches, flower arranging, recognizing women's achievements and charity. They are framed as good event choices — not claims that every family or school has identical customs.
+## Verification
 
-Women featured include Trung Trac, Trung Nhi, Lady Trieu, Le Thi Xuyen, Nguyen Thi Dinh, Vo Thi Sau, Dang Thuy Tram, Nguyen Thi Binh, Ho Xuan Huong, and Ly Chieu Hoang. They are featured because October 20 celebrates the contributions of Vietnamese women, **not because they were all born on October 20**.
-
-### Reliable references
-
-- [Vietnam Women's Union — 80 Years of Development](https://www.hoilhpn.org.vn/tin-chi-tiet/-/chi-tiet/hoi-lhpn-viet-nam-80-nam-mot-chang-%C4%91uong-20-10-1930-20-10-2010--14712-2.html)
-- [Vietnam Women's Union — Historical Milestones](https://www.hoilhpn.org.vn/web/guest/tin-chi-tiet/-/chi-tiet/hoi-lhpn-viet-nam-cac-dau-moc-lich-su-32291-3301.html)
-- [Vietnam Women's Union — October 20 Activities (2026)](https://www.hoilhpn.org.vn/web/guest/tin-chi-tiet/-/chi-tiet/7-hoat-%C4%91ong-trong-tam-chao-mung-96-nam-thanh-lap-hoi-lhpn-viet-nam-va-ngay-phu-nu-viet-nam-999501-2.html)
-- [Vietnam Women's Union — Flower-Arranging Event (2025)](https://www.hoilhpn.org.vn/web/guest/tin-chi-tiet/-/chi-tiet/%C4%91ang-uy-tw-hoi-lhpn-viet-nam-to-chuc-sinh-hoat-chuyen-%C4%91e-nhung-sac-mau-hanh-phuc-ky-niem-95-nam-thanh-lap-hoi-681701-7.html)
-- [Vietnam Women's Museum — About](https://baotangphunu.org.vn/en/about/)
-- [Vietnam National Museum of History — Trung Sisters](https://baotanglichsu.vn/VI/Articles/3098/13485/cuoc-khoi-nghia-hai-ba-trung-nam-40-43-sau-cong-nguyen.html)
-- [Vietnam National Museum of History — Lady Trieu](https://baotanglichsu.vn/vi/Articles/3098/14281/cuoc-khoi-nghia-cua-trieu-thitrinh.html)
-
-Individual historical question cards also provide a source link after the answer is revealed.
-
-## Original illustrations
-
-Twelve new SVG illustrations are served from `public/questions/october20/` with **no external image hosting**. Each is paired with a specific October 20 activity (flowers, greeting cards, performances, tributes, museum visits, awards and more). Older general-topic illustrations are no longer referenced by the quiz.
-
-## Event format
-
-- Participants play as one person or as one team on a shared screen.
-- Keyboard shortcuts: **A/B/C/D** or **1/2/3/4**; **Enter** advances after answering.
-- A correct answer: 100 points, plus up to 50 speed points; streaks of three or more add 20.
-- Scores are local to the browser and **not** a networked leaderboard.
-- The mini game is designed for a **6–10 minute club segment**.
-- [English-only MC script](docs/english-club-host-guide.md)
-
-
-## Responsive presentation layout and attribution
-
-The website uses a **100dvh viewport-locked layout** on desktop, projectors, tablets, and phones. The start form, quiz, and results screen are designed to fit inside the browser viewport **without scrolling the page**. After selecting an answer, the option grid is replaced with feedback to free vertical space. Reviewing results uses **Previous / Next** buttons to navigate one answer at a time, rather than a long scrollable list.
-
-For best results during a live presentation, use standard browser zoom (100%) and a typical landscape projector resolution. Browser accessibility settings, exceptionally small viewports, and enlarged system fonts can require further layout adjustments.
-
-**Created by:** Truong Minh Khiem  
-**Affiliation:** Ho Chi Minh City University of Education
-
-These credits appear in English in the fixed footer on all three game screens, and the author and affiliation are included in page metadata.
-
-## Tests and development
-
-```bash
-npm ci
-npm run lint
-npm run build
-```
-
-The prebuild validator in `scripts/check-quiz-bank.mjs` checks duplicate questions, category/difficulty ratios, missing images, all four answer options and **100 simulated 10-question rounds** — including balance, final challenge placement and correctness after shuffling.
+`npm run build` runs `scripts/check-quiz-bank.mjs` to verify the exact 12 teacher answers, photo presence, and 100 complete, non-repeating random rounds, then runs the server scoring tests before compiling Next.js. Database SQL schema in `db/live-quiz.sql` uses 30 seconds as the default on newly created rooms. Check Vercel Preview before publishing to production.

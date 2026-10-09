@@ -68,9 +68,9 @@ export default function QuizApp() {
         </div>
 
         <footer className="app-footer" aria-label="Website credits">
-          <span>Created by <strong>Truong Minh Khiem</strong></span>
+          <span>Questions: <strong>Ms. Phan Thanh Thùy</strong> — English Teacher, Vo Van Kiet High School</span>
           <span className="footer-separator" aria-hidden="true"> • </span>
-          <span>Ho Chi Minh City University of Education</span>
+          <span>System: <strong>Trương Minh Khiêm</strong> — Cohort 52 Student, Ho Chi Minh City University of Education</span>
         </footer>
       </div>
     </main>

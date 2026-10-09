@@ -6,7 +6,7 @@ import {
   PlayerAnswerRecord,
 } from '@/types/quiz';
 
-export const QUESTION_TIME_LIMIT = 25;
+export const QUESTION_TIME_LIMIT = 30;
 
 /**
  * Pure calculation function for score, speed bonus, and streak bonus.

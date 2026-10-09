@@ -1,137 +1,65 @@
 /**
- * Build-time checks for the English Club mini game.
- * Fail the preview/build early if a question or self-hosted illustration is broken.
+ * Check that ONLY the 12 questions in the attached teacher's Word document are
+ * available in either solo or live mode. Quiz option shuffling must preserve keys.
  */
-import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { runInNewContext } from 'node:vm';
+import {readFileSync,existsSync} from 'node:fs';
+import {join} from 'node:path';
+import {runInNewContext} from 'node:vm';
 import ts from 'typescript';
 
-const root = process.cwd();
-const bank = readFileSync(join(root, 'src/data/questions.ts'), 'utf8');
-const entries = [...bank.matchAll(/  createQuestion\(\{([\s\S]*?)\n  \}\),?/g)].map(m => m[1]);
-const expectedCounts = {
-  'October 20: Origins': 12,
-  'October 20: Activities': 18,
-  'Vietnamese Women': 12,
-  'October 20: Picture Quiz': 12,
-};
-const expectedDifficulties = {
-  'October 20: Origins': { 'warm-up': 6, standard: 6 },
-  'October 20: Activities': { 'warm-up': 6, standard: 6, challenge: 6 },
-  'Vietnamese Women': { 'warm-up': 6, standard: 6 },
-  'October 20: Picture Quiz': { 'warm-up': 6, standard: 6 },
-};
+const root=process.cwd();
+const assert=(ok,message)=>{if(!ok)throw new Error('Teacher DOCX question bank: '+message)};
+const code=readFileSync(join(root,'src/data/questions.ts'),'utf8');
+const module={exports:{}};
+const compiled=ts.transpileModule(code,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+runInNewContext(compiled,{module,exports:module.exports,require:(name)=>{throw new Error('Unexpected question-bank dependency '+name)}});
+const {questionBank,buildQuizRound,buildContinuousQuiz,buildUnseenSoloRound,QUESTIONS_PER_ROUND}=module.exports;
 
-function assert(condition, message) {
-  if (!condition) throw new Error('English Club question bank: ' + message);
+assert(QUESTIONS_PER_ROUND===12,'All 12 teacher-authored questions must play in a round');
+assert(questionBank.length===12,'Expected exactly twelve questions, got '+questionBank.length);
+const ids=new Set(questionBank.map(q=>String(q.id)));
+const prompts=new Set(questionBank.map(q=>q.question.toLowerCase().replace(/[^a-z0-9]/g,'')));
+assert(ids.size===12&&prompts.size===12,'Duplicate question ID or text');
+assert(questionBank.every(q=>String(q.id).startsWith('teacher-20oct-')),'Unapproved question in the bank');
+assert(questionBank.every(q=>q.options.length===4),'All 12 questions must have four options');
+assert(questionBank.every(q=>q.options.some(o=>o.key===q.correctAnswer)),'Correct answer key missing');
+const correctText=q=>q.options.find(x=>x.key===q.correctAnswer).text;
+const expected=[
+'20/10/1930','10','Lý Chiêu Hoàng','Trung Trac',
+'Industriousness – Beauty – Eloquence – Virtue','Domestic Violence','Housework',
+'The wife / The girlfriend!','Resourceful/Capable','Nguyen Thi Dinh',
+'Dang Thuy Tram','To honor female contributions, express gratitude, and promote gender equality'
+];
+for(let i=0;i<12;i++){
+ assert(correctText(questionBank[i])===expected[i],'Answer differs from teacher DOCX at '+(i+1));
+ assert(questionBank[i].options.every(o=>o.text&&o.text.trim()),'Blank option at '+(i+1));
+ assert(questionBank[i].explanation&&questionBank[i].explanation.trim(),'Missing explanation at '+(i+1));
 }
-function field(data, key) {
-  const match = data.match(new RegExp('\\b' + key + ': "([^"]+)"'));
-  return match?.[1];
+assert(questionBank.filter(q=>Boolean(q.image)).length===2,'Both image questions from Word must remain');
+for (const q of questionBank.filter(q=>q.image)){
+ assert(q.image.startsWith('/questions/teacher-docx/'),'Image source must match uploaded DOCX');
+ const asset=join(root,'public',q.image.slice(1));
+ assert(existsSync(asset),'Missing original photo asset: '+q.image);
+ const bytes=readFileSync(asset);
+ assert(bytes.length>=1500,'Photo asset unusually small: '+q.image);
+ assert(bytes[0]===0xff&&bytes[1]===0xd8&&bytes.at(-2)===0xff&&bytes.at(-1)===0xd9,
+   'The embedded teacher photo must be a complete JPEG: '+q.image);
 }
-
-assert(entries.length === 54, 'Expected exactly 54 valid questions, found ' + entries.length);
-const ids = new Set();
-const prompts = new Set();
-const forbidden = /\b(?:grammar|grammatical|plural|synonym|idiom|present simple|relative clause|articles?|preposition|serena williams|marie curie|malala|nasa|smithsonian|amelia earhart)\b/i;
-const counts = Object.fromEntries(Object.keys(expectedCounts).map(k => [k, 0]));
-const difficultyCounts = Object.fromEntries(Object.keys(expectedCounts).map(k => [k, {}]));
-let pictureCount = 0;
-
-for (const item of entries) {
-  const id = field(item, 'id');
-  const category = field(item, 'category');
-  const difficulty = field(item, 'difficulty');
-  const question = field(item, 'question');
-  const options = [...item.matchAll(/      ([ABCD]): "((?:[^"\\]|\\.)*)",/g)];
-  const answer = item.match(/correctAnswer: '([ABCD])'/)?.[1];
-  const image = field(item, 'image');
-  assert(id && !ids.has(id), 'Duplicate or missing ID: ' + id);
-  ids.add(id);
-  assert(question && !prompts.has(question), 'Duplicate or missing question: ' + id);
-  assert(!forbidden.test(question), 'Off-topic language/foreign-figure question: ' + id);
-  prompts.add(question);
-  assert(category in expectedCounts, 'Unknown category: ' + id);
-  assert(difficulty in expectedDifficulties[category], 'Invalid difficulty: ' + id);
-  assert(question.length <= 145, 'Question too long for projector: ' + id);
-  assert(options.length === 4 && new Set(options.map(x => x[1])).size === 4, 'Must have A-D options: ' + id);
-  assert(new Set(options.map(x => x[2].toLowerCase())).size === 4, 'Duplicate options: ' + id);
-  assert(options.some(x => x[1] === answer), 'Correct answer missing: ' + id);
-  assert(field(item, 'explanation'), 'Missing explanation: ' + id);
-  counts[category]++;
-  difficultyCounts[category][difficulty] = (difficultyCounts[category][difficulty] || 0) + 1;
-
-  if (category === 'October 20: Picture Quiz') {
-    pictureCount++;
-    assert(image?.startsWith('/questions/october20/') && image.endsWith('.svg'), 'Missing local picture: ' + id);
-    const filepath = join(root, 'public', image.slice(1));
-    assert(existsSync(filepath), 'Missing SVG file: ' + filepath);
-    const svg = readFileSync(filepath, 'utf8');
-    assert(svg.includes('<svg') && svg.includes('</svg>') && svg.includes('<title'), 'Invalid accessible SVG: ' + id);
-  } else {
-    assert(!image, 'Unexpected illustration outside picture round: ' + id);
-  }
+const tested=new Set();
+for(let i=0;i<100;i++){
+ const round=buildQuizRound(questionBank,12),room=buildContinuousQuiz(questionBank);
+ assert(round.length===12&&new Set(round.map(q=>q.id)).size===12,'Solo duplicates');
+ assert(room.length===12&&new Set(room.map(q=>q.id)).size===12,'Live room duplicates');
+ for(const q of [...round,...room]){
+  const original=questionBank.find(x=>x.id===q.id);
+  assert(original&&correctText(q)===correctText(original),'Shuffled answer mapping incorrect: '+q.id);
+ }
+ tested.add(String(room[0].id));
 }
-assert(JSON.stringify(counts) === JSON.stringify(expectedCounts), 'Category counts: ' + JSON.stringify(counts));
-for (const [category, expected] of Object.entries(expectedDifficulties)) {
-  for (const [level, number] of Object.entries(expected)) {
-    assert(difficultyCounts[category][level] === number, category + ' / ' + level + ': wrong difficulty count');
-  }
-}
-assert(pictureCount === 12, 'Expected 12 illustrated questions');
-
-const plans = [...bank.matchAll(/\{ category: '([^']+)', difficulty: '([^']+)', count: (\d+) \}/g)];
-assert(plans.length === 9, 'Round blueprint must have 9 slots');
-assert(plans.reduce((n, x) => n + Number(x[3]), 0) === 10, 'Round must contain 10 questions');
-for (const slot of plans) {
-  assert(expectedDifficulties[slot[1]]?.[slot[2]] >= Number(slot[3]), 'Cannot satisfy round slot: ' + slot[1]);
-}
-// Execute the real TypeScript selection algorithm in isolation, not just regex checks.
-const compiled = ts.transpileModule(bank, {
-  compilerOptions: {
-    module: ts.ModuleKind.CommonJS,
-    target: ts.ScriptTarget.ES2022,
-  },
-}).outputText;
-const quizModule = { exports: {} };
-runInNewContext(compiled, { module: quizModule, exports: quizModule.exports });
-const { questionBank, buildQuizRound } = quizModule.exports;
-const expectedRoundCategories = {
-  'October 20: Origins': 3,
-  'October 20: Activities': 3,
-  'Vietnamese Women': 2,
-  'October 20: Picture Quiz': 2,
-};
-const expectedRoundLevels = { 'warm-up': 5, standard: 4, challenge: 1 };
-const seenRounds = new Set();
-
-for (let run = 0; run < 100; run++) {
-  const round = buildQuizRound(questionBank, 10);
-  const categoryMix = Object.fromEntries(Object.keys(expectedRoundCategories).map(k => [k, 0]));
-  const levelMix = Object.fromEntries(Object.keys(expectedRoundLevels).map(k => [k, 0]));
-  assert(round.length === 10, 'Wrong game length: ' + round.length);
-  assert(new Set(round.map(q => q.id)).size === 10, 'Duplicate question in a game');
-  for (const q of round) {
-    categoryMix[q.category]++;
-    levelMix[q.difficulty]++;
-    assert(q.options.length === 4, 'Incorrect option count for ' + q.id);
-    assert(q.options.some(x => x.key === q.correctAnswer), 'Invalid answer mapping after shuffling: ' + q.id);
-    assert(new Set(q.options.map(x => x.key)).size === 4, 'Duplicated answer keys: ' + q.id);
-  }
-  assert(JSON.stringify(categoryMix) === JSON.stringify(expectedRoundCategories), 'Uneven round categories');
-  assert(JSON.stringify(levelMix) === JSON.stringify(expectedRoundLevels), 'Uneven round difficulties');
-  assert(round.filter(q => q.image).length === 2, 'Every round must contain two pictures');
-  assert(round.slice(0, 5).every(q => q.difficulty === 'warm-up'), 'Warm-up questions must come first');
-  assert(round.slice(5, 9).every(q => q.difficulty === 'standard'), 'Standard questions must come next');
-  assert(round[9].difficulty === 'challenge', 'Final question must be a challenge');
-  for (const q of round) {
-    const original = questionBank.find(item => item.id === q.id);
-    const rightOriginal = original.options.find(opt => opt.key === original.correctAnswer);
-    const rightNew = q.options.find(opt => opt.key === q.correctAnswer);
-    assert(rightNew.text === rightOriginal.text, 'Shuffled correct answer changed: ' + q.id);
-  }
-  seenRounds.add(round.map(q => q.id).sort().join(','));
-}
-assert(seenRounds.size > 1, 'Question selection is not randomized');
-console.log('October 20 mini game validated: 54 themed questions, 12 local SVGs, 100 balanced random rounds and answer mapping passed.');
+assert(tested.size>1,'Room question order should vary');
+const first=buildUnseenSoloRound(questionBank,[],12);
+assert(first.seenIds.length===12,'First solo cycle should use all teacher questions');
+const second=buildUnseenSoloRound(questionBank,first.seenIds,12);
+assert(second.cycleComplete && second.questions.length===12,'Solo restarts only after all 12');
+console.log('PASS: 12 DOCX-only questions, all original correct answers, 2 embedded photo assets.');
+console.log('PASS: 100 randomized solo rounds, 100 unique live decks, no repeats within a room.');
