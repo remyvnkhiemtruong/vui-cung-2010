@@ -275,8 +275,6 @@ body { min-height:0; }
 }
 @media (max-width:520px) {
   .footer-separator {display:none}
-  .app-footer span {display:block}
-  .app-footer span strong {font-weight:800}
   .home-form-controls {flex-direction:column}
   .home-form-controls input {width:100%}
   .home-form-controls button {width:100%}
@@ -338,190 +336,93 @@ body { min-height:0; }
   .live-quiz-options button strong {width:24px;height:24px;flex-shrink:0}
 }
 
-/* Authorship: visible, differentiated credit cards across solo, host, and projector.
-   Uses existing viewport-locked shell instead of introducing page scrolling. */
-.author-credits {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(6px, .9vw, 12px);
-  width: min(100%, 940px);
-  margin-inline: auto;
-  flex: none;
-}
-.author-credit {
-  position: relative;
-  isolation: isolate;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  text-align: left;
-  gap: 3px;
-  border: 1.5px solid;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(25, 25, 35, .06);
-}
-.author-credit::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: var(--credit-accent);
-}
-.author-credit--questions {
-  --credit-accent: #be123c;
-  color: #881337;
-  border-color: #fda4af;
-  background: linear-gradient(115deg, #fff1f2, #ffe4e6 90%);
-}
-.author-credit--system {
-  --credit-accent: #1d4ed8;
-  color: #1e3a8a;
-  border-color: #93c5fd;
-  background: linear-gradient(115deg, #eff6ff, #dbeafe 90%);
-}
-.author-credit-heading {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-}
-.author-credit-symbol {
-  display: grid;
-  place-items: center;
-  width: 25px;
-  height: 25px;
-  flex: 0 0 auto;
-  border-radius: 8px;
-  color: var(--credit-accent);
-  background: #ffffffb8;
-}
-.author-credit-label {
-  font-size: clamp(9px, 1vw, 11px);
-  font-weight: 900;
-  line-height: 1.12;
-  letter-spacing: .095em;
-  color: var(--credit-accent);
-}
-.author-credit-name {
-  display: block;
-  max-width: 100%;
-  color: #0f172a;
-  font-size: clamp(14px, 2.05vw, 21px);
-  font-weight: 900;
-  line-height: 1.1;
-  overflow-wrap: anywhere;
-}
-.author-credit-role {
-  max-width: 100%;
-  color: #334155;
-  font-size: clamp(10px, 1.13vw, 12px);
-  font-weight: 650;
-  line-height: 1.18;
-  overflow-wrap: anywhere;
-}
-.author-credits--feature .author-credit {
-  min-height: 91px;
-  padding: clamp(8px, 1.15dvh, 13px) clamp(10px, 1.5vw, 18px);
-  gap: 4px;
-}
-.author-credits--compact .author-credit {
-  min-height: 47px;
-  padding: 5px clamp(7px, 1vw, 12px);
-  gap: 1px;
-  border-radius: 11px;
-}
-.author-credits--compact .author-credit-heading { gap: 4px; }
-.author-credits--compact .author-credit-symbol { width: 17px; height: 17px; border-radius: 5px; }
-.author-credits--compact .author-credit-symbol svg { width: 12px; height: 12px; }
-.author-credits--compact .author-credit-label { font-size: clamp(8px, .88vw, 10px); }
-.author-credits--compact .author-credit-name { font-size: clamp(12px, 1.28vw, 15px); }
-.author-credits--compact .author-credit-role { font-size: clamp(9px, .95vw, 11px); }
-.app-credit-footer, .live-credit-footer {
+/* An unobtrusive attribution ribbon at the very bottom of every game screen.
+   One desktop line; on narrow phones two short lines, without stealing quiz space. */
+.app-credit-footer,
+.live-credit-footer {
   position: relative;
   z-index: 10;
   flex: 0 0 auto;
   width: 100%;
-  padding: 4px clamp(7px, 1.5vw, 16px) max(5px, env(safe-area-inset-bottom));
-  background: rgba(255, 255, 255, .75);
-  border-top: 1px solid rgba(244, 63, 94, .12);
+  padding: 4px 10px max(5px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(190, 18, 60, .12);
+  background: rgba(255, 255, 255, .76);
+  box-shadow: none;
 }
-.home-card > .author-credits { width: 100%; }
-@media (max-width: 560px) {
-  .author-credits { gap: 5px; }
-  .author-credit-name { font-size: clamp(12px, 3.35vw, 17px); }
-  .author-credit-role { font-size: clamp(9px, 2.5vw, 11px); }
-  .author-credit-label { letter-spacing: .035em; font-size: 9px; }
-  .author-credits--feature .author-credit {
-    min-height: 90px;
-    padding: 7px 8px 7px 10px;
-  }
-  .author-credits--compact .author-credit {
-    min-height: 56px;
-    padding: 4px 6px 5px 9px;
-    gap: 1px;
-  }
-  .author-credits--compact .author-credit-name { font-size: clamp(11px, 3vw, 13px); }
-  .author-credits--compact .author-credit-role { font-size: clamp(8px, 2.15vw, 10px); }
+.credit-ribbon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: clamp(14px, 2.5vw, 40px);
+  max-width: 1480px;
+  min-height: 19px;
+  margin: 0 auto;
+  color: #475569;
+  line-height: 1.18;
 }
-@media (max-height: 680px) {
-  .home-card > .author-credits .author-credit { min-height: 69px; padding-block: 6px; gap: 1px; }
-  .home-card > .author-credits .author-credit-symbol { width: 19px; height: 19px; }
-  .home-card > .author-credits .author-credit-symbol svg { width: 12px; height: 12px; }
-  .home-card > .author-credits .author-credit-name { font-size: clamp(12px, 2.1dvh, 17px); }
-  .home-card > .author-credits .author-credit-role { font-size: 9px; line-height: 1.1; }
-  .app-credit-footer,.live-credit-footer { padding-top: 2px; padding-bottom: 3px; }
-  .author-credits--compact .author-credit { min-height: 39px; }
+.credit-ribbon-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  gap: 6px;
+  margin: 0;
+  white-space: nowrap;
+  font-size: 11px;
+  line-height: 1.18;
+}
+.credit-ribbon-item::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ribbon-color);
+}
+.credit-ribbon-item--questions { --ribbon-color: #be123c; }
+.credit-ribbon-item--system { --ribbon-color: #1d4ed8; }
+.credit-ribbon-label {
+  flex: none;
+  color: var(--ribbon-color);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .045em;
+}
+.credit-ribbon-name {
+  flex: none;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 800;
+}
+.credit-ribbon-role {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 500;
+}
+@media (max-width: 1260px) {
+  /* Names and credit types stay visible; the longer institutions remain in
+     each item's title attribute for narrower displays. */
+  .credit-ribbon-role { display: none; }
+}
+@media (max-width: 640px) {
+  .app-credit-footer, .live-credit-footer {
+    padding: 3px 6px max(4px, env(safe-area-inset-bottom));
+  }
+  .credit-ribbon {
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+  }
+  .credit-ribbon-item { gap: 5px; font-size: 10px; }
+  .credit-ribbon-label { font-size: 8px; letter-spacing: .02em; }
+  .credit-ribbon-name { font-size: 10px; }
+  .credit-ribbon-item::before { width: 4px; height: 4px; }
 }
 @media (max-height: 530px) {
-  .home-card > .home-rules { display: none; }
-  .home-card > .author-credits .author-credit { min-height: 57px; }
-  .author-credits--compact .author-credit-symbol { display: none; }
-  .author-credits--compact .author-credit { min-height: 36px; }
-  .author-credits--compact .author-credit-role { display: none; }
-}
-
-/* Landing-page author credits stay at the BOTTOM (outside the welcome card).
-   On short displays they compress without adding document scrolling. */
-.app-credit-footer .author-credits--feature {
-  width: min(100%, 940px);
-}
-.app-credit-footer .author-credits--feature .author-credit {
-  min-height: clamp(57px, 11dvh, 90px);
-}
-@media (max-height: 680px) {
-  .app-credit-footer .author-credits--feature .author-credit {
-    min-height: 57px;
-    padding: 5px 9px;
-    gap: 2px;
-  }
-  .app-credit-footer .author-credits--feature .author-credit-symbol {
-    height: 18px;
-    width: 18px;
-  }
-  .app-credit-footer .author-credits--feature .author-credit-symbol svg {
-    width: 12px;
-    height: 12px;
-  }
-  .app-credit-footer .author-credits--feature .author-credit-name {
-    font-size: clamp(12px, 2.25dvh, 17px);
-  }
-  .app-credit-footer .author-credits--feature .author-credit-role {
-    font-size: clamp(9px, 1.7dvh, 11px);
-  }
-}
-@media (max-height: 480px) {
-  .app-credit-footer .author-credits--feature .author-credit {
-    min-height: 43px;
-    padding: 3px 8px;
-    gap: 0;
-  }
-  .app-credit-footer .author-credits--feature .author-credit-symbol {
-    display: none;
-  }
-  .app-credit-footer .author-credits--feature .author-credit-role {
-    display: none;
-  }
+  .app-credit-footer, .live-credit-footer { padding-top: 2px; padding-bottom: 2px; }
+  .credit-ribbon { min-height: 0; }
+  .credit-ribbon-item { font-size: 9px; }
+  .credit-ribbon-label { font-size: 8px; }
+  .credit-ribbon-name { font-size: 10px; }
 }
