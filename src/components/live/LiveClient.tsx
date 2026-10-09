@@ -279,7 +279,7 @@ export function PlayerRoom({code}:{code:string}){
     catch(e){setMessage(e instanceof Error?e.message:'Could not submit your answer.')}finally{setBusy(false)}
   };
   const locked=choiceIndex===room?.index||room?.me?.answered===true;
-  return <LiveLayout title="PLAY LIVE" subtitle={'Room '+code+' | Vietnamese Women's Day'}>
+  return <LiveLayout title="PLAY LIVE" subtitle={'Room '+code+" | Vietnamese Women's Day"}>
     {!session?<div className="mx-auto flex h-full max-w-md flex-col justify-center">
       <Panel><Smartphone className="mb-2 h-9 w-9 text-rose-600"/>
         <h2 className="mb-1 text-2xl font-black">JOIN ROOM {code}</h2>
