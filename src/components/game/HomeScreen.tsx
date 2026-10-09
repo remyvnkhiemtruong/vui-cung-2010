@@ -121,7 +121,7 @@ export default function HomeScreen({
           <HelpCircle className="h-3.5 w-3.5 text-rose-600" aria-hidden="true" />
           <span>Choose A, B, C or D | Play solo or as a team</span>
           <Link href="/live/host" className="rounded-full bg-rose-600 px-3 py-1 text-xs font-extrabold text-white hover:bg-rose-700">
-            CREATE LIVE ROOM ->
+            CREATE LIVE ROOM
           </Link>
           {highScore && (
             <span className="inline-flex items-center gap-1 font-bold text-amber-800">
