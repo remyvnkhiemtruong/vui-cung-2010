@@ -6,7 +6,7 @@ This game uses **only the 12 questions from the Word document supplied by the En
 
 **Question content:** Ms. Phan Thanh Thùy — English Teacher, Vo Van Kiet High School.
 
-**System development:** Trương Minh Khiêm — Cohort 52 Student, Ho Chi Minh City University of Education.
+**System development:** Truong Minh Khiem — Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education.
 
 The source document contains 12 items across 3 pages: Vietnamese Women's Day date, ten women at Đồng Lộc Junction, Lý Chiêu Hoàng, Trưng Trắc, Công–Dung–Ngôn–Hạnh, two illustrated questions (domestic violence and housework), a light-hearted October 20 riddle, the 'eight golden words', Nguyễn Thị Định, Đặng Thùy Trâm, and the purpose of October 20.
 

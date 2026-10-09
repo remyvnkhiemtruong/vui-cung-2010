@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   creator: "Truong Minh Khiem",
   other: {
     "question-author": "Ms. Phan Thanh Thuy, English Teacher, Vo Van Kiet High School",
-    "system-developer": "Truong Minh Khiem, Cohort 52 Student, Ho Chi Minh City University of Education"
+    "system-developer": "Truong Minh Khiem, Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education"
   },
   openGraph: {
     title,
