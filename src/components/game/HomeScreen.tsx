@@ -7,6 +7,7 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { StageDecorations } from '@/components/decorations/StageDecorations';
 import SoundToggle from '@/components/common/SoundToggle';
+import AuthorCredits from '@/components/common/AuthorCredits';
 import { HighScoreRecord } from '@/types/quiz';
 import { QUESTION_TIME_LIMIT } from '@/utils/gameEngine';
 
@@ -67,6 +68,8 @@ export default function HomeScreen({
             Questions supplied by Ms. Phan Thanh Thùy · Picture clues · 30 seconds per question
           </p>
         </div>
+
+        <AuthorCredits variant="feature" />
 
         <form onSubmit={submit} className="home-form" noValidate>
           <label htmlFor="playerNameInput" className="mb-1 block text-xs sm:text-sm font-extrabold text-rose-950">

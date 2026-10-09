@@ -111,3 +111,21 @@ test('database and solo default use 30 seconds',()=>{
  assert(schema.includes('seconds_per_question integer NOT NULL DEFAULT 30'));
  assert(engine.includes('export const QUESTION_TIME_LIMIT = 30'));
 });
+
+test('both prominent credits are available on home, solo result, and live stages',()=>{
+  const credits=fs.readFileSync('src/components/common/AuthorCredits.tsx','utf8');
+  const home=fs.readFileSync('src/components/game/HomeScreen.tsx','utf8');
+  const page=fs.readFileSync('src/app/page.tsx','utf8');
+  const live=fs.readFileSync('src/components/live/LiveClient.tsx','utf8');
+  const css=fs.readFileSync('src/app/globals.css','utf8');
+  assert(credits.includes('Ms. Phan Thanh Thùy'));
+  assert(credits.includes('English Teacher · Vo Van Kiet High School'));
+  assert(credits.includes('Trương Minh Khiêm'));
+  assert(credits.includes('Cohort 52 Student · Ho Chi Minh City University of Education'));
+  assert(credits.includes('QUESTION CONTENT')&&credits.includes('SYSTEM DEVELOPMENT'));
+  assert(home.includes('<AuthorCredits variant="feature" />'));
+  assert(page.includes('screen !== \'start\'') && page.includes('<AuthorCredits variant="compact" />'));
+  assert(live.includes('<AuthorCredits variant="compact" />'));
+  assert(css.includes('.author-credits--compact'));
+  assert(css.includes('@media (max-height: 530px)'));
+});
