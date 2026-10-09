@@ -3,6 +3,7 @@ import React,{useCallback,useEffect,useRef,useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {QRCodeSVG} from 'qrcode.react';
+import AuthorCredits from '@/components/common/AuthorCredits';
 import {ArrowRight,CheckCircle2,Clock3,Copy,ExternalLink,Gamepad2,Medal,Monitor,Play,Radio,RotateCcw,Shield,Smartphone,Trophy,Users} from 'lucide-react';
 
 type Phase='lobby'|'question'|'reveal'|'finished';
@@ -53,10 +54,8 @@ function LiveLayout({title,subtitle,children}:{title:string,subtitle:string,chil
       <Link href="/live" className="shrink-0 rounded-xl border border-rose-200 px-3 py-2 text-xs font-bold text-rose-700 hover:bg-rose-50">LIVE HOME</Link>
     </header>
     <div className="min-h-0 flex-1 overflow-hidden px-3 py-2 sm:px-5 sm:py-3">{children}</div>
-    <footer className="shrink-0 border-t border-rose-100 bg-white/50 px-2 py-1 text-center text-[10px] text-rose-800">
-      <span>Questions: <strong>Ms. Phan Thanh Thùy</strong> — English Teacher, Vo Van Kiet High School</span>
-      <span className="mx-2 hidden sm:inline" aria-hidden="true">•</span>
-      <span className="block sm:inline">System: <strong>Trương Minh Khiêm</strong> — Cohort 52 Student, Ho Chi Minh City University of Education</span>
+    <footer className="live-credit-footer" aria-label="Website credits">
+      <AuthorCredits variant="compact" />
     </footer>
   </main>;
 }
