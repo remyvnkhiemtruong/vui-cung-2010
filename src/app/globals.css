@@ -645,3 +645,179 @@ body { min-height:0; }
   .question-option:hover,.live-option-btn:hover,.home-start-button:hover,
   .results-stat:hover,.home-rule:hover {transform:none !important;}
 }
+
+/* SHOWTIME V2 - presentation-grade polish without any new layout space.
+   Only transform, opacity, shadow and color animate; real scoring/timer stay unchanged. */
+@keyframes showtimeCounterBonus {
+  0% {opacity:0;transform:translate3d(0,11px,0) scale(.8)}
+  18% {opacity:1;transform:translate3d(0,-3px,0) scale(1.16)}
+  70% {opacity:1;transform:translate3d(0,-14px,0) scale(1)}
+  100% {opacity:0;transform:translate3d(0,-25px,0) scale(.88)}
+}
+@keyframes showtimeAnswerCorrect {
+  0% {box-shadow:0 0 0 0 rgba(16,185,129,.3);transform:scale(.992)}
+  50% {box-shadow:0 0 0 6px rgba(16,185,129,.11);transform:scale(1)}
+  100% {box-shadow:0 0 0 0 rgba(16,185,129,0);transform:scale(1)}
+}
+@keyframes showtimeAnswerWrong {
+  0%,100% {transform:translateX(0)}
+  24% {transform:translateX(-4px)}
+  50% {transform:translateX(3px)}
+  74% {transform:translateX(-1px)}
+}
+@keyframes showtimeSpark {
+  0% {opacity:0;transform:translate3d(0,0,0) scale(.15)}
+  25% {opacity:1;transform:translate3d(calc(var(--sx)*.38),calc(var(--sy)*.38),0) scale(1.15)}
+  100% {opacity:0;transform:translate3d(var(--sx),var(--sy),0) scale(0)}
+}
+@keyframes showtimeQuestionExit {
+  to {opacity:0;transform:translate3d(-18px,-5px,0) scale(.987);filter:blur(1px)}
+}
+@keyframes showtimeProgressShine {
+  0% {transform:translateX(-120%)}
+  100% {transform:translateX(340%)}
+}
+@keyframes showtimeCorrectChoice {
+  0% {box-shadow:0 0 0 0 rgba(16,185,129,.34);transform:scale(.991)}
+  60% {box-shadow:0 0 0 7px rgba(16,185,129,.12);transform:scale(1.013)}
+  100% {box-shadow:0 0 0 2px rgba(16,185,129,.06);transform:scale(1)}
+}
+@keyframes showtimeSelection {
+  0% {transform:scale(.96);filter:brightness(1.2)}
+  75% {transform:scale(1.016)}
+  100% {transform:scale(1)}
+}
+@keyframes showtimeCountPop {
+  0% {transform:scale(.84);opacity:.65}
+  65% {transform:scale(1.15);opacity:1}
+  100% {transform:scale(1)}
+}
+@keyframes showtimeResultBar {
+  from {transform:scaleX(0)}
+  to {transform:scaleX(1)}
+}
+@keyframes showtimeVictoryShimmer {
+  0%,100% {filter:drop-shadow(0 0 0 rgba(217,119,6,0));transform:translateY(0)}
+  50% {filter:drop-shadow(0 2px 13px rgba(245,158,11,.36));transform:translateY(-3px)}
+}
+
+/* The score is visually counted up. A temporary +delta badge never occupies
+   the score line, so timer and question controls cannot be shifted. */
+.score-ticker {display:inline-block;position:relative;white-space:nowrap;vertical-align:baseline;font-variant-numeric:tabular-nums;}
+.score-ticker-digits {display:inline-block;min-width:1ch;letter-spacing:-.02em;}
+.score-ticker-bonus {
+  position:absolute;z-index:2;inset-inline-end:-4px;bottom:calc(100% + 1px);
+  font-size:clamp(10px,1.2vw,14px);font-weight:950;line-height:1;
+  padding:3px 6px;border-radius:8px;white-space:nowrap;
+  background:#047857;color:#fff;box-shadow:0 5px 13px rgba(4,120,87,.17);
+  pointer-events:none;animation:showtimeCounterBonus 1.2s both ease-out;
+}
+.live-rank-row .score-ticker,.player-score {font-variant-numeric:tabular-nums;}
+.live-rank-row .score-ticker-digits {transition:color .25s;}
+.live-rank-row:first-child .score-ticker-digits {color:#a16207;}
+.combo-indicator {transition:color .25s ease;}
+.combo-indicator.combo-hot {
+  color:#c2410c;background:linear-gradient(110deg,#fff7ed,#fef3c7);
+  border-radius:999px;padding:2px 7px;box-shadow:0 0 0 1px rgba(251,146,60,.24);
+}
+.combo-hot .combo-digit {animation:showtimeCountPop .36s ease-out both;}
+.game-progress-track {position:relative;isolation:isolate;}
+.game-progress-fill {position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(90deg,#be123c,#fb7185,#f59e0b);}
+.game-progress-fill::after {
+  content:'';position:absolute;inset:0;width:35%;opacity:.4;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);
+  animation:showtimeProgressShine 3.8s ease-in-out infinite;
+}
+.time-ring.is-warning {filter:drop-shadow(0 0 7px rgba(245,158,11,.12));}
+.time-ring.is-urgent .timer-stroke {filter:drop-shadow(0 0 3px rgba(225,29,72,.42));}
+.time-ring.is-urgent .timer-stroke {stroke-width:6;}
+
+/* 240ms handoff starts ONLY after the user chooses Next. Never slows answers
+   or the 30-second authoritative clock. */
+.question-shell.question-handoff-out {
+  pointer-events:none;animation:showtimeQuestionExit .24s ease-in forwards;
+}
+.question-feedback {position:relative;isolation:isolate;}
+.question-feedback.answer-celebrate {
+  animation:stageFloatIn .25s ease-out both,showtimeAnswerCorrect .55s .14s ease-out 1;
+}
+.question-feedback.answer-incorrect {animation:stageFloatIn .25s ease-out both,showtimeAnswerWrong .29s .12s ease-out 1;}
+.question-feedback.answer-timeout {border-color:#fcd34d;background:#fffbeb;}
+.question-feedback-header strong svg {flex-shrink:0;}
+.answer-points {animation:showtimeCountPop .44s .06s cubic-bezier(.2,.8,.2,1) both;}
+.correct-sparkles {position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.correct-sparkles i {
+  position:absolute;left:50%;top:24%;width:7px;height:7px;
+  background:#f59e0b;border-radius:2px;
+  animation:showtimeSpark .75s .06s ease-out both;
+}
+.correct-sparkles i:nth-child(1){--sx:-110px;--sy:-23px;background:#fb7185;}
+.correct-sparkles i:nth-child(2){--sx:-68px;--sy:-53px;background:#f59e0b;}
+.correct-sparkles i:nth-child(3){--sx:-24px;--sy:-63px;background:#10b981;}
+.correct-sparkles i:nth-child(4){--sx:33px;--sy:-57px;background:#f59e0b;}
+.correct-sparkles i:nth-child(5){--sx:88px;--sy:-44px;background:#fb7185;}
+.correct-sparkles i:nth-child(6){--sx:120px;--sy:8px;background:#34d399;}
+.correct-sparkles i:nth-child(7){--sx:-104px;--sy:32px;background:#fbbf24;}
+.correct-sparkles i:nth-child(8){--sx:74px;--sy:35px;background:#f59e0b;}
+.question-feedback > :not(.correct-sparkles) {position:relative;z-index:1;}
+
+/* Answer colors are server-confirmed in Live mode. Choosing a tile never
+   exposes the correct answer early. */
+.live-option-btn.live-option-selected {
+  outline:3px solid #fff;outline-offset:0;box-shadow:0 0 0 4px rgba(16,185,129,.78);
+  animation:showtimeSelection .24s ease-out both;
+}
+.live-option-btn.live-option-correct {
+  box-shadow:0 0 0 3px #fff,0 0 0 6px rgba(16,185,129,.44);
+  animation:showtimeCorrectChoice .55s ease-out both;
+  filter:brightness(1.1);
+}
+.live-option-btn.live-option-dim {opacity:.56;filter:saturate(.6);}
+.live-answer-reveal {
+  border:1px solid #86efac;background:linear-gradient(110deg,#ecfdf5,#f0fdf4);
+  animation:stageFloatIn .35s ease-out both;
+}
+.answer-count-pop {display:inline-block;animation:showtimeCountPop .34s ease-out both;}
+.live-rank-row:first-child {
+  background:linear-gradient(105deg,#fffbeb,#fff7dc,#fff1f2);
+  border-color:#f5c66a;
+}
+.live-rank-row:nth-child(2) {background:linear-gradient(105deg,#f8fafc,#f1f5f9,#fff1f2);}
+.live-rank-row:nth-child(3) {background:linear-gradient(105deg,#fff7ed,#ffedd5,#fff1f2);}
+.live-rank-row {will-change:auto;}
+.live-rank-row:first-child > strong:first-child {
+  color:#b45309;filter:drop-shadow(0 1px 2px rgba(217,119,6,.13));
+}
+.projection-finish {animation:stageFloatIn .48s ease-out both;}
+.projection-finish > svg {
+  animation:showtimeVictoryShimmer 2.8s ease-in-out infinite;
+}
+.projection-finish-sparkle {pointer-events:none;width:0;height:0;}
+.stage-results .results-stats .stage-stat:nth-child(1){animation:stageFloatIn .33s .06s both;}
+.stage-results .results-stats .stage-stat:nth-child(2){animation:stageFloatIn .33s .11s both;}
+.stage-results .results-stats .stage-stat:nth-child(3){animation:stageFloatIn .33s .16s both;}
+.stage-results .results-stats .stage-stat:nth-child(4){animation:stageFloatIn .33s .21s both;}
+.results-accuracy-track {width:100%;height:5px;overflow:hidden;border-radius:999px;background:#ffe4e6;flex:none;}
+.results-accuracy-fill {
+  width:0;height:100%;border-radius:999px;background:linear-gradient(90deg,#fb7185,#10b981);
+  transform-origin:left;animation:showtimeResultBar .85s .25s both cubic-bezier(.2,.7,.2,1);
+}
+
+/* Accessibility is a hard requirement: reduced-motion means no timed entrance,
+   scale, ticker, spark or UI movement, while retaining all visible information. */
+@media (prefers-reduced-motion:reduce) {
+  .score-ticker-bonus,.combo-hot .combo-digit,.answer-points,.correct-sparkles i,
+  .question-feedback.answer-celebrate,.question-feedback.answer-incorrect,
+  .question-shell.question-handoff-out,.live-option-btn.live-option-selected,
+  .live-option-btn.live-option-correct,.live-answer-reveal,.answer-count-pop,
+  .projection-finish,.projection-finish > svg,.game-progress-fill::after,
+  .stage-results .stage-stat,.results-accuracy-fill {
+    animation:none !important;transition:none !important;transform:none !important;
+  }
+  .question-shell.question-handoff-out {opacity:1;filter:none;}
+}
+@media(max-height:560px) {
+  .score-ticker-bonus{font-size:10px;padding:2px 4px;}
+  .correct-sparkles i{width:5px;height:5px;}
+  .results-accuracy-track{height:3px;}
+}
