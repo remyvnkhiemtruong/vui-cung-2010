@@ -482,3 +482,46 @@ body { min-height:0; }
   .author-credits--compact .author-credit { min-height: 36px; }
   .author-credits--compact .author-credit-role { display: none; }
 }
+
+/* Landing-page author credits stay at the BOTTOM (outside the welcome card).
+   On short displays they compress without adding document scrolling. */
+.app-credit-footer .author-credits--feature {
+  width: min(100%, 940px);
+}
+.app-credit-footer .author-credits--feature .author-credit {
+  min-height: clamp(57px, 11dvh, 90px);
+}
+@media (max-height: 680px) {
+  .app-credit-footer .author-credits--feature .author-credit {
+    min-height: 57px;
+    padding: 5px 9px;
+    gap: 2px;
+  }
+  .app-credit-footer .author-credits--feature .author-credit-symbol {
+    height: 18px;
+    width: 18px;
+  }
+  .app-credit-footer .author-credits--feature .author-credit-symbol svg {
+    width: 12px;
+    height: 12px;
+  }
+  .app-credit-footer .author-credits--feature .author-credit-name {
+    font-size: clamp(12px, 2.25dvh, 17px);
+  }
+  .app-credit-footer .author-credits--feature .author-credit-role {
+    font-size: clamp(9px, 1.7dvh, 11px);
+  }
+}
+@media (max-height: 480px) {
+  .app-credit-footer .author-credits--feature .author-credit {
+    min-height: 43px;
+    padding: 3px 8px;
+    gap: 0;
+  }
+  .app-credit-footer .author-credits--feature .author-credit-symbol {
+    display: none;
+  }
+  .app-credit-footer .author-credits--feature .author-credit-role {
+    display: none;
+  }
+}
