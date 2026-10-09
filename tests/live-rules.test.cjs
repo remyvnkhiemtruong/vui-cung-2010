@@ -9,26 +9,26 @@ const moduleObj={exports:{}};
 new Function('module','exports',transpiled)(moduleObj,moduleObj.exports);
 const {LIVE_MAX_PLAYERS,LIVE_SECONDS,LIVE_ROUND_SIZE,liveScore,legalTransition}=moduleObj.exports;
 
-test('50-player capacity, 200 questions, 25-second timer',()=>{
+test('50-player capacity, 12 questions, 30-second timer',()=>{
   assert.equal(LIVE_MAX_PLAYERS,50);
-  assert.equal(LIVE_ROUND_SIZE,200);
-  assert.equal(LIVE_SECONDS,25);
+  assert.equal(LIVE_ROUND_SIZE,12);
+  assert.equal(LIVE_SECONDS,30);
 });
 test('score is bounded and favors quick answers',()=>{
-  assert.deepEqual(liveScore(false,25000,25,8),{points:0,newStreak:0});
-  assert.deepEqual(liveScore(true,25000,25,0),{points:150,newStreak:1});
+  assert.deepEqual(liveScore(false,30000,30,8),{points:0,newStreak:0});
+  assert.deepEqual(liveScore(true,30000,30,0),{points:150,newStreak:1});
   assert.deepEqual(liveScore(true,0,25,1),{points:100,newStreak:2});
-  assert.deepEqual(liveScore(true,12500,25,2),{points:145,newStreak:3});
-  assert.equal(liveScore(true,60000,25,3).points,170);
-  assert.equal(liveScore(true,-200,25,0).points,100);
+  assert.deepEqual(liveScore(true,15000,30,2),{points:145,newStreak:3});
+  assert.equal(liveScore(true,70000,30,3).points,170);
+  assert.equal(liveScore(true,-200,30,0).points,100);
 });
-test('50 simulated players over 200 rounds',()=>{
+test('50 simulated players over 12 rounds',()=>{
   const players=Array.from({length:50},(_,i)=>({name:'Player '+(i+1),points:0,streak:0}));
   for(let question=0;question<LIVE_ROUND_SIZE;question++){
     for(let i=0;i<players.length;i++){
       const correct=(i+question)%4!==0;
-      const time=Math.max(0,25000-i*180-question*125);
-      const score=liveScore(correct,time,25,players[i].streak);
+      const time=Math.max(0,30000-i*180-question*125);
+      const score=liveScore(correct,time,30,players[i].streak);
       players[i].points+=score.points;
       players[i].streak=score.newStreak;
     }
@@ -37,15 +37,15 @@ test('50 simulated players over 200 rounds',()=>{
   assert.equal(players.length,50);
   assert.equal(ranked.length,50);
   assert(ranked[0].points>=ranked[49].points);
-  assert(players.every(p=>p.points>=0 && p.points<=34000));
+  assert(players.every(p=>p.points>=0 && p.points<=2040));
 });
 test('phase transitions prohibit skipping the reveal',()=>{
   assert.equal(legalTransition('lobby','start',-1),'question');
   assert.equal(legalTransition('question','reveal',0),'reveal');
   assert.equal(legalTransition('reveal','next',0),'question');
   assert.equal(legalTransition('reveal','next',9),'question');
-  assert.equal(legalTransition('reveal','next',198),'question');
-  assert.equal(legalTransition('reveal','next',199),'finished');
+  assert.equal(legalTransition('reveal','next',10),'question');
+  assert.equal(legalTransition('reveal','next',11),'finished');
   assert.equal(legalTransition('question','finish',0),'finished');
   assert.equal(legalTransition('lobby','next',-1),null);
   assert.equal(legalTransition('question','next',0),null);
@@ -92,13 +92,20 @@ test('MC and projector see server-confirmed response progress before reveal',()=
   assert(ui.includes("only the MC can reveal the answer"));
 });
 
-test('room persists all questions, answer validation allows question 200',()=>{
+test('room persists all 12 teacher questions and validates question 12',()=>{
   const create=fs.readFileSync('src/app/api/live/route.ts','utf8');
   const submit=fs.readFileSync('src/app/api/live/[code]/answer/route.ts','utf8');
   const state=fs.readFileSync('src/app/api/live/[code]/route.ts','utf8');
   assert(create.includes('buildContinuousQuiz(questionBank)'));
-  assert(submit.includes('index<0||index>=200'));
+  assert(submit.includes('index<0||index>=12'));
   assert(state.includes('questions -> question_index AS active_question'));
   assert(state.includes('jsonb_array_length(questions) AS total'));
   assert(!state.includes('SELECT code,phase,question_index,questions,'));
+});
+
+test('database and solo default use 30 seconds',()=>{
+ const schema=fs.readFileSync('db/live-quiz.sql','utf8');
+ const engine=fs.readFileSync('src/utils/gameEngine.ts','utf8');
+ assert(schema.includes('seconds_per_question integer NOT NULL DEFAULT 30'));
+ assert(engine.includes('export const QUESTION_TIME_LIMIT = 30'));
 });
