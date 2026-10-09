@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS live_quiz_rooms (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Existing databases also need the 30-second default; CREATE TABLE IF NOT EXISTS
+-- does not update a previously defined 25-second column default.
+ALTER TABLE live_quiz_rooms ALTER COLUMN seconds_per_question SET DEFAULT 30;
+
 CREATE TABLE IF NOT EXISTS live_quiz_players (
   id uuid PRIMARY KEY,
   room_code varchar(6) NOT NULL REFERENCES live_quiz_rooms(code) ON DELETE CASCADE,
