@@ -124,6 +124,12 @@ test('Mrs question author and balanced IT developer credits on all game screens'
   assert(credits.includes('Truong Minh Khiem'));
   assert(credits.includes('Faculty of Information Technology'));
   assert(credits.includes('Informatics Teacher Education'));
+  const completeRole='Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education';
+  assert(credits.includes(completeRole),'Developer affiliation must not be abbreviated');
+  assert(!credits.includes('IT Student')&&!credits.includes('HCMUE</span>'),'No abbreviations in the displayed role');
+  assert(css.includes('white-space:normal;overflow-wrap:anywhere'),'Long role must wrap instead of clipping');
+  assert(!css.includes('text-overflow:ellipsis;white-space:nowrap'),'Do not cut off full credits');
+  assert(css.includes('@media(max-width:850px)'),'Compact narrow-screen footer should remain balanced');
   assert(credits.includes('English Teacher, Vo Van Kiet High School'));
   assert([...credits].every(c=>c.charCodeAt(0)<128),'Public credits should be unaccented ASCII');
   assert(metadata.includes('Mrs. Phan Thanh Thuy'));

@@ -18,7 +18,7 @@ export default function AuthorCredits(){
         <span className="credit-ribbon-label">SYSTEM DEVELOPMENT</span>
         <strong className="credit-ribbon-name">Truong Minh Khiem</strong>
       </div>
-      <span className="credit-ribbon-role">Informatics Teacher Education &amp; IT Student, Faculty of Information Technology, HCMUE</span>
+      <span className="credit-ribbon-role">Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education</span>
     </div>
   </section>;
 }
