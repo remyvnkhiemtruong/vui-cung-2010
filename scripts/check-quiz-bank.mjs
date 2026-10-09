@@ -4,6 +4,7 @@
  */
 import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
+import {createHash} from 'node:crypto';
 import {runInNewContext} from 'node:vm';
 import ts from 'typescript';
 
@@ -41,9 +42,22 @@ for (const q of questionBank.filter(q=>q.image)){
  const asset=join(root,'public',q.image.slice(1));
  assert(existsSync(asset),'Missing original photo asset: '+q.image);
  const bytes=readFileSync(asset);
- assert(bytes.length>=1500,'Photo asset unusually small: '+q.image);
- assert(bytes[0]===0xff&&bytes[1]===0xd8&&bytes.at(-2)===0xff&&bytes.at(-1)===0xd9,
-   'The embedded teacher photo must be a complete JPEG: '+q.image);
+ const expectedAssets={
+   '/questions/teacher-docx/domestic-violence.webp':{
+      size:2086,hash:'bf2294e1da705129ecade0806cebb9a15a9495eea1c1cdc53471871e32776108'
+   },
+   '/questions/teacher-docx/housework.webp':{
+      size:4408,hash:'a91b55f6614150792f46a50893f572bcfb8d8f04d59601adf2f8edac5ae73971'
+   }
+ };
+ const expected=expectedAssets[q.image];
+ assert(expected,'Only the two photos cropped from the teacher DOCX are allowed: '+q.image);
+ assert(bytes.length===expected.size,'Original photo byte length mismatch: '+q.image);
+ assert(bytes.toString('ascii',0,4)==='RIFF' && bytes.toString('ascii',8,12)==='WEBP',
+   'Image must be a valid WebP container: '+q.image);
+ assert(bytes.readUInt32LE(4)===bytes.length-8,'Corrupt WebP RIFF length: '+q.image);
+ assert(createHash('sha256').update(bytes).digest('hex')===expected.hash,
+   'Original teacher DOCX photo data changed or was corrupted: '+q.image);
 }
 const tested=new Set();
 for(let i=0;i<100;i++){

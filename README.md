@@ -25,3 +25,7 @@ The two photo questions use photos cropped **directly from the teacher's origina
 ## Verification
 
 `npm run build` runs `scripts/check-quiz-bank.mjs` to verify the exact 12 teacher answers, photo presence, and 100 complete, non-repeating random rounds, then runs the server scoring tests before compiling Next.js. Database SQL schema in `db/live-quiz.sql` uses 30 seconds as the default on newly created rooms. Check Vercel Preview before publishing to production.
+
+### Original image assets
+
+The two visual questions show photographs cropped from the image screenshots embedded in the teacher's source Word file. The original option graphics were intentionally excluded because the website already renders A/B/C/D choices. Both local WebP images are integrity-checked in the build (size, RIFF header and SHA-256), and served directly to browsers to avoid the previously broken JPEG/optimizer path.

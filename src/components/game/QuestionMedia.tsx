@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { ImageIcon, FileQuestion, Sparkles } from 'lucide-react';
+import { ImageIcon, FileQuestion } from 'lucide-react';
 
 interface QuestionMediaProps {
   src?: string;
@@ -71,6 +71,7 @@ export default function QuestionMedia({
         ${className}
       `}
       role="figure"
+      aria-label={`Illustration for: ${alt}`}
     >
       {/* Loading Skeleton */}
       {isLoading && (
@@ -87,6 +88,7 @@ export default function QuestionMedia({
         src={src}
         alt={alt}
         fill
+        unoptimized
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 450px"
         className={`
           object-contain drop-shadow-xs transition-opacity duration-300
@@ -100,32 +102,7 @@ export default function QuestionMedia({
         priority
       />
 
-      {/* Category / Visual Pill Tag */}
-      <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold bg-white/90 backdrop-blur-xs text-rose-800 border border-rose-200/80 shadow-xs">
-          <Sparkles className="w-3 h-3 text-rose-600" />
-          {category || 'Visual question'}
-        </span>
-      </div>
-
-      {credit && (
-        <div className="absolute bottom-2.5 right-2.5 z-10 max-w-[80%] text-right">
-          {sourceUrl ? (
-            <a
-              href={sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block rounded-lg bg-black/65 px-2 py-1 text-[9px] sm:text-[10px] font-medium text-white/90 backdrop-blur-sm hover:bg-black/80"
-            >
-              Image credit: {credit}
-            </a>
-          ) : (
-            <span className="inline-block rounded-lg bg-black/65 px-2 py-1 text-[9px] sm:text-[10px] font-medium text-white/90 backdrop-blur-sm">
-              Image credit: {credit}
-            </span>
-          )}
-        </div>
-      )}
+      {credit && <span className="sr-only">{credit}</span>}
     </div>
   );
 }
