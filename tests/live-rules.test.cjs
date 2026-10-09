@@ -125,7 +125,7 @@ test('Mrs question author and balanced IT developer credits on all game screens'
   assert(credits.includes('Faculty of Information Technology'));
   assert(credits.includes('Informatics Teacher Education'));
   assert(credits.includes('English Teacher, Vo Van Kiet High School'));
-  assert(/^[\\x00-\\x7F]*$/.test(credits),'Public credits should be unaccented ASCII');
+  assert([...credits].every(c=>c.charCodeAt(0)<128),'Public credits should be unaccented ASCII');
   assert(metadata.includes('Mrs. Phan Thanh Thuy'));
   assert(credits.includes('QUESTION CONTENT')&&credits.includes('SYSTEM DEVELOPMENT'));
   assert(credits.includes('className="credit-ribbon"'));
@@ -148,7 +148,7 @@ test('music selector provides three original tracks and independent control',()=
   assert(engine.includes("id: 'heartfelt-thanks'"));
   assert(engine.includes("id: 'joyful-october'"));
   assert(engine.includes('window')&&engine.includes('AudioContext'));
-  assert(!/https?:\\/\\//.test(engine),'Music must not rely on external recordings');
+  assert(!engine.includes('http://')&&!engine.includes('https://'),'Music must not rely on external recordings');
   assert(engine.includes('oct20_music_track_v1'));
   assert(engine.includes('oct20_music_volume_v1'));
   assert(engine.includes('storedVolume===null?NaN'),'Unconfigured volume should not be silently zero');
