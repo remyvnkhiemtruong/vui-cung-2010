@@ -1,6 +1,7 @@
 'use client';
 
-import {useId,useState,useSyncExternalStore} from 'react';
+import {useId,useRef,useState,useSyncExternalStore} from 'react';
+import {createPortal} from 'react-dom';
 import {Check,Music2,Pause,Play,Volume2,VolumeX} from 'lucide-react';
 import {backgroundMusic,MUSIC_TRACKS} from '@/utils/music';
 
@@ -9,6 +10,16 @@ export default function MusicPicker(){
   const [open,setOpen]=useState(false);
   const [unsupported,setUnsupported]=useState(false);
   const menuId=useId();
+  const buttonRef=useRef<HTMLButtonElement>(null);
+  const [position,setPosition]=useState({top:60,right:10});
+  const toggleMenu=()=>{
+    if(!open && buttonRef.current){
+      const box=buttonRef.current.getBoundingClientRect();
+      setPosition({top:Math.max(8,Math.min(box.bottom+8,window.innerHeight-326)),
+        right:Math.max(8,window.innerWidth-box.right)});
+    }
+    setOpen(value=>!value);
+  };
   const {track,playing,volume}=useSyncExternalStore(
     backgroundMusic.subscribe,backgroundMusic.getSnapshot,backgroundMusic.getServerSnapshot
   );
@@ -20,16 +31,20 @@ export default function MusicPicker(){
     if(!wasPlaying&&!started)setUnsupported(true);
   };
   return <div className="music-picker relative">
-    <button type="button"
+    <button ref={buttonRef} type="button"
       aria-label={`Background music: ${playing?'playing':'paused'}. ${selected.name}. Open music controls.`}
       aria-expanded={open} aria-controls={menuId}
-      onClick={()=>setOpen(v=>!v)}
+      onClick={toggleMenu}
       className={`music-picker-trigger ${playing?'is-playing':''}`}
       title="Background music / Nhac nen">
       <Music2 aria-hidden="true" size={17}/>
       <span className="hidden sm:inline">MUSIC</span>
     </button>
-    {open&&<div id={menuId} role="group" aria-label="Background music selector"
+    {open&&typeof document!=='undefined'&&createPortal(<>
+      <button type="button" className="music-picker-backdrop" tabIndex={-1}
+        aria-label="Close background music selector" onClick={()=>setOpen(false)} />
+      <div id={menuId} role="group" aria-label="Background music selector"
+      style={{top:position.top,right:position.right}}
       className="music-picker-panel">
       <div className="music-picker-top">
         <div><strong>BACKGROUND MUSIC</strong><p>Original October 20 instrumentals</p></div>
@@ -58,6 +73,6 @@ export default function MusicPicker(){
       </label>
       {unsupported&&<p role="alert" className="music-hint">Audio is unavailable in this browser.</p>}
       <p className="music-hint">Select a track, then press Play. Sound effects stay separate.</p>
-    </div>}
+    </div></>,document.body)}
   </div>;
 }
