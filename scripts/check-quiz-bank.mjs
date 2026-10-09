@@ -24,10 +24,18 @@ assert(ids.size===12&&prompts.size===12,'Duplicate question ID or text');
 assert(questionBank.every(q=>String(q.id).startsWith('teacher-20oct-')),'Unapproved question in the bank');
 assert(questionBank.every(q=>q.options.length===4),'All 12 questions must have four options');
 assert(questionBank.every(q=>q.options.some(o=>o.key===q.correctAnswer)),'Correct answer key missing');
+const userFacingText=questionBank.flatMap(q=>[
+ q.question,q.explanation||'',q.imageCredit||'',...q.options.map(o=>o.text)
+]);
+assert(userFacingText.every(t=>[...t].every(c=>c.charCodeAt(0)<=127)),
+ 'Every question, answer and explanation must use unaccented English/romanized names');
+assert(!questionBank.some(q=>/Bat khuat|Trung hau|Cong - Dung|Doi quan toc dai|Nga ba Dong Loc/i.test(q.question)),
+ 'Historical phrases should be translated into English');
+
 const correctText=q=>q.options.find(x=>x.key===q.correctAnswer).text;
 const expected=[
-'20/10/1930','10','Lý Chiêu Hoàng','Trung Trac',
-'Industriousness – Beauty – Eloquence – Virtue','Domestic Violence','Housework',
+'20/10/1930','10','Ly Chieu Hoang','Trung Trac',
+'Industriousness - Beauty - Eloquence - Virtue','Domestic Violence','Housework',
 'The wife / The girlfriend!','Resourceful/Capable','Nguyen Thi Dinh',
 'Dang Thuy Tram','To honor female contributions, express gratitude, and promote gender equality'
 ];

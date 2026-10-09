@@ -193,7 +193,7 @@ export default function QuestionReviewList({
                 rel="noopener noreferrer"
                 className="mt-3 inline-flex text-xs font-bold text-rose-700 underline underline-offset-2"
               >
-                View fact-checking source ↗
+                View fact-checking source
               </a>
             )}
 

@@ -26,9 +26,9 @@ export default function ResultScreen({
   const accuracy = Math.round((stats.correctCount / totalQuestions) * 100) || 0;
   const bestScore = highScore?.bestScore ?? highScore?.score;
   const rank =
-    accuracy >= 90 ? 'OCTOBER 20 MASTER 🌸' :
-    accuracy >= 75 ? 'VIETNAMESE WOMEN EXPERT 🌷' :
-    accuracy >= 50 ? 'RISING QUIZ STAR ✨' : 'KEEP LEARNING & CELEBRATING 💪';
+    accuracy >= 90 ? 'OCTOBER 20 MASTER ' :
+    accuracy >= 75 ? 'VIETNAMESE WOMEN EXPERT ' :
+    accuracy >= 50 ? 'RISING QUIZ STAR ' : 'KEEP LEARNING & CELEBRATING ';
 
   useEffect(() => {
     if (accuracy < 75 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -67,7 +67,7 @@ export default function ResultScreen({
             <div className="rounded-2xl bg-gradient-to-br from-rose-600 to-pink-600 px-4 py-3 text-center text-white shadow-lg">
               <p className="text-[10px] sm:text-xs font-extrabold tracking-widest">TOTAL SCORE</p>
               <p className="results-score">{stats.score.toLocaleString()}</p>
-              <p className="text-[10px] sm:text-xs text-rose-100">Correct answers · Speed bonus · Streak bonus</p>
+              <p className="text-[10px] sm:text-xs text-rose-100">Correct answers | Speed bonus | Streak bonus</p>
             </div>
 
             <div className="results-stats" aria-label="Game statistics">
@@ -96,7 +96,7 @@ export default function ResultScreen({
             {highScore && bestScore !== undefined && (
               <div className="flex items-center justify-center gap-2 text-center text-[10px] sm:text-xs font-bold text-amber-800">
                 <Award className="h-4 w-4 shrink-0" />
-                <span className="truncate">Device best: {highScore.playerName} — {bestScore.toLocaleString()} pts</span>
+                <span className="truncate">Device best: {highScore.playerName} - {bestScore.toLocaleString()} pts</span>
               </div>
             )}
 
@@ -167,7 +167,7 @@ export default function ResultScreen({
               {active.sourceUrl && (
                 <a href={active.sourceUrl} target="_blank" rel="noopener noreferrer"
                    className="text-[10px] sm:text-xs font-bold text-rose-700 underline">
-                  Read the historical source ↗
+                  Read the historical source 
                 </a>
               )}
             </div>

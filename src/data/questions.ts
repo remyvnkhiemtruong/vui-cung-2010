@@ -70,7 +70,7 @@ export const questionBank: Question[] = [
     "type": "multiple-choice",
     "difficulty": "warm-up",
     "category": "Vietnamese Women",
-    "question": "How many women soldiers sacrificed at 'Ngã ba Đồng Lộc'?",
+    "question": "How many young women lost their lives at Dong Loc Junction?",
     "options": {
       "A": "9",
       "B": "10",
@@ -78,7 +78,7 @@ export const questionBank: Question[] = [
       "D": "12"
     },
     "correctAnswer": "B",
-    "explanation": "The source document records ten young women who lost their lives at Đồng Lộc Junction."
+    "explanation": "The source document records ten young women who lost their lives at Dong Loc Junction."
   }),
   createQuestion({
     "id": "teacher-20oct-03",
@@ -87,13 +87,13 @@ export const questionBank: Question[] = [
     "category": "Vietnamese Women",
     "question": "Who was the first female emperor (ruler) of Vietnam?",
     "options": {
-      "A": "Lý Chiêu Hoàng",
-      "B": "Ỷ Lan Nguyên Phi",
-      "C": "Đặng Thị Huệ",
-      "D": "Võ Mị Nương"
+      "A": "Ly Chieu Hoang",
+      "B": "Y Lan Nguyen Phi",
+      "C": "Dang Thi Hue",
+      "D": "Vo Mi Nuong"
     },
     "correctAnswer": "A",
-    "explanation": "Lý Chiêu Hoàng is recognized as Vietnam's first and only reigning female monarch. The original file says 'first emperor (king)'; 'female' clarifies the intended meaning."
+    "explanation": "Ly Chieu Hoang is recognized as Vietnam's first and only reigning female monarch. The wording specifies 'female' to make the intended meaning clear."
   }),
   createQuestion({
     "id": "teacher-20oct-04",
@@ -108,7 +108,7 @@ export const questionBank: Question[] = [
       "D": "Bui Thi Xuan"
     },
     "correctAnswer": "C",
-    "explanation": "The supplied question names Trưng Trắc as the correct choice."
+    "explanation": "The supplied question names Trung Trac as the correct choice."
   }),
   createQuestion({
     "id": "teacher-20oct-05",
@@ -117,13 +117,13 @@ export const questionBank: Question[] = [
     "category": "October 20: Origins",
     "question": "What are the four fundamental virtues of traditional Vietnamese women?",
     "options": {
-      "A": "Industriousness – Beauty – Eloquence – Virtue",
-      "B": "Courage – Sport – Wealth – Fame",
-      "C": "Wealth – Fame – Status – Luxury",
-      "D": "Speed – Strength – Talent – Luck"
+      "A": "Industriousness - Beauty - Eloquence - Virtue",
+      "B": "Courage - Sport - Wealth - Fame",
+      "C": "Wealth - Fame - Status - Luxury",
+      "D": "Speed - Strength - Talent - Luck"
     },
     "correctAnswer": "A",
-    "explanation": "The supplied answer is Industriousness – Beauty – Eloquence – Virtue (Công – Dung – Ngôn – Hạnh)."
+    "explanation": "The four traditional virtues are commonly expressed in English as Industriousness, Beauty, Eloquence and Virtue."
   }),
   createQuestion({
     "id": "teacher-20oct-06",
@@ -179,7 +179,7 @@ export const questionBank: Question[] = [
     "type": "multiple-choice",
     "difficulty": "challenge",
     "category": "October 20: Origins",
-    "question": "President Ho Chi Minh awarded Vietnamese women eight golden words honoring their virtues: 'Anh hung, Bất khuất, Trung hậu, _______'. What is the fourth quality?",
+    "question": "President Ho Chi Minh praised Vietnamese women as 'Heroic, Indomitable, Loyal and _______'. Which final quality completes the tribute?",
     "options": {
       "A": "Intelligent",
       "B": "Resourceful/Capable",
@@ -187,14 +187,14 @@ export const questionBank: Question[] = [
       "D": "Brave"
     },
     "correctAnswer": "B",
-    "explanation": "The fourth quality is Đảm đang (Resourceful/Capable), completing 'Anh hùng, Bất khuất, Trung hậu, Đảm đang'."
+    "explanation": "The final quality is 'Resourceful and Capable'. This is an English rendering of the four qualities in the original tribute."
   }),
   createQuestion({
     "id": "teacher-20oct-10",
     "type": "multiple-choice",
     "difficulty": "challenge",
     "category": "Vietnamese Women",
-    "question": "Who was the first female general of the Vietnam People's Army, famous for leading the \"Long-Haired Army\" (Đội quân tóc dài) in Ben Tre?",
+    "question": "Who was the first female general of the Vietnam People's Army, famous for leading the \"Long-Haired Army\" in Ben Tre?",
     "options": {
       "A": "Nguyen Thi Binh",
       "B": "Nguyen Thi Dinh",
@@ -202,7 +202,7 @@ export const questionBank: Question[] = [
       "D": "Nguyen Thi Minh Khai"
     },
     "correctAnswer": "B",
-    "explanation": "The document identifies Nguyễn Thị Định, associated with the Long-Haired Army in Ben Tre."
+    "explanation": "The document identifies Nguyen Thi Dinh, associated with the Long-Haired Army in Ben Tre."
   }),
   createQuestion({
     "id": "teacher-20oct-11",
@@ -217,7 +217,7 @@ export const questionBank: Question[] = [
       "D": "Nguyen Thi Chien"
     },
     "correctAnswer": "B",
-    "explanation": "Đặng Thùy Trâm wrote the wartime diary later published in English as Last Night I Dreamed of Peace."
+    "explanation": "Dang Thuy Tram wrote the wartime diary later published in English as Last Night I Dreamed of Peace."
   }),
   createQuestion({
     "id": "teacher-20oct-12",

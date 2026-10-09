@@ -46,10 +46,10 @@ export default function HomeScreen({
       <Card glow className="home-card relative z-10">
         <div className="home-badges flex justify-center items-center gap-2 pr-12">
           <Badge variant="rose" icon={<Sparkles className="w-3.5 h-3.5" />}>
-            ENGLISH CLUB • OCTOBER 20
+            ENGLISH CLUB | OCTOBER 20
           </Badge>
           <span className="rounded-full bg-amber-50 px-3 py-1 text-[11px] sm:text-xs font-bold text-amber-800">
-            {bankSize} in the bank · {totalQuestions} per game
+            {bankSize} in the bank | {totalQuestions} per game
           </span>
         </div>
 
@@ -66,7 +66,7 @@ export default function HomeScreen({
             VIETNAMESE WOMEN&apos;S DAY
           </p>
           <p className="mt-1 text-[11px] sm:text-sm text-slate-600">
-            12 teacher-prepared questions · Picture clues · 30 seconds per question
+            12 teacher-prepared questions | Picture clues | 30 seconds per question
           </p>
         </div>
 
@@ -119,9 +119,9 @@ export default function HomeScreen({
 
         <div className="flex flex-wrap items-center justify-center gap-2 text-center text-[11px] sm:text-xs text-slate-600">
           <HelpCircle className="h-3.5 w-3.5 text-rose-600" aria-hidden="true" />
-          <span>Choose A, B, C or D · Play solo or as a team</span>
+          <span>Choose A, B, C or D | Play solo or as a team</span>
           <Link href="/live/host" className="rounded-full bg-rose-600 px-3 py-1 text-xs font-extrabold text-white hover:bg-rose-700">
-            CREATE LIVE ROOM →
+            CREATE LIVE ROOM ->
           </Link>
           {highScore && (
             <span className="inline-flex items-center gap-1 font-bold text-amber-800">

@@ -119,7 +119,7 @@ export default function QuestionCard({
               {question.sourceUrl ? (
                 <a href={question.sourceUrl} target="_blank" rel="noopener noreferrer"
                    className="truncate text-[10px] sm:text-xs font-bold text-rose-700 underline underline-offset-2">
-                  Read the source ↗
+                  Read the source
                 </a>
               ) : <span />}
               <button
