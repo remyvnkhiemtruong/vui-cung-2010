@@ -123,7 +123,7 @@ test('both unaccented author credits render at bottom across game modes',()=>{
   assert(credits.includes('English Teacher - Vo Van Kiet High School'));
   assert(credits.includes('Truong Minh Khiem'));
   assert(credits.includes('Cohort 52 Student - Ho Chi Minh City University of Education'));
-  assert(/^[\\x00-\\x7F]*$/.test(credits), 'Author credits must be entirely unaccented ASCII');
+  assert(/^[\x00-\x7F]*$/.test(credits), 'Author credits must be entirely unaccented ASCII');
   assert(credits.includes('QUESTION CONTENT')&&credits.includes('SYSTEM DEVELOPMENT'));
   assert(!home.includes('<AuthorCredits'), 'No credit cards in the middle of HomeScreen');
   assert(!home.includes('Phan Thanh Thuy'), 'No author name beneath the home title');
