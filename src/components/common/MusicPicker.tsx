@@ -36,7 +36,7 @@ export default function MusicPicker(){
       aria-expanded={open} aria-controls={menuId}
       onClick={toggleMenu}
       className={`music-picker-trigger ${playing?'is-playing':''}`}
-      title="Background music / Nhac nen">
+      title="Background music controls">
       <Music2 aria-hidden="true" size={17}/>
       <span className="hidden sm:inline">MUSIC</span>
     </button>

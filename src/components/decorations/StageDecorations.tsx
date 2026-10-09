@@ -5,7 +5,7 @@ export function StageDecorations() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden z-0 select-none" aria-hidden="true">
       {/* Top Center Spotlight Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[900px] h-[350px] bg-gradient-to-b from-rose-300/30 via-pink-200/20 to-transparent blur-3xl rounded-full" />
+      <div className="stage-ambient-glow absolute top-0 left-1/2 -translate-x-1/2 w-[600px] md:w-[900px] h-[350px] bg-gradient-to-b from-rose-300/30 via-pink-200/20 to-transparent blur-3xl rounded-full" />
 
       {/* Top Left Floral Accent */}
       <div className="absolute -top-10 -left-10 w-48 h-48 md:w-72 md:h-72 bg-radial from-rose-400/20 via-pink-300/10 to-transparent rounded-full blur-2xl" />

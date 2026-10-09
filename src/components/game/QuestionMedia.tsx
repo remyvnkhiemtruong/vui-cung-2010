@@ -55,7 +55,7 @@ export default function QuestionMedia({
             {src || 'Image source is not configured'}
           </span>
           <div className="text-[10px] text-slate-400 mt-0.5">
-            [Image unavailable — the quiz will continue normally]
+            [Image unavailable - the quiz will continue normally]
           </div>
         </div>
       </div>

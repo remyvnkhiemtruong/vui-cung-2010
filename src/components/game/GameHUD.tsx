@@ -39,7 +39,7 @@ export default function GameHUD({
           <div className="min-w-0 text-right">
             <p className="flex items-center justify-end gap-1 text-sm sm:text-lg font-black text-amber-700">
               <Trophy className="h-4 w-4 shrink-0" aria-hidden="true" />
-              {score.toLocaleString()}
+              <span className="score-pop" key={score}>{score.toLocaleString()}</span>
             </p>
             <p className="flex items-center justify-end gap-1 text-[10px] sm:text-xs font-bold text-orange-700">
               <Flame className="h-3 w-3" aria-hidden="true" /> Streak {streak}

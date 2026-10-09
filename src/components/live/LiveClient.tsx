@@ -44,12 +44,12 @@ function useRoom(code:string,player?:PlayerSession|null){
   return {room,issue,refresh,remaining:Math.ceil(ms/1000),remainingMs:ms};
 }
 function Panel({children,className=''}:{children:React.ReactNode,className?:string}){
-  return <div className={'rounded-2xl border border-rose-200 bg-white/95 p-3 sm:p-5 shadow-lg '+className}>{children}</div>;
+  return <div className={'live-panel rounded-2xl border border-rose-200 bg-white/95 p-3 sm:p-5 shadow-lg '+className}>{children}</div>;
 }
 function LiveLayout({title,subtitle,children}:{title:string,subtitle:string,children:React.ReactNode}){
-  return <main className="relative flex h-dvh min-h-0 flex-col overflow-hidden bg-gradient-to-br from-rose-100 via-pink-50 to-amber-50 text-slate-900">
+  return <main className="live-stage relative flex h-dvh min-h-0 flex-col overflow-hidden bg-gradient-to-br from-rose-100 via-pink-50 to-amber-50 text-slate-900">
     <header className="flex shrink-0 items-center justify-between gap-2 border-b border-rose-200 bg-white/80 px-3 py-2 sm:px-6">
-      <div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-widest text-rose-600">ENGLISH CLUB • OCTOBER 20</p>
+      <div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-widest text-rose-600">ENGLISH CLUB | OCTOBER 20</p>
       <h1 className="truncate text-base font-black text-rose-950 sm:text-2xl">{title}</h1>
       <p className="hidden text-xs text-slate-600 sm:block">{subtitle}</p></div>
       <div className="flex shrink-0 items-center gap-2">
@@ -74,7 +74,7 @@ function QR({url}:{url:string}) {
 function Ranking({room,limit=10}:{room:Snapshot,limit?:number}){
   return <div className="min-h-0 flex-1 overflow-auto" aria-label="Live leaderboard">
     {room.leaderboard.length===0?<p className="py-4 text-center text-slate-500">No players yet.</p>:
-    room.leaderboard.slice(0,limit).map(p=><div key={p.rank+':'+p.name} className="mb-1.5 flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50/80 px-3 py-2">
+    room.leaderboard.slice(0,limit).map(p=><div key={p.rank+':'+p.name} className={`live-rank-row ${p.rank<=3?'live-rank-podium':''} mb-1.5 flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50/80 px-3 py-2`}>
       <strong className={'w-7 text-center text-lg '+(p.rank<=3?'text-amber-600':'text-slate-500')}>{p.rank}</strong>
       <span className="min-w-0 flex-1 truncate text-sm font-bold">{p.name}</span>
       <strong className="text-sm tabular-nums text-rose-700">{p.score.toLocaleString()}</strong>
@@ -93,7 +93,7 @@ function ResponseProgress({room,compact=false}:{room:Snapshot,compact?:boolean})
   const percentage=total>0 ? Math.round(answered/total*100) : 0;
   return <div role="status"
     aria-label={`${answered} of ${total} students have answered the current question`}
-    className={`shrink-0 rounded-xl border ${complete?'border-emerald-200 bg-emerald-50':'border-rose-200 bg-rose-50'} ${compact?'px-3 py-2':'px-3 py-2 sm:px-4 sm:py-3'}`}>
+    className={`live-response-progress ${complete?'is-complete':''} shrink-0 rounded-xl border ${complete?'border-emerald-200 bg-emerald-50':'border-rose-200 bg-rose-50'} ${compact?'px-3 py-2':'px-3 py-2 sm:px-4 sm:py-3'}`}>
     <div className="flex items-center justify-between gap-2">
       <div className="flex min-w-0 items-center gap-2">
         {complete?<CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600"/>:<Users className="h-5 w-5 shrink-0 text-rose-600"/>}
@@ -110,7 +110,7 @@ function ResponseProgress({room,compact=false}:{room:Snapshot,compact?:boolean})
         style={{width:`${percentage}%`}}/>
     </div>
     {!compact&&<p className="mt-1 text-[11px] font-semibold text-slate-600">
-      {complete?'Ready to reveal — only the MC can reveal the answer.':
+      {complete?'Ready to reveal - only the MC can reveal the answer.':
         `${pending} ${pending===1?'student has':'students have'} not answered yet.`}
     </p>}
   </div>;
@@ -119,10 +119,10 @@ function ResponseProgress({room,compact=false}:{room:Snapshot,compact?:boolean})
 function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false,busy=false}:{room:Snapshot,remaining:number,showOptions?:boolean,onAnswer?:(choice:Option['key'])=>void,locked?:boolean,busy?:boolean}){
   const q=room.question;
   if(!q)return <p className="text-center text-slate-600">Waiting for the next question...</p>;
-  return <div className="flex min-h-0 flex-1 flex-col justify-center gap-2">
+  return <div className="live-question-stage flex min-h-0 flex-1 flex-col justify-center gap-2">
     <div className="flex flex-wrap items-center justify-between gap-2">
-      <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-bold text-rose-800">QUESTION {room.index+1}/{room.total} • {q.category}</span>
-      <span className="flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-lg font-black text-amber-900"><Clock3 className="h-4 w-4"/>{room.phase==='question'?remaining+'s':'REVEALED'}</span>
+      <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-bold text-rose-800">QUESTION {room.index+1}/{room.total} | {q.category}</span>
+      <span className={`live-timer-pill ${room.phase==='question'&&remaining<=5?'is-urgent':''} flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-lg font-black text-amber-900`}><Clock3 className="h-4 w-4"/>{room.phase==='question'?remaining+'s':'REVEALED'}</span>
     </div>
     <div className={'flex min-h-0 flex-1 flex-col items-center justify-center gap-3 '+(q.image?'sm:flex-row':'')}>
       {q.image&&<img src={q.image} alt={q.question} className="live-quiz-image max-h-[24dvh] w-full max-w-sm rounded-xl object-contain sm:w-2/5"/>}
@@ -133,7 +133,7 @@ function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false
         const isCorrect=room.phase==='reveal'&&q.correctAnswer===o.key;
         return <button key={o.key} type="button" onClick={()=>onAnswer?.(o.key)}
           disabled={!showOptions||locked||busy||room.phase!=='question'||remaining===0}
-          className={'flex min-h-[58px] items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs font-semibold text-white sm:min-h-[75px] sm:text-base '+(isCorrect?'ring-4 ring-emerald-300 shadow-xl ':'')+(showOptions&&!locked?'hover:brightness-110 ':'') }
+          className={'live-option-btn flex min-h-[58px] items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs font-semibold text-white sm:min-h-[75px] sm:text-base '+(isCorrect?'ring-4 ring-emerald-300 shadow-xl ':'')+(showOptions&&!locked?'hover:brightness-110 ':'') }
           style={{backgroundColor:colors[i],borderColor:isCorrect?'#fff':colors[i]}}>
           <strong className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/25 text-base">{o.key}</strong>
           <span>{o.text}</span>
@@ -141,7 +141,7 @@ function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false
       })}
     </div>
     {room.phase==='reveal'&&<div className="rounded-xl bg-emerald-50 p-2 text-center text-xs text-emerald-900 sm:text-sm">
-      <strong>Correct answer: {q.correctAnswer}</strong> · {q.explanation}
+      <strong>Correct answer: {q.correctAnswer}</strong> | {q.explanation}
     </div>}
   </div>;
 }
@@ -152,7 +152,7 @@ export function LiveHome(){
     <div className="mx-auto flex h-full max-w-3xl flex-col items-center justify-center gap-4">
       <div className="text-center"><Gamepad2 className="mx-auto mb-2 h-12 w-12 text-rose-600"/>
         <h2 className="text-2xl font-black sm:text-4xl">Vietnamese Women's Day</h2>
-        <p className="mt-2 text-sm text-slate-600">12 teacher-authored questions • Up to 50 players • No repeats</p>
+        <p className="mt-2 text-sm text-slate-600">12 teacher-authored questions | Up to 50 players | No repeats</p>
       </div>
       <Panel className="w-full max-w-xl">
         <label htmlFor="roomCode" className="text-xs font-bold text-rose-800">ENTER YOUR 6-CHARACTER ROOM CODE</label>
@@ -226,7 +226,7 @@ export function HostConsole(){
             <p className="text-sm font-bold">ROOM <strong className="text-xl tracking-widest text-rose-700">{session.code}</strong></p>
             <span className="rounded-full bg-rose-100 px-2 py-1 text-xs font-extrabold uppercase">{room?.phase||'Connecting'}</span>
           </div>
-          {room?.phase==='lobby'&&<div className="flex flex-1 flex-col items-center justify-center gap-2">
+          {room?.phase==='lobby'&&<div className="live-lobby-stage flex flex-1 flex-col items-center justify-center gap-2">
             {joinUrl&&<QR url={joinUrl}/>}
             <p className="text-center text-sm font-bold">Waiting for students: {room.playerCount}/50</p>
             <p className="max-w-full break-all text-center text-xs text-slate-500">{joinUrl}</p>
@@ -234,7 +234,7 @@ export function HostConsole(){
               <Copy className="h-4 w-4"/> COPY INVITE LINK
             </Button>}
           </div>}
-          {room&&(room.phase==='question'||room.phase==='reveal')&&<CurrentQuestion room={room} remaining={remaining}/>}
+          {room&&(room.phase==='question'||room.phase==='reveal')&&<CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={remaining}/>}
           {room?.phase==='question'&&<ResponseProgress room={room}/>}
           {room?.phase==='finished'&&<div className="flex flex-1 flex-col items-center justify-center gap-2">
             <Trophy className="h-12 w-12 text-amber-500"/><h2 className="text-2xl font-black">GAME FINISHED</h2><p>Final ranking is available on the projector.</p>
@@ -279,7 +279,7 @@ export function PlayerRoom({code}:{code:string}){
     catch(e){setMessage(e instanceof Error?e.message:'Could not submit your answer.')}finally{setBusy(false)}
   };
   const locked=choiceIndex===room?.index||room?.me?.answered===true;
-  return <LiveLayout title="PLAY LIVE" subtitle={'Room '+code+' • Vietnamese Women’s Day'}>
+  return <LiveLayout title="PLAY LIVE" subtitle={'Room '+code+" | Vietnamese Women's Day"}>
     {!session?<div className="mx-auto flex h-full max-w-md flex-col justify-center">
       <Panel><Smartphone className="mb-2 h-9 w-9 text-rose-600"/>
         <h2 className="mb-1 text-2xl font-black">JOIN ROOM {code}</h2>
@@ -295,17 +295,17 @@ export function PlayerRoom({code}:{code:string}){
           <strong className="truncate">{session.name}</strong><strong className="text-rose-700">Score: {room?.me?.score??0}</strong>
         </div>
         {room?.phase==='lobby'&&<Panel className="flex flex-1 flex-col items-center justify-center gap-3 text-center">
-          <Users className="h-12 w-12 text-rose-600"/><h2 className="text-2xl font-black">YOU'RE IN!</h2>
+          <Users className="live-waiting-icon h-12 w-12 text-rose-600"/><h2 className="text-2xl font-black">YOU'RE IN!</h2>
           <p>Waiting for the MC to start. {room.playerCount}/50 players joined.</p>
         </Panel>}
         {room?.phase==='question'&&<Panel className="flex min-h-0 flex-1 flex-col overflow-hidden">
-          <CurrentQuestion room={room} remaining={remaining} showOptions onAnswer={answer} locked={locked} busy={busy}/>
-          {locked&&<p className="mt-2 rounded-lg bg-emerald-50 p-2 text-center text-sm font-bold text-emerald-800"><CheckCircle2 className="mr-1 inline h-4 w-4"/> Answer locked — wait for the MC!</p>}
+          <CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={remaining} showOptions onAnswer={answer} locked={locked} busy={busy}/>
+          {locked&&<p className="mt-2 rounded-lg bg-emerald-50 p-2 text-center text-sm font-bold text-emerald-800"><CheckCircle2 className="mr-1 inline h-4 w-4"/> Answer locked - wait for the MC!</p>}
           {message&&<p role="alert" className="mt-1 text-center text-xs font-semibold text-rose-700">{message}</p>}
         </Panel>}
         {room?.phase==='reveal'&&<Panel className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
-          <CurrentQuestion room={room} remaining={0}/>
-          <p className="text-center text-sm font-semibold text-slate-700">Your score: {room.me?.score??0} • Waiting for the next question.</p>
+          <CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={0}/>
+          <p className="text-center text-sm font-semibold text-slate-700">Your score: {room.me?.score??0} | Waiting for the next question.</p>
         </Panel>}
         {room?.phase==='finished'&&<Panel className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden text-center">
           <Trophy className="mx-auto h-12 w-12 shrink-0 text-amber-500"/><h2 className="text-2xl font-black">GAME OVER!</h2>
@@ -324,7 +324,7 @@ export function Projection({code}:{code:string}){
   useEffect(()=>setOrigin(window.location.origin),[]);
   const {room,issue,remaining}=useRoom(code);
   const joinUrl=origin+'/live/join/'+code;
-  return <LiveLayout title={'ROOM '+code} subtitle="LIVE PROJECTOR • English Club">
+  return <LiveLayout title={'ROOM '+code} subtitle="LIVE PROJECTOR | English Club">
     <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(180px,32%)] gap-2 sm:gap-4">
       <Panel className="flex min-h-0 flex-col gap-2 overflow-hidden">
         {room?.phase==='lobby'&&<div className="flex flex-1 flex-col items-center justify-center gap-2">
@@ -333,12 +333,12 @@ export function Projection({code}:{code:string}){
           <p className="text-center text-sm">ROOM CODE: <strong className="text-2xl tracking-widest text-rose-700">{code}</strong></p>
           <p>{room.playerCount}/50 players ready</p>
         </div>}
-        {(room?.phase==='question'||room?.phase==='reveal')&&<CurrentQuestion room={room} remaining={remaining}/>}
+        {(room?.phase==='question'||room?.phase==='reveal')&&<CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={remaining}/>}
         {room?.phase==='question'&&<ResponseProgress room={room} compact/>}
         {room?.phase==='finished'&&<div className="flex flex-1 flex-col items-center justify-center text-center">
           <Medal className="h-16 w-16 text-amber-500"/><h2 className="text-2xl font-black sm:text-5xl">CONGRATULATIONS!</h2>
           <p className="mt-2 text-lg text-rose-700">Happy Vietnamese Women's Day!</p>
-          {room.leaderboard[0]&&<h3 className="mt-6 text-2xl font-black">🏆 {room.leaderboard[0].name}</h3>}
+          {room.leaderboard[0]&&<h3 className="mt-6 text-2xl font-black"> {room.leaderboard[0].name}</h3>}
         </div>}
         {!room&&<p className="text-center text-slate-600">Connecting...</p>}
         {issue&&<p className="text-xs text-rose-700">{issue}</p>}

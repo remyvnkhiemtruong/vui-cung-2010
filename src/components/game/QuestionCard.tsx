@@ -87,7 +87,7 @@ export default function QuestionCard({
               <button
                 type="button"
                 key={option.key}
-                className="quiz-option-btn question-option bg-white text-slate-900 hover:bg-rose-50 hover:border-rose-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-rose-300"
+                className="quiz-option-btn question-option option-stage bg-white text-slate-900 hover:bg-rose-50 hover:border-rose-500 focus:outline-none focus-visible:ring-4 focus-visible:ring-rose-300"
                 onClick={() => onSelectOption(option.key)}
                 aria-label={`Option ${option.key}: ${option.text}`}
               >
@@ -119,7 +119,7 @@ export default function QuestionCard({
               {question.sourceUrl ? (
                 <a href={question.sourceUrl} target="_blank" rel="noopener noreferrer"
                    className="truncate text-[10px] sm:text-xs font-bold text-rose-700 underline underline-offset-2">
-                  Read the source ↗
+                  Read the source
                 </a>
               ) : <span />}
               <button

@@ -45,6 +45,7 @@ export default function QuizApp() {
                 timeLeft={timeLeft}
               />
               <QuestionCard
+                key={currentQuestion.id}
                 question={currentQuestion}
                 selectedOption={selectedOption}
                 onSelectOption={handleSelectOption}
