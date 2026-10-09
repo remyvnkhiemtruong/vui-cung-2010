@@ -275,8 +275,6 @@ body { min-height:0; }
 }
 @media (max-width:520px) {
   .footer-separator {display:none}
-  .app-footer span {display:block}
-  .app-footer span strong {font-weight:800}
   .home-form-controls {flex-direction:column}
   .home-form-controls input {width:100%}
   .home-form-controls button {width:100%}
