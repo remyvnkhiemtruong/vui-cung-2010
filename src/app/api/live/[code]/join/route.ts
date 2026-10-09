@@ -7,7 +7,7 @@ export async function POST(request:Request,{params}:Context){
     const {code}=await params;
     if(!isRoomCode(code))return json({error:'Invalid room code.'},400);
     const body=await request.json().catch(()=>null),name=normalizeName(body?.name);
-    if(!name)return json({error:'Name must contain 2–30 characters.'},400);
+    if(!name)return json({error:'Name must contain 2 to 30 characters.'},400);
     const id=newPlayerId(),token=makeToken(),sql=db();
     const [result]=await sql`SELECT live_quiz_join(${code},CAST(${id} AS uuid),${name},${hashToken(token)}) AS status`;
     const status=String(result.status);

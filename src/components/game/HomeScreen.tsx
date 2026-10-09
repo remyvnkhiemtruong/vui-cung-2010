@@ -58,7 +58,7 @@ export default function HomeScreen({
           <SoundToggle />
         </div>
 
-        <div className="home-hero">
+        <div className="home-hero home-hero-reveal">
           <h1 className="home-title text-rose-950">
             CELEBRATE <span className="text-rose-600">20/10</span>
           </h1>
@@ -90,7 +90,7 @@ export default function HomeScreen({
             <button
               type="submit"
               disabled={!trimmed}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-2.5 text-base font-black text-white shadow-lg transition hover:from-rose-700 hover:to-pink-700 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-4 focus-visible:ring-rose-300"
+              className="home-start-button inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-2.5 text-base font-black text-white shadow-lg transition hover:from-rose-700 hover:to-pink-700 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-4 focus-visible:ring-rose-300"
             >
               <Play className="h-5 w-5 fill-white" aria-hidden="true" />
               START QUIZ

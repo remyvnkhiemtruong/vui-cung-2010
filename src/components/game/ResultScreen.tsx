@@ -50,7 +50,7 @@ export default function ResultScreen({
 
   return (
     <div className="results-screen">
-      <Card glow className="results-card">
+      <Card glow className="results-card stage-results">
         {reviewIndex === null ? (
           <>
             <div className="text-center">
@@ -66,7 +66,7 @@ export default function ResultScreen({
 
             <div className="rounded-2xl bg-gradient-to-br from-rose-600 to-pink-600 px-4 py-3 text-center text-white shadow-lg">
               <p className="text-[10px] sm:text-xs font-extrabold tracking-widest">TOTAL SCORE</p>
-              <p className="results-score">{stats.score.toLocaleString()}</p>
+              <p className="results-score results-score-reveal">{stats.score.toLocaleString()}</p>
               <p className="text-[10px] sm:text-xs text-rose-100">Correct answers | Speed bonus | Streak bonus</p>
             </div>
 
