@@ -170,3 +170,58 @@ test('music selector provides three original tracks and independent control',()=
   assert(css.includes('.music-picker-panel'));
   assert(css.includes('.music-picker-backdrop'));
 });
+
+test('visible game content uses English and unaccented Romanized names',()=>{
+  const fs = require('node:fs');
+  const questionFile=fs.readFileSync('src/data/questions.ts','utf8');
+  const visualFiles=[
+    'src/components/game/HomeScreen.tsx',
+    'src/components/game/QuestionCard.tsx',
+    'src/components/game/GameHUD.tsx',
+    'src/components/game/ResultScreen.tsx',
+    'src/components/game/QuestionReviewList.tsx',
+    'src/components/game/QuestionMedia.tsx',
+    'src/components/live/LiveClient.tsx',
+    'src/components/common/MusicPicker.tsx',
+    'src/components/common/AuthorCredits.tsx',
+    'src/app/layout.tsx',
+    'src/app/api/live/[code]/join/route.ts',
+  ];
+  for(const file of visualFiles){
+    const content=fs.readFileSync(file,'utf8');
+    assert([...content].every(char=>char.codePointAt(0)<128),
+      'Expected unaccented English UI copy in '+file);
+  }
+  assert([...questionFile].every(char=>char.codePointAt(0)<128));
+  assert(questionFile.includes('Dong Loc Junction'));
+  assert(questionFile.includes('Ly Chieu Hoang'));
+  assert(questionFile.includes("Which final quality completes the tribute?"));
+  assert(!questionFile.includes('Doi quan toc dai'));
+  assert(!questionFile.includes('Bat khuat'));
+  assert(questionFile.includes('Resourceful/Capable'));
+  assert(!fs.readFileSync('src/components/common/MusicPicker.tsx','utf8').includes('Nhac nen'));
+});
+test('stage transitions are subtle, responsive and reduced-motion accessible',()=>{
+  const css=fs.readFileSync('src/app/globals.css','utf8');
+  const quiz=fs.readFileSync('src/components/game/QuestionCard.tsx','utf8');
+  const player=fs.readFileSync('src/app/page.tsx','utf8');
+  const live=fs.readFileSync('src/components/live/LiveClient.tsx','utf8');
+  const timer=fs.readFileSync('src/components/game/CircularTimer.tsx','utf8');
+  const hud=fs.readFileSync('src/components/game/GameHUD.tsx','utf8');
+  const home=fs.readFileSync('src/components/game/HomeScreen.tsx','utf8');
+  for(const effect of ['stageFloatIn','stageOptionReveal','stageScoreRise','stageTimerAlert',
+    'stageReadyGlow','live-rank-podium','live-question-stage','home-start-button']){
+    assert(css.includes(effect),'Motion style missing: '+effect);
+  }
+  assert(css.includes('@media (prefers-reduced-motion:reduce)'));
+  assert(css.includes('animation:none !important'));
+  assert(player.includes('key={currentQuestion.id}'),'New solo questions must animate once on entrance');
+  assert(quiz.includes('option-stage'));
+  assert(live.includes('live-option-btn')&&live.includes('live-response-progress'));
+  assert(live.includes('live-timer-pill'));
+  assert(live.includes('live-rank-row'));
+  assert(live.includes('key={`${room.index}-${room.phase}`}'),'Live questions remount only at phase transitions');
+  assert(hud.includes('score-pop'));
+  assert(timer.includes('time-ring'));
+  assert(home.includes('home-hero-reveal'));
+});
