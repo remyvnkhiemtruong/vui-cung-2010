@@ -14,7 +14,7 @@ export async function POST(request:Request,{params}:Context){
     const id=body?.playerId,choice=body?.choice,index=body?.index;
     if(typeof id!=='string'||!/^[0-9a-f-]{36}$/i.test(id)||
       !['A','B','C','D'].includes(choice)||!Number.isInteger(index)||
-      index<0||index>=200)return json({error:'Invalid answer submission.'},400);
+      index<0||index>=12)return json({error:'Invalid answer submission.'},400);
     const sql=db();
     const [row]=await sql`SELECT live_quiz_submit(${code},CAST(${id} AS uuid),
       ${hashToken(token)},${index},${choice},CAST(${arrivedAt} AS timestamptz)) AS outcome`;

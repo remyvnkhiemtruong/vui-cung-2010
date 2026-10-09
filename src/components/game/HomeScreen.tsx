@@ -21,7 +21,7 @@ export interface HomeScreenProps {
 export default function HomeScreen({
   onStart,
   highScore,
-  totalQuestions = 10,
+  totalQuestions = 12,
   bankSize = totalQuestions,
   timeLimit = QUESTION_TIME_LIMIT,
 }: HomeScreenProps) {
@@ -64,7 +64,7 @@ export default function HomeScreen({
             VIETNAMESE WOMEN&apos;S DAY
           </p>
           <p className="mt-1 text-[11px] sm:text-sm text-slate-600">
-            October 20 traditions · Inspiring Vietnamese women · Picture clues
+            Questions supplied by Ms. Phan Thanh Thùy · Picture clues · 30 seconds per question
           </p>
         </div>
 

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS live_quiz_rooms (
   question_index integer NOT NULL DEFAULT -1,
   questions jsonb NOT NULL CHECK (jsonb_typeof(questions) = 'array'),
   question_started_at timestamptz,
-  seconds_per_question integer NOT NULL DEFAULT 25 CHECK (seconds_per_question BETWEEN 10 AND 120),
+  seconds_per_question integer NOT NULL DEFAULT 30 CHECK (seconds_per_question BETWEEN 10 AND 120),
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );

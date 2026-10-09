@@ -54,7 +54,9 @@ function LiveLayout({title,subtitle,children}:{title:string,subtitle:string,chil
     </header>
     <div className="min-h-0 flex-1 overflow-hidden px-3 py-2 sm:px-5 sm:py-3">{children}</div>
     <footer className="shrink-0 border-t border-rose-100 bg-white/50 px-2 py-1 text-center text-[10px] text-rose-800">
-      Created by <strong>Truong Minh Khiem</strong> • Ho Chi Minh City University of Education
+      <span>Questions: <strong>Ms. Phan Thanh Thùy</strong> — English Teacher, Vo Van Kiet High School</span>
+      <span className="mx-2 hidden sm:inline" aria-hidden="true">•</span>
+      <span className="block sm:inline">System: <strong>Trương Minh Khiêm</strong> — Cohort 52 Student, Ho Chi Minh City University of Education</span>
     </footer>
   </main>;
 }
@@ -147,7 +149,7 @@ export function LiveHome(){
     <div className="mx-auto flex h-full max-w-3xl flex-col items-center justify-center gap-4">
       <div className="text-center"><Gamepad2 className="mx-auto mb-2 h-12 w-12 text-rose-600"/>
         <h2 className="text-2xl font-black sm:text-4xl">Vietnamese Women's Day</h2>
-        <p className="mt-2 text-sm text-slate-600">200 unique questions • Up to 50 players • No repeats</p>
+        <p className="mt-2 text-sm text-slate-600">12 teacher-authored questions • Up to 50 players • No repeats</p>
       </div>
       <Panel className="w-full max-w-xl">
         <label htmlFor="roomCode" className="text-xs font-bold text-rose-800">ENTER YOUR 6-CHARACTER ROOM CODE</label>

@@ -19,9 +19,9 @@ import {
 } from '@/utils/gameEngine';
 import { soundManager } from '@/utils/sound';
 
-const STORAGE_KEY_HIGH_SCORE = 'english_club_october20_only_10q_v5';
+const STORAGE_KEY_HIGH_SCORE = 'english_club_october20_teacher_questions_v1';
 
-const SOLO_DECK_STORAGE_KEY = 'english_club_oct20_200q_seen_v1';
+const SOLO_DECK_STORAGE_KEY = 'english_club_oct20_teacher12_seen_v1';
 
 function drawNewSoloRound() {
   let seenIds: string[] = [];
