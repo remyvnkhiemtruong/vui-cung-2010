@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, CheckCircle2, XCircle, ImageIcon, AlertTriangle, Flame } from 'lucide-react';
 import QuestionMedia from './QuestionMedia';
 import { Question, OptionKey } from '@/types/quiz';
@@ -22,13 +22,25 @@ export default function QuestionCard({
   const isCorrect = isAnswered && selectedOption === question.correctAnswer;
   const isTimeout = isAnswered && selectedOption === null;
   const correctOption = question.options.find(opt => opt.key === question.correctAnswer);
+  const [leaving,setLeaving]=useState(false);
+  const leavingRef=useRef(false);
+  const nextTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const advance=useCallback(()=>{
+    if(leavingRef.current||!isAnswered)return;
+    leavingRef.current=true;
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced){onNext();return;}
+    setLeaving(true);
+    nextTimer.current=setTimeout(onNext,240);
+  },[isAnswered,onNext]);
+  useEffect(()=>()=>{if(nextTimer.current!==null)clearTimeout(nextTimer.current);},[]);
 
   const handleKeyDown = useCallback((event: KeyboardEvent) => {
     if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
     if (isAnswered) {
       if (event.key === 'Enter') {
         event.preventDefault();
-        onNext();
+        advance();
       }
       return;
     }
@@ -37,7 +49,7 @@ export default function QuestionCard({
       event.preventDefault();
       onSelectOption(choice);
     }
-  }, [isAnswered, onNext, onSelectOption]);
+  }, [isAnswered, advance, onSelectOption]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -49,7 +61,7 @@ export default function QuestionCard({
     question.difficulty === 'standard' ? 'MAIN ROUND' : 'FINAL CHALLENGE';
 
   return (
-    <div key={question.id} className={`question-shell animate-question-in ${isAnswered ? 'is-answered' : ''}`}>
+    <div key={question.id} className={`question-shell animate-question-in ${isAnswered ? 'is-answered' : ''} ${leaving ? 'question-handoff-out' : ''}`}>
       <section className="stage-card question-card" aria-label="Quiz question">
         <div className="question-labels text-[10px] sm:text-xs font-extrabold">
           <div className="flex min-w-0 flex-wrap gap-1.5">
@@ -97,14 +109,17 @@ export default function QuestionCard({
             ))}
           </div>
         ) : (
-          <div className={`question-feedback ${isCorrect ? 'correct' : ''}`} role="status" aria-live="polite">
+          <div className={`question-feedback ${isCorrect ? 'correct answer-celebrate' : isTimeout ? 'answer-timeout' : 'answer-incorrect'}`} role="status" aria-live="polite">
+            {isCorrect&&<div aria-hidden="true" className="correct-sparkles">
+              {Array.from({length:8},(_,i)=><i key={i} style={{'--spark-index':i} as React.CSSProperties}/>)}
+            </div>}
             <div className="question-feedback-header">
               <strong className={`flex items-center gap-2 text-base sm:text-lg font-black ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}`}>
                 {isCorrect ? <CheckCircle2 className="h-5 w-5" /> : isTimeout ? <AlertTriangle className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
                 {isCorrect ? 'CORRECT!' : isTimeout ? "TIME'S UP!" : 'NOT QUITE!'}
               </strong>
               {isCorrect && scoreGained ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white">
+                <span className="answer-points inline-flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white">
                   <Flame className="h-3.5 w-3.5" /> +{scoreGained} points
                 </span>
               ) : null}
@@ -124,7 +139,8 @@ export default function QuestionCard({
               ) : <span />}
               <button
                 type="button"
-                onClick={onNext}
+                onClick={advance}
+                disabled={leaving}
                 className="question-next inline-flex items-center justify-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 px-4 font-black text-xs sm:text-sm text-white shadow-lg hover:from-rose-700 hover:to-pink-700 focus-visible:ring-4 focus-visible:ring-rose-300"
               >
                 {isLastQuestion ? 'VIEW RESULTS' : 'NEXT QUESTION'} <ArrowRight className="h-4 w-4" />

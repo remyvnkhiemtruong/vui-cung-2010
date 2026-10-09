@@ -3,6 +3,8 @@ import React,{useCallback,useEffect,useRef,useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import {QRCodeSVG} from 'qrcode.react';
+import confetti from 'canvas-confetti';
+import ScoreTicker from '@/components/common/ScoreTicker';
 import AuthorCredits from '@/components/common/AuthorCredits';
 import MusicPicker from '@/components/common/MusicPicker';
 import {ArrowRight,CheckCircle2,Clock3,Copy,ExternalLink,Gamepad2,Medal,Monitor,Play,Radio,RotateCcw,Shield,Smartphone,Trophy,Users} from 'lucide-react';
@@ -77,7 +79,7 @@ function Ranking({room,limit=10}:{room:Snapshot,limit?:number}){
     room.leaderboard.slice(0,limit).map(p=><div key={p.rank+':'+p.name} className={`live-rank-row ${p.rank<=3?'live-rank-podium':''} mb-1.5 flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50/80 px-3 py-2`}>
       <strong className={'w-7 text-center text-lg '+(p.rank<=3?'text-amber-600':'text-slate-500')}>{p.rank}</strong>
       <span className="min-w-0 flex-1 truncate text-sm font-bold">{p.name}</span>
-      <strong className="text-sm tabular-nums text-rose-700">{p.score.toLocaleString()}</strong>
+      <strong className="text-sm tabular-nums text-rose-700"><ScoreTicker value={p.score} className="live-score" /></strong>
     </div>)}
   </div>;
 }
@@ -102,7 +104,7 @@ function ResponseProgress({room,compact=false}:{room:Snapshot,compact?:boolean})
         </span>
       </div>
       <strong className={`shrink-0 text-lg font-black tabular-nums sm:text-2xl ${complete?'text-emerald-700':'text-rose-700'}`}>
-        {answered}<span className="text-slate-500">/{total}</span>
+        <span className="answer-count-pop" key={answered}>{answered}</span><span className="text-slate-500">/{total}</span>
       </strong>
     </div>
     <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-white" aria-hidden="true">
@@ -116,7 +118,7 @@ function ResponseProgress({room,compact=false}:{room:Snapshot,compact?:boolean})
   </div>;
 }
 
-function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false,busy=false}:{room:Snapshot,remaining:number,showOptions?:boolean,onAnswer?:(choice:Option['key'])=>void,locked?:boolean,busy?:boolean}){
+function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false,busy=false,selectedChoice=null}:{room:Snapshot,remaining:number,showOptions?:boolean,onAnswer?:(choice:Option['key'])=>void,locked?:boolean,busy?:boolean,selectedChoice?:Option['key']|null}){
   const q=room.question;
   if(!q)return <p className="text-center text-slate-600">Waiting for the next question...</p>;
   return <div className="live-question-stage flex min-h-0 flex-1 flex-col justify-center gap-2">
@@ -131,16 +133,18 @@ function CurrentQuestion({room,remaining,showOptions=false,onAnswer,locked=false
     <div className="live-quiz-options grid shrink-0 grid-cols-2 gap-2">
       {q.options.map((o,i)=>{
         const isCorrect=room.phase==='reveal'&&q.correctAnswer===o.key;
+        const dimOnReveal=room.phase==='reveal'&&!isCorrect;
+        const chosen=selectedChoice===o.key&&room.phase==='question';
         return <button key={o.key} type="button" onClick={()=>onAnswer?.(o.key)}
           disabled={!showOptions||locked||busy||room.phase!=='question'||remaining===0}
-          className={'live-option-btn flex min-h-[58px] items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs font-semibold text-white sm:min-h-[75px] sm:text-base '+(isCorrect?'ring-4 ring-emerald-300 shadow-xl ':'')+(showOptions&&!locked?'hover:brightness-110 ':'') }
+          className={'live-option-btn flex min-h-[58px] items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-xs font-semibold text-white sm:min-h-[75px] sm:text-base '+(isCorrect?'live-option-correct ring-4 ring-emerald-300 shadow-xl ':'')+(dimOnReveal?'live-option-dim ':'')+(chosen?'live-option-selected ':'')+(showOptions&&!locked?'hover:brightness-110 ':'') }
           style={{backgroundColor:colors[i],borderColor:isCorrect?'#fff':colors[i]}}>
           <strong className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/25 text-base">{o.key}</strong>
           <span>{o.text}</span>
         </button>;
       })}
     </div>
-    {room.phase==='reveal'&&<div className="rounded-xl bg-emerald-50 p-2 text-center text-xs text-emerald-900 sm:text-sm">
+    {room.phase==='reveal'&&<div className="live-answer-reveal rounded-xl bg-emerald-50 p-2 text-center text-xs text-emerald-900 sm:text-sm">
       <strong>Correct answer: {q.correctAnswer}</strong> | {q.explanation}
     </div>}
   </div>;
@@ -262,9 +266,10 @@ export function PlayerRoom({code}:{code:string}){
   const [name,setName]=useState(''),[session,setSession]=useState<PlayerSession|null>(null);
   const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
   const [choiceIndex,setChoiceIndex]=useState(-1);
+  const [selectedChoice,setSelectedChoice]=useState<Option['key']|null>(null);
   useEffect(()=>{try{const item=sessionStorage.getItem('live-quiz-player-'+code);if(item)setSession(JSON.parse(item) as PlayerSession)}catch{}},[code]);
   const {room,issue,refresh,remaining}=useRoom(code,session);
-  useEffect(()=>{setChoiceIndex(-1)},[room?.index]);
+  useEffect(()=>{setChoiceIndex(-1);setSelectedChoice(null)},[room?.index]);
   const join=async()=>{
     setBusy(true);setMessage('');
     try{const p=await requestJson<PlayerSession>('/api/live/'+code+'/join',{method:'POST',body:JSON.stringify({name})});
@@ -273,10 +278,10 @@ export function PlayerRoom({code}:{code:string}){
   };
   const answer=async(choice:Option['key'])=>{
     if(!session||!room||busy||choiceIndex===room.index)return;
-    setBusy(true);setChoiceIndex(room.index);setMessage('');
+    setBusy(true);setChoiceIndex(room.index);setSelectedChoice(choice);setMessage('');
     try{await requestJson('/api/live/'+code+'/answer',{method:'POST',headers:{Authorization:'Bearer '+session.token},
       body:JSON.stringify({playerId:session.id,choice,index:room.index})});await refresh();}
-    catch(e){setMessage(e instanceof Error?e.message:'Could not submit your answer.')}finally{setBusy(false)}
+    catch(e){setChoiceIndex(-1);setSelectedChoice(null);setMessage(e instanceof Error?e.message:'Could not submit your answer.')}finally{setBusy(false)}
   };
   const locked=choiceIndex===room?.index||room?.me?.answered===true;
   return <LiveLayout title="PLAY LIVE" subtitle={'Room '+code+" | Vietnamese Women's Day"}>
@@ -292,24 +297,24 @@ export function PlayerRoom({code}:{code:string}){
       </Panel></div>:
       <div className="mx-auto flex h-full min-h-0 w-full max-w-4xl flex-col gap-2">
         <div className="flex shrink-0 justify-between rounded-xl bg-white/90 px-3 py-2 text-xs sm:text-base">
-          <strong className="truncate">{session.name}</strong><strong className="text-rose-700">Score: {room?.me?.score??0}</strong>
+          <strong className="truncate">{session.name}</strong><strong className="text-rose-700">Score: <ScoreTicker value={room?.me?.score??0} showBonus className="player-score" /></strong>
         </div>
         {room?.phase==='lobby'&&<Panel className="flex flex-1 flex-col items-center justify-center gap-3 text-center">
           <Users className="live-waiting-icon h-12 w-12 text-rose-600"/><h2 className="text-2xl font-black">YOU'RE IN!</h2>
           <p>Waiting for the MC to start. {room.playerCount}/50 players joined.</p>
         </Panel>}
         {room?.phase==='question'&&<Panel className="flex min-h-0 flex-1 flex-col overflow-hidden">
-          <CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={remaining} showOptions onAnswer={answer} locked={locked} busy={busy}/>
+          <CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={remaining} showOptions onAnswer={answer} locked={locked} busy={busy} selectedChoice={selectedChoice}/>
           {locked&&<p className="mt-2 rounded-lg bg-emerald-50 p-2 text-center text-sm font-bold text-emerald-800"><CheckCircle2 className="mr-1 inline h-4 w-4"/> Answer locked - wait for the MC!</p>}
           {message&&<p role="alert" className="mt-1 text-center text-xs font-semibold text-rose-700">{message}</p>}
         </Panel>}
         {room?.phase==='reveal'&&<Panel className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden">
           <CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={0}/>
-          <p className="text-center text-sm font-semibold text-slate-700">Your score: {room.me?.score??0} | Waiting for the next question.</p>
+          <p className="text-center text-sm font-semibold text-slate-700">Your score: <ScoreTicker value={room.me?.score??0} showBonus /> | Waiting for the next question.</p>
         </Panel>}
         {room?.phase==='finished'&&<Panel className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden text-center">
           <Trophy className="mx-auto h-12 w-12 shrink-0 text-amber-500"/><h2 className="text-2xl font-black">GAME OVER!</h2>
-          <p className="text-xl font-bold text-rose-700">You earned {room.me?.score??0} points</p>
+          <p className="text-xl font-bold text-rose-700">You earned <ScoreTicker value={room.me?.score??0} animateOnMount /> points</p>
           <h3 className="text-sm font-black uppercase">Final Leaderboard</h3>
           <Ranking room={room}/>
         </Panel>}
@@ -317,6 +322,15 @@ export function PlayerRoom({code}:{code:string}){
         {issue&&<p role="alert" className="shrink-0 text-center text-xs text-rose-700">{issue}</p>}
       </div>}
   </LiveLayout>;
+}
+
+function ProjectionCelebration({code}:{code:string}){
+  useEffect(()=>{
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    confetti({particleCount:55,spread:65,startVelocity:25,origin:{x:.2,y:.55},zIndex:60});
+    confetti({particleCount:55,spread:65,startVelocity:25,origin:{x:.8,y:.55},zIndex:60});
+  },[code]);
+  return <div className="projection-finish-sparkle" aria-hidden="true" />;
 }
 
 export function Projection({code}:{code:string}){
@@ -335,7 +349,8 @@ export function Projection({code}:{code:string}){
         </div>}
         {(room?.phase==='question'||room?.phase==='reveal')&&<CurrentQuestion key={`${room.index}-${room.phase}`} room={room} remaining={remaining}/>}
         {room?.phase==='question'&&<ResponseProgress room={room} compact/>}
-        {room?.phase==='finished'&&<div className="flex flex-1 flex-col items-center justify-center text-center">
+        {room?.phase==='finished'&&<div className="projection-finish flex flex-1 flex-col items-center justify-center text-center">
+          <ProjectionCelebration code={code}/>
           <Medal className="h-16 w-16 text-amber-500"/><h2 className="text-2xl font-black sm:text-5xl">CONGRATULATIONS!</h2>
           <p className="mt-2 text-lg text-rose-700">Happy Vietnamese Women's Day!</p>
           {room.leaderboard[0]&&<h3 className="mt-6 text-2xl font-black"> {room.leaderboard[0].name}</h3>}

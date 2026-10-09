@@ -44,7 +44,7 @@ export default function CircularTimer({
   }
 
   return (
-    <div className={`time-ring ${isUrgent?'is-urgent':''} relative flex items-center justify-center select-none`}>
+    <div className={`time-ring ${isUrgent?'is-urgent':timeLeft<=10&&timeLeft>0?'is-warning':''} relative flex items-center justify-center select-none`}>
       <div
         className={`relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center rounded-full transition-all duration-300 ${
           isUrgent ? 'scale-105 shadow-lg shadow-rose-500/20 ring-2 ring-rose-400/40 animate-pulse' : ''
@@ -76,7 +76,7 @@ export default function CircularTimer({
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-700 ease-linear"
+            className="timer-stroke transition-all duration-700 ease-linear"
           />
         </svg>
 

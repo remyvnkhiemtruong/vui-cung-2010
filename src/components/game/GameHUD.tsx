@@ -3,6 +3,7 @@
 import React from 'react';
 import { UserRound, Trophy, Flame } from 'lucide-react';
 import CircularTimer from './CircularTimer';
+import ScoreTicker from '@/components/common/ScoreTicker';
 import { QUESTION_TIME_LIMIT } from '@/utils/gameEngine';
 
 interface GameHUDProps {
@@ -39,16 +40,16 @@ export default function GameHUD({
           <div className="min-w-0 text-right">
             <p className="flex items-center justify-end gap-1 text-sm sm:text-lg font-black text-amber-700">
               <Trophy className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <span className="score-pop" key={score}>{score.toLocaleString()}</span>
+              <ScoreTicker value={score} showBonus className="hud-score" />
             </p>
-            <p className="flex items-center justify-end gap-1 text-[10px] sm:text-xs font-bold text-orange-700">
-              <Flame className="h-3 w-3" aria-hidden="true" /> Streak {streak}
+            <p className={`combo-indicator ${streak>=3?'combo-hot':''} flex items-center justify-end gap-1 text-[10px] sm:text-xs font-bold text-orange-700`}>
+              <Flame className="h-3 w-3" aria-hidden="true" /> {streak>=3?'COMBO':'Streak'} <span className="combo-digit" key={streak}>{streak}</span>
             </p>
           </div>
         </div>
         <div className="game-hud-progress flex items-center gap-2" aria-label={`Game progress ${progress}%`}>
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-rose-100">
-            <div className="h-full rounded-full bg-rose-500 transition-[width] duration-300" style={{width: `${progress}%`}} />
+          <div className="game-progress-track h-1.5 flex-1 overflow-hidden rounded-full bg-rose-100">
+            <div className="game-progress-fill h-full rounded-full bg-rose-500 transition-[width] duration-300" style={{width: `${progress}%`}} />
           </div>
           <span className="text-[10px] font-bold text-rose-700">{progress}%</span>
         </div>
