@@ -4,7 +4,7 @@ This game uses **only the 12 questions from the Word document supplied by the En
 
 ## Content and credits
 
-**Question content:** Ms. Phan Thanh Thùy — English Teacher, Vo Van Kiet High School.
+**Question content:** Mrs. Phan Thanh Thuy — English Teacher, Vo Van Kiet High School.
 
 **System development:** Truong Minh Khiem — Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education.
 
@@ -29,3 +29,9 @@ The two photo questions use photos cropped **directly from the teacher's origina
 ### Original image assets
 
 The two visual questions show photographs cropped from the image screenshots embedded in the teacher's source Word file. The original option graphics were intentionally excluded because the website already renders A/B/C/D choices. Both local WebP images are integrity-checked in the build (size, RIFF header and SHA-256), and served directly to browsers to avoid the previously broken JPEG/optimizer path.
+
+## Background music
+
+An optional music picker (top right) provides three **original synthesized instrumental tracks**: Gentle Bloom, Heartfelt Thanks, and Joyful October. Click **Play** to start audio; modern browsers require a user action for sound. Select the track and adjust volume from 0 to 100%. Music and the existing answer-feedback sound effects are controlled independently. No copyrighted recording, remote audio provider, subscription or additional backend service is used. The chosen track and volume persist in browser storage, while playback starts paused after a fresh page load. The same picker is available on the solo welcome/quiz and on all Live screens.
+
+The shared developer credit remains evenly split between both contributors in a slim footer, and the question author is styled **Mrs. Phan Thanh Thuy** throughout.

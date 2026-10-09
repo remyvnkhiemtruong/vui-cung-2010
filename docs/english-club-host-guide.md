@@ -1,6 +1,6 @@
 # English Club — 20 October (MC Script)
 
-**Questions:** Supplied by Ms. Phan Thanh Thùy, English Teacher, Vo Van Kiet High School.
+**Questions:** Supplied by Mrs. Phan Thanh Thuy, English Teacher, Vo Van Kiet High School.
 
 **System:** Developed by Trương Minh Khiêm, Cohort 52 Student, Ho Chi Minh City University of Education.
 
@@ -8,7 +8,7 @@
 
 ## Opening
 
-> Welcome to our Vietnamese Women's Day English Club Quiz! Today's twelve questions were prepared by Ms. Phan Thanh Thùy from Vo Van Kiet High School. We will explore the history of October 20, memorable women, traditional virtues, and two picture-based questions.
+> Welcome to our Vietnamese Women's Day English Club Quiz! Today's twelve questions were prepared by Mrs. Phan Thanh Thuy from Vo Van Kiet High School. We will explore the history of October 20, memorable women, traditional virtues, and two picture-based questions.
 
 ## How to play
 

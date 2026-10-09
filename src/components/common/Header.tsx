@@ -3,6 +3,7 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
 import SoundToggle from './SoundToggle';
+import MusicPicker from './MusicPicker';
 
 export default function Header() {
   return (
@@ -18,7 +19,8 @@ export default function Header() {
           Vietnamese Women&apos;s Day <Heart className="inline h-3 w-3 fill-rose-400" aria-hidden="true" />
         </p>
       </div>
-      <div className="absolute right-2 top-1.5">
+      <div className="absolute right-2 top-1.5 flex items-center gap-1.5">
+        <MusicPicker />
         <SoundToggle />
       </div>
     </header>

@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 const title = "English Club Mini Game | Vietnamese Women's Day";
-const description = "12 English-language questions from Ms. Phan Thanh Thuy's Vietnamese Women's Day quiz, with a live game system developed by Truong Minh Khiem.";
+const description = "12 English-language questions from Mrs. Phan Thanh Thuy's Vietnamese Women's Day quiz, with a live game system developed by Truong Minh Khiem.";
 
 export const metadata: Metadata = {
   title,
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Phan Thanh Thuy" }, { name: "Truong Minh Khiem" }],
   creator: "Truong Minh Khiem",
   other: {
-    "question-author": "Ms. Phan Thanh Thuy, English Teacher, Vo Van Kiet High School",
+    "question-author": "Mrs. Phan Thanh Thuy, English Teacher, Vo Van Kiet High School",
     "system-developer": "Truong Minh Khiem, Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education"
   },
   openGraph: {
