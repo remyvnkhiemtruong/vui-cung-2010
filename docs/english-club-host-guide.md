@@ -26,3 +26,7 @@
 ## Closing
 
 > Thank you for joining our English Club celebration. We appreciate the contributions, courage, and achievements of Vietnamese women. Happy Vietnamese Women's Day!
+
+## Image integrity fix
+
+The original teacher's Word document embeds the two quiz illustration screenshots as PNG images. The photo portions alone have been faithfully cropped, encoded into small valid WebP files and committed under `public/questions/teacher-docx/`. Do not use the old `.jpg` files: they were corrupt and triggered `Image unavailable` despite the route returning HTTP 200. The prebuild validator pins the correct image data with SHA-256 and RIFF/WEBP checks, and the solo player bypasses the Next.js image optimizer for these static local resources.

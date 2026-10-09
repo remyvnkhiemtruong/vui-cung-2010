@@ -139,8 +139,8 @@ export const questionBank: Question[] = [
     },
     "correctAnswer": "B",
     "explanation": "The image depicts violence against a woman; the supplied answer is Domestic Violence.",
-    "image": "/questions/teacher-docx/domestic-violence.jpg",
-    "imageCredit": "Photo extracted from the supplied question document"
+    "image": "/questions/teacher-docx/domestic-violence.webp",
+    "imageCredit": "Original photo cropped from the teacher's supplied Word document"
   }),
   createQuestion({
     "id": "teacher-20oct-07",
@@ -156,8 +156,8 @@ export const questionBank: Question[] = [
     },
     "correctAnswer": "B",
     "explanation": "The woman is cleaning the house. The supplied answer is Housework.",
-    "image": "/questions/teacher-docx/housework.jpg",
-    "imageCredit": "Photo extracted from the supplied question document"
+    "image": "/questions/teacher-docx/housework.webp",
+    "imageCredit": "Original photo cropped from the teacher's supplied Word document"
   }),
   createQuestion({
     "id": "teacher-20oct-08",
