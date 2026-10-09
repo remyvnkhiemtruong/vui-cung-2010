@@ -395,12 +395,15 @@ body { min-height:0; }
   font-size: 12px;
   font-weight: 800;
 }
-.credit-ribbon-role {
+ .credit-ribbon-role {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: #64748b;
   font-size: 10px;
   font-weight: 500;
 }
-@media (max-width: 1260px) {
+@media (max-width: 1600px) {
   /* Names and credit types stay visible; the longer institutions remain in
      each item's title attribute for narrower displays. */
   .credit-ribbon-role { display: none; }

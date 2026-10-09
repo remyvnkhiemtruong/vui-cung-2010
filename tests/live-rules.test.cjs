@@ -120,8 +120,13 @@ test('credits use a single unobtrusive ribbon at bottom on solo and live screens
   const css=fs.readFileSync('src/app/globals.css','utf8');
   assert(credits.includes('Ms. Phan Thanh Thuy'));
   assert(credits.includes('Truong Minh Khiem'));
+  assert(credits.includes('Informatics Teacher Education and Information Technology'));
+  assert(credits.includes('Faculty of Information Technology'));
+  const metadata=fs.readFileSync('src/app/layout.tsx','utf8');
+  assert(metadata.includes('Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education'));
+  assert(!credits.includes('Cohort 52 Student,'));
   assert(credits.includes('English Teacher, Vo Van Kiet High School'));
-  assert(credits.includes('Cohort 52 Student, Ho Chi Minh City University of Education'));
+  assert(credits.includes('Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education'));
   assert(/^[\x00-\x7F]*$/.test(credits),'Attribution must have no diacritics');
   assert(credits.includes('QUESTION CONTENT') && credits.includes('SYSTEM DEVELOPMENT'));
   assert(credits.includes('className="credit-ribbon"'));

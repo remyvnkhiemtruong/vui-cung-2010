@@ -12,10 +12,10 @@ export default function AuthorCredits() {
         <span className="credit-ribbon-role">English Teacher, Vo Van Kiet High School</span>
       </p>
       <p className="credit-ribbon-item credit-ribbon-item--system"
-         title="Cohort 52 Student, Ho Chi Minh City University of Education">
+         title="Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education">
         <span className="credit-ribbon-label">SYSTEM DEVELOPMENT</span>
         <strong className="credit-ribbon-name">Truong Minh Khiem</strong>
-        <span className="credit-ribbon-role">Cohort 52 Student, Ho Chi Minh City University of Education</span>
+        <span className="credit-ribbon-role">Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education</span>
       </p>
     </section>
   );
