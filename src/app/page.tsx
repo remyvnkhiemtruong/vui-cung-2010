@@ -69,7 +69,7 @@ export default function QuizApp() {
         </div>
 
         <footer className="app-footer app-credit-footer" aria-label="Website credits">
-          <AuthorCredits variant={screen === 'start' ? 'feature' : 'compact'} />
+          <AuthorCredits />
         </footer>
       </div>
     </main>

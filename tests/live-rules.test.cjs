@@ -112,27 +112,25 @@ test('database and solo default use 30 seconds',()=>{
  assert(engine.includes('export const QUESTION_TIME_LIMIT = 30'));
 });
 
-test('both unaccented author credits render at bottom across game modes',()=>{
+test('credits use a single unobtrusive ribbon at bottom on solo and live screens',()=>{
   const credits=fs.readFileSync('src/components/common/AuthorCredits.tsx','utf8');
   const home=fs.readFileSync('src/components/game/HomeScreen.tsx','utf8');
   const page=fs.readFileSync('src/app/page.tsx','utf8');
   const live=fs.readFileSync('src/components/live/LiveClient.tsx','utf8');
   const css=fs.readFileSync('src/app/globals.css','utf8');
-  const layout=fs.readFileSync('src/app/layout.tsx','utf8');
   assert(credits.includes('Ms. Phan Thanh Thuy'));
-  assert(credits.includes('English Teacher - Vo Van Kiet High School'));
   assert(credits.includes('Truong Minh Khiem'));
-  assert(credits.includes('Cohort 52 Student - Ho Chi Minh City University of Education'));
-  assert(/^[\x00-\x7F]*$/.test(credits), 'Author credits must be entirely unaccented ASCII');
-  assert(credits.includes('QUESTION CONTENT')&&credits.includes('SYSTEM DEVELOPMENT'));
-  assert(!home.includes('<AuthorCredits'), 'No credit cards in the middle of HomeScreen');
-  assert(!home.includes('Phan Thanh Thuy'), 'No author name beneath the home title');
-  assert(page.includes("<AuthorCredits variant={screen === 'start' ? 'feature' : 'compact'} />"));
+  assert(credits.includes('English Teacher, Vo Van Kiet High School'));
+  assert(credits.includes('Cohort 52 Student, Ho Chi Minh City University of Education'));
+  assert(/^[\x00-\x7F]*$/.test(credits),'Attribution must have no diacritics');
+  assert(credits.includes('QUESTION CONTENT') && credits.includes('SYSTEM DEVELOPMENT'));
+  assert(credits.includes('className="credit-ribbon"'));
+  assert(!credits.includes('author-credit') && !credits.includes('shadow'),'Old obstructive cards must be gone');
+  assert(!home.includes('<AuthorCredits'),'Do not place credits in the welcome card');
+  assert(page.includes('<AuthorCredits />'));
   assert(page.includes('className="app-footer app-credit-footer"'));
-  const footerAt=page.indexOf('<footer className="app-footer app-credit-footer"');
-  assert(footerAt>=0 && !page.slice(Math.max(0,footerAt-65),footerAt).includes("screen !== 'start'"), 'Footer must appear on the start screen too');
-  assert(live.includes('className="live-credit-footer"')&&live.includes('<AuthorCredits variant="compact" />'));
-  assert(css.includes('.app-credit-footer .author-credits--feature'));
-  assert(layout.includes('Phan Thanh Thuy')&&layout.includes('Truong Minh Khiem'));
-  assert(!layout.includes('Thùy')&&!layout.includes('Trương'));
+  assert(live.includes('className="live-credit-footer"') && live.includes('<AuthorCredits />'));
+  assert(css.includes('.credit-ribbon-role { display: none; }'));
+  assert(css.includes('flex-direction: column;'));
+  assert(!css.includes('/* Authorship: visible, differentiated credit cards'));
 });

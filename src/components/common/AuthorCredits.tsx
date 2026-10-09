@@ -1,29 +1,22 @@
-import { BookOpenText, Code2 } from 'lucide-react';
-
-interface AuthorCreditsProps {
-  /** Feature cards on the welcome screen; compact cards throughout gameplay. */
-  variant?: 'feature' | 'compact';
-}
-
-export default function AuthorCredits({ variant = 'compact' }: AuthorCreditsProps) {
+/**
+ * Quiet, bottom-of-screen attribution. Keeps the names visible without
+ * competing with the question, answer options or projector leaderboard.
+ */
+export default function AuthorCredits() {
   return (
-    <section className={`author-credits author-credits--${variant}`} aria-label="Question author and system developer">
-      <article className="author-credit author-credit--questions">
-        <div className="author-credit-heading">
-          <span className="author-credit-symbol" aria-hidden="true"><BookOpenText size={15} strokeWidth={2.4} /></span>
-          <span className="author-credit-label">QUESTION CONTENT</span>
-        </div>
-        <strong className="author-credit-name">Ms. Phan Thanh Thuy</strong>
-        <span className="author-credit-role">English Teacher - Vo Van Kiet High School</span>
-      </article>
-      <article className="author-credit author-credit--system">
-        <div className="author-credit-heading">
-          <span className="author-credit-symbol" aria-hidden="true"><Code2 size={15} strokeWidth={2.4} /></span>
-          <span className="author-credit-label">SYSTEM DEVELOPMENT</span>
-        </div>
-        <strong className="author-credit-name">Truong Minh Khiem</strong>
-        <span className="author-credit-role">Cohort 52 Student - Ho Chi Minh City University of Education</span>
-      </article>
+    <section className="credit-ribbon" aria-label="Question content and system credits">
+      <p className="credit-ribbon-item credit-ribbon-item--questions"
+         title="English Teacher, Vo Van Kiet High School">
+        <span className="credit-ribbon-label">QUESTION CONTENT</span>
+        <strong className="credit-ribbon-name">Ms. Phan Thanh Thuy</strong>
+        <span className="credit-ribbon-role">English Teacher, Vo Van Kiet High School</span>
+      </p>
+      <p className="credit-ribbon-item credit-ribbon-item--system"
+         title="Cohort 52 Student, Ho Chi Minh City University of Education">
+        <span className="credit-ribbon-label">SYSTEM DEVELOPMENT</span>
+        <strong className="credit-ribbon-name">Truong Minh Khiem</strong>
+        <span className="credit-ribbon-role">Cohort 52 Student, Ho Chi Minh City University of Education</span>
+      </p>
     </section>
   );
 }

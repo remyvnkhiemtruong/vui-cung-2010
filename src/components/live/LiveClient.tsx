@@ -55,7 +55,7 @@ function LiveLayout({title,subtitle,children}:{title:string,subtitle:string,chil
     </header>
     <div className="min-h-0 flex-1 overflow-hidden px-3 py-2 sm:px-5 sm:py-3">{children}</div>
     <footer className="live-credit-footer" aria-label="Website credits">
-      <AuthorCredits variant="compact" />
+      <AuthorCredits />
     </footer>
   </main>;
 }
