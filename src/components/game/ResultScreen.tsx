@@ -9,6 +9,7 @@ import {
 import confetti from 'canvas-confetti';
 import { PlayerStats, HighScoreRecord, Question } from '@/types/quiz';
 import { Card } from '@/components/ui/Card';
+import ScoreTicker from '@/components/common/ScoreTicker';
 
 interface ResultScreenProps {
   stats: PlayerStats;
@@ -66,12 +67,12 @@ export default function ResultScreen({
 
             <div className="rounded-2xl bg-gradient-to-br from-rose-600 to-pink-600 px-4 py-3 text-center text-white shadow-lg">
               <p className="text-[10px] sm:text-xs font-extrabold tracking-widest">TOTAL SCORE</p>
-              <p className="results-score results-score-reveal">{stats.score.toLocaleString()}</p>
+              <p className="results-score results-score-reveal"><ScoreTicker value={stats.score} animateOnMount /></p>
               <p className="text-[10px] sm:text-xs text-rose-100">Correct answers | Speed bonus | Streak bonus</p>
             </div>
 
             <div className="results-stats" aria-label="Game statistics">
-              <div className="results-stat bg-emerald-50">
+              <div className="results-stat stage-stat bg-emerald-50">
                 <CheckCircle2 className="mx-auto h-4 w-4 text-emerald-700" />
                 <strong className="block text-emerald-800">{stats.correctCount}/{totalQuestions}</strong>
                 <span className="text-[10px] sm:text-xs font-bold text-slate-600">Correct</span>
@@ -91,6 +92,10 @@ export default function ResultScreen({
                 <strong className="block text-orange-800">{stats.maxStreak}</strong>
                 <span className="text-[10px] sm:text-xs font-bold text-slate-600">Best streak</span>
               </div>
+            </div>
+
+            <div className="results-accuracy-track" aria-label={`Accuracy: ${accuracy}%`}>
+              <div className="results-accuracy-fill" style={{width:`${accuracy}%`}} />
             </div>
 
             {highScore && bestScore !== undefined && (
