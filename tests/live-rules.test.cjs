@@ -74,6 +74,8 @@ test('one-click create has no MC passcode and uses throttled DB function',()=>{
   assert(!handler.includes('body?.passcode'));
   assert(handler.includes('live_quiz_create_room'));
   assert(ui.includes('void createRoom()'));
+  assert(ui.includes('live-quiz-host-teacher12-v1'));
+  assert(!ui.includes("sessionStorage.getItem('live-quiz-host')"));
   assert(!ui.includes('Host passcode'));
   assert(migration.includes("IF n >= 8 THEN RETURN 'rate_limited'"));
   assert(migration.includes('pg_advisory_xact_lock'));

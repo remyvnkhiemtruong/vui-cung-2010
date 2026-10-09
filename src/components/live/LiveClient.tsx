@@ -171,8 +171,8 @@ export function HostConsole(){
   const [origin,setOrigin]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
   useEffect(()=>{
     setOrigin(window.location.origin);
-    const raw=sessionStorage.getItem('live-quiz-host');
-    if(raw){try{const previous=JSON.parse(raw) as HostSession;setSession(previous);return;}catch{sessionStorage.removeItem('live-quiz-host');}}
+    const raw=sessionStorage.getItem('live-quiz-host-teacher12-v1');
+    if(raw){try{const previous=JSON.parse(raw) as HostSession;setSession(previous);return;}catch{sessionStorage.removeItem('live-quiz-host-teacher12-v1');}}
     if(creatingRef.current)return;
     creatingRef.current=true;
     void createRoom();
@@ -188,14 +188,14 @@ export function HostConsole(){
         method:'POST',body:JSON.stringify({})
       });
       const value={code:data.code,token:data.hostToken};
-      sessionStorage.setItem('live-quiz-host',JSON.stringify(value));
+      sessionStorage.setItem('live-quiz-host-teacher12-v1',JSON.stringify(value));
       setSession(value);
     }catch(e){setMessage(e instanceof Error?e.message:'Could not create room.')}
     finally{setBusy(false)}
   };
   const newRoom=()=>{
     // Explicit new-room action: do not reuse the previous session.
-    sessionStorage.removeItem('live-quiz-host');
+    sessionStorage.removeItem('live-quiz-host-teacher12-v1');
     setSession(null);
     void createRoom();
   };
