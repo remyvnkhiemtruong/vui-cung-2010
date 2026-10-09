@@ -1,22 +1,24 @@
 /**
- * Quiet, bottom-of-screen attribution. Keeps the names visible without
- * competing with the question, answer options or projector leaderboard.
+ * Balanced and lightly highlighted credits at the bottom of the screen.
+ * Names remain unaccented as requested, with full details available on hover.
  */
-export default function AuthorCredits() {
-  return (
-    <section className="credit-ribbon" aria-label="Question content and system credits">
-      <p className="credit-ribbon-item credit-ribbon-item--questions"
-         title="English Teacher, Vo Van Kiet High School">
+export default function AuthorCredits(){
+  return <section className="credit-ribbon" aria-label="Question content and system credits">
+    <div className="credit-ribbon-item credit-ribbon-item--questions"
+      title="Mrs. Phan Thanh Thuy - English Teacher, Vo Van Kiet High School">
+      <div className="credit-ribbon-heading">
         <span className="credit-ribbon-label">QUESTION CONTENT</span>
-        <strong className="credit-ribbon-name">Ms. Phan Thanh Thuy</strong>
-        <span className="credit-ribbon-role">English Teacher, Vo Van Kiet High School</span>
-      </p>
-      <p className="credit-ribbon-item credit-ribbon-item--system"
-         title="Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education">
+        <strong className="credit-ribbon-name">Mrs. Phan Thanh Thuy</strong>
+      </div>
+      <span className="credit-ribbon-role">English Teacher, Vo Van Kiet High School</span>
+    </div>
+    <div className="credit-ribbon-item credit-ribbon-item--system"
+      title="Truong Minh Khiem - Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education">
+      <div className="credit-ribbon-heading">
         <span className="credit-ribbon-label">SYSTEM DEVELOPMENT</span>
         <strong className="credit-ribbon-name">Truong Minh Khiem</strong>
-        <span className="credit-ribbon-role">Student in Informatics Teacher Education and Information Technology, Faculty of Information Technology, Ho Chi Minh City University of Education</span>
-      </p>
-    </section>
-  );
+      </div>
+      <span className="credit-ribbon-role">Informatics Teacher Education &amp; IT Student, Faculty of Information Technology, HCMUE</span>
+    </div>
+  </section>;
 }
